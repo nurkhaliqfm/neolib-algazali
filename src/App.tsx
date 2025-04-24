@@ -24,8 +24,24 @@ function App() {
 					element={<Admin.DashboardPage />}
 				/>
 				<Route
-					path={AppRoutes.AdminKoleksi.path}
-					element={<Admin.KoleksiPage />}
+					path={AppRoutes.AdminKoleksiJurnal.path}
+					element={<Admin.KoleksiPage.KoleksiJurnalPage />}
+				/>
+				<Route
+					path={AppRoutes.AdminKoleksiEjurnal.path}
+					element={<Admin.KoleksiPage.KoleksiEjurnalPage />}
+				/>
+				<Route
+					path={AppRoutes.AdminKoleksiBuku.path}
+					element={<Admin.KoleksiPage.KoleksBukuiPage />}
+				/>
+				<Route
+					path={AppRoutes.AdminKoleksiEbook.path}
+					element={<Admin.KoleksiPage.KoleksiEbookPage />}
+				/>
+				<Route
+					path={AppRoutes.AdminKoleksiSkripsi.path}
+					element={<Admin.KoleksiPage.KoleksiSkripsiPage />}
 				/>
 				<Route
 					path={AppRoutes.AdminTransaksi.path}
