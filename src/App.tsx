@@ -1,16 +1,12 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import AppRoutes from "./routes";
-import Error from "./modules/Error";
-import Admin from "./modules/Admin";
+import { Navigate, Route, Routes } from 'react-router-dom';
+import AppRoutes from './routes';
+import Error from './modules/Error';
+import Admin from './modules/Admin';
+import DashboardLayout from './components/layout/Dashboard';
 
 function App() {
 	return (
 		<Routes>
-			<Route
-				path={AppRoutes.Dashboard.path}
-				element={<Admin.DashboardPage />}
-			/>
-
 			{/* NOTE: Error Route */}
 			<Route path={AppRoutes.Error.path} element={<Error.ErrorPage />} />
 			<Route path="*" element={<Navigate to={AppRoutes.Error.path} />} />
@@ -21,36 +17,33 @@ function App() {
 				element={<Error.ForbiddenPage />}
 			/>
 
-			{/* <Route element={<ResultLayout />}>
+			{/* NOTE: ADMIN Route */}
+			<Route element={<DashboardLayout />}>
 				<Route
-					path={AppRoutes.ResultLocation.path}
-					element={<Result.LocationPage />}
+					path={AppRoutes.AdminDashboard.path}
+					element={<Admin.DashboardPage />}
 				/>
 				<Route
-					path={AppRoutes.ResultVenue.path}
-					element={<Result.VenuePage />}
+					path={AppRoutes.AdminKoleksi.path}
+					element={<Admin.KoleksiPage />}
 				/>
 				<Route
-					path={AppRoutes.ResultPertandingan.path}
-					element={<Result.PertandingaPoolPage />}
+					path={AppRoutes.AdminTransaksi.path}
+					element={<Admin.TransaksiPage />}
 				/>
 				<Route
-					path={AppRoutes.ResultPertandinganSwiss.path}
-					element={<Result.PertandingaSwissPage />}
+					path={AppRoutes.AdminAnggota.path}
+					element={<Admin.AnggotaPage />}
 				/>
 				<Route
-					path={AppRoutes.ResultPertandinganGugur.path}
-					element={<Result.PertandingaGugurPage />}
+					path={AppRoutes.AdminPassword.path}
+					element={<Admin.PasswordPage />}
 				/>
-				<Route
-					path={AppRoutes.ResultPertandinganFinal.path}
-					element={<Result.PertandingaFinalPage />}
-				/>
-			</Route> */}
+			</Route>
 
-			{/* <Route element={<DashboardLayout />}>
+			{/* <Route element={<BaseLayout />}>
 				<Route
-					path={AppRoutes.Dashboard.path}
+					path={AppRoutes.Home.path}
 					element={<AuthorizedRoute page={<User.DashboardPage />} />}
 				/>
 			</Route> */}

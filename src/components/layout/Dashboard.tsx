@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarInset } from '../ui/sidebar';
 import HeaderLayout from './Header';
 import { AppSidebar } from './Sidebar';
 
-const PageLayout = () => {
+const DashboardLayout = () => {
 	return (
 		<main className="w-screen">
 			<SidebarProvider defaultOpen>
@@ -21,4 +21,4 @@ const PageLayout = () => {
 	);
 };
 
-export default PageLayout;
+export default DashboardLayout;
