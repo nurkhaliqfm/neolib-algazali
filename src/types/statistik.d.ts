@@ -4,7 +4,7 @@ export type StatistikResponseItem = {
 };
 
 export type StatistikResponse = {
-	repository: { [key in RepositoryItemKey]: StatistikItem };
+	repository: { [key in RepositoryItemKey]: StatistikResponseItem };
 	anggota: StatistikResponseItem;
 	pinjaman: StatistikResponseItem;
 };
