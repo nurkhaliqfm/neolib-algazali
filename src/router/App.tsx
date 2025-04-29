@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AppRoutes from './routes';
-import Error from './modules/Error';
-import Admin from './modules/Admin';
-import DashboardLayout from './components/layout/Dashboard';
+import Error from '../modules/Error';
+import Admin from '../modules/admin';
+import DashboardLayout from '../components/layout/Dashboard';
 
 function App() {
 	return (
