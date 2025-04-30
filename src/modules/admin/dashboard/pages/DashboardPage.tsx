@@ -5,36 +5,8 @@ import { CardDashboardItemKey } from '../types/dashboard.type';
 import { RepositoryItemKey } from '@/types/repository';
 import { StatistikResponse } from '@/types/statistik';
 import { BorrowHistoryReponse } from '@/types/borrow';
-
-const dataStatistik: StatistikResponse = {
-	repository: {
-		artikel_jurnal: {
-			title: 'Artikel Jurnal',
-			total: 15,
-		},
-		ejurnal: {
-			title: 'E-Jurnal',
-			total: 3,
-		},
-		buku: {
-			title: 'Buku',
-			total: 1447,
-		},
-		ebook: {
-			title: 'E-Book',
-			total: 69,
-		},
-		skripsi: {
-			title: 'Skripsi',
-			total: 1145,
-		},
-	},
-	anggota: {
-		title: 'Anggota',
-		total: 409,
-	},
-	pinjaman: { title: 'Pinjaman', total: 25 },
-};
+import { useEffect, useState } from 'react';
+import { getDataStatistik } from '../services/statistikService';
 
 const dataPeminjaman: BorrowHistoryReponse[] = [
 	{
@@ -88,30 +60,45 @@ const dataPeminjaman: BorrowHistoryReponse[] = [
 ];
 
 function DashboardPage() {
+	const [statistikData, setStatistikData] = useState<StatistikResponse | null>(
+		null
+	);
+	useEffect(() => {
+		getDataStatistik({
+			token: '',
+			onDone: (data) => {
+				console.log(data);
+				setStatistikData(data);
+			},
+		});
+	}, []);
+
 	return (
 		<>
-			<section className="grid grid-cols-2 md:grid-cols-3 gap-4">
-				{dataStatistik &&
-					Object.keys(dataStatistik.repository).map((keys) => {
+			{statistikData && (
+				<section className="grid grid-cols-2 md:grid-cols-3 gap-4">
+					{Object.keys(statistikData.repository).map((keys) => {
 						return (
 							<DashboardCard
 								key={`card-koleksi-${keys}`}
 								slug={keys as RepositoryItemKey}
-								item={dataStatistik.repository[keys as CardDashboardItemKey]}
+								item={statistikData.repository[keys as CardDashboardItemKey]}
 							/>
 						);
 					})}
-				<DashboardCard
-					key={`card-koleksi-anggota`}
-					slug="anggota"
-					item={dataStatistik.anggota}
-				/>
-				<DashboardCard
-					key={`card-koleksi-pinjaman`}
-					slug="pinjaman"
-					item={dataStatistik.pinjaman}
-				/>
-			</section>
+
+					<DashboardCard
+						key={`card-koleksi-anggota`}
+						slug="anggota"
+						item={statistikData.anggota}
+					/>
+					<DashboardCard
+						key={`card-koleksi-pinjaman`}
+						slug="pinjaman"
+						item={statistikData.pinjaman}
+					/>
+				</section>
+			)}
 
 			<section className="my-4 grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-max">
 				<DashboardChart />
