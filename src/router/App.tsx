@@ -3,6 +3,8 @@ import AppRoutes from './routes';
 import Error from '../modules/Error';
 import Admin from '../modules/admin';
 import DashboardLayout from '../components/layout/Dashboard';
+import BaseLayout from '@/components/layout/Base';
+import Public from '@/modules/Public';
 
 function App() {
 	return (
@@ -57,12 +59,9 @@ function App() {
 				/>
 			</Route>
 
-			{/* <Route element={<BaseLayout />}>
-				<Route
-					path={AppRoutes.Home.path}
-					element={<AuthorizedRoute page={<User.DashboardPage />} />}
-				/>
-			</Route> */}
+			<Route element={<BaseLayout />}>
+				<Route path={AppRoutes.Home.path} element={<Public.HomePage />} />
+			</Route>
 		</Routes>
 	);
 }
