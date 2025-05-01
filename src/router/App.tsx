@@ -5,6 +5,7 @@ import Admin from '../modules/admin';
 import DashboardLayout from '../components/layout/Dashboard';
 import BaseLayout from '@/components/layout/Base';
 import Public from '@/modules/Public';
+import Auth from '@/modules/Auth';
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 				element={<Error.ForbiddenPage />}
 			/>
 
+			<Route path={AppRoutes.Login.path} element={<Auth.LoginPage />} />
 			{/* NOTE: ADMIN Route */}
 			<Route element={<DashboardLayout />}>
 				<Route

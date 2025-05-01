@@ -7,6 +7,7 @@ import { StatistikResponse } from '@/types/statistik';
 import { BorrowHistoryReponse } from '@/types/borrow';
 import { useEffect, useState } from 'react';
 import { getDataStatistik } from '../services/statistikService';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
 
 const dataPeminjaman: BorrowHistoryReponse[] = [
 	{
@@ -60,17 +61,20 @@ const dataPeminjaman: BorrowHistoryReponse[] = [
 ];
 
 function DashboardPage() {
+	const user = useTypedSelector((state) => state.oauth.oauthData);
+
 	const [statistikData, setStatistikData] = useState<StatistikResponse | null>(
 		null
 	);
+
 	useEffect(() => {
 		getDataStatistik({
-			token: '',
+			token: user?.access_token,
 			onDone: (data) => {
-				console.log(data);
 				setStatistikData(data);
 			},
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

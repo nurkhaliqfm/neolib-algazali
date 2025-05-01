@@ -14,6 +14,7 @@ const AppRoutes = {
 	Home: { path: '/', label: 'E-Library ITB Al-Gazali Barru' },
 
 	// NOTE: Others Route
+	Login: { path: '/login', lable: 'Login Page' },
 	Error: { path: '/error', label: 'Error Page' },
 	Forbidden: { path: '/forbidden', label: 'Forbidden Page' },
 };

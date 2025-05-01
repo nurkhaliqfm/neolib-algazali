@@ -2,7 +2,7 @@ import { ApiError } from '@/types/global';
 import { StatistikResponse } from '@/types/statistik';
 import axios, { AxiosError } from 'axios';
 
-const { VITE_SERVER_BASE_URL, VITE_DEFAULT_TOKEN_OAUTH2 } = import.meta.env;
+const { VITE_SERVER_BASE_URL } = import.meta.env;
 
 const getDataStatistik = async ({
 	token,
@@ -16,9 +16,7 @@ const getDataStatistik = async ({
 			`${VITE_SERVER_BASE_URL}/admin/statistik/repository`,
 			{
 				headers: {
-					Authorization: `Bearer ${
-						token === '' ? VITE_DEFAULT_TOKEN_OAUTH2 : token
-					}`,
+					Authorization: `Bearer ${token}`,
 				},
 			}
 		);
