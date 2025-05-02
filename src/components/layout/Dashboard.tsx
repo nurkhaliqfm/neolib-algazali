@@ -5,7 +5,7 @@ import { AppSidebar } from './Sidebar';
 
 const DashboardLayout = () => {
 	return (
-		<main className="w-screen">
+		<>
 			<SidebarProvider defaultOpen>
 				<section className="flex w-full">
 					<AppSidebar />
@@ -17,7 +17,7 @@ const DashboardLayout = () => {
 					</SidebarInset>
 				</section>
 			</SidebarProvider>
-		</main>
+		</>
 	);
 };
 

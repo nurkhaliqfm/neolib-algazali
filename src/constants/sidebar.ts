@@ -4,7 +4,7 @@ import {
 	HiOutlineBookOpen,
 	HiOutlineDocumentText,
 	HiOutlineFingerPrint,
-	HiOutlineHome,
+	HiOutlineChartPie,
 	HiOutlineUserGroup,
 	HiOutlineWallet,
 } from 'react-icons/hi2';
@@ -17,7 +17,7 @@ export const SIDEBAR_LIST = [
 				key: 'dashboard',
 				title: 'Dashboard',
 				url: AppRoutes.AdminDashboard.path,
-				icon: HiOutlineHome,
+				icon: HiOutlineChartPie,
 			},
 		],
 	},

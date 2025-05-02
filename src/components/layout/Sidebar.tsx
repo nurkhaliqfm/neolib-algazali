@@ -1,6 +1,7 @@
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
@@ -8,17 +9,20 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarRail,
 } from '@/components/ui/sidebar';
 
 import LogoKampus from '@/assets/logo.svg';
 import { SIDEBAR_LIST } from '@/constants/sidebar';
 import { Fragment } from 'react/jsx-runtime';
-
-// Menu items.
+import { SidebarUser } from './SidebarUser';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
 
 export function AppSidebar() {
+	const user = useTypedSelector((state) => state.oauth.oauthData);
+
 	return (
-		<Sidebar>
+		<Sidebar variant="inset">
 			<SidebarHeader className="flex flex-row items-center gap-x-4">
 				<img src={LogoKampus} width={50} />
 				<section className="leading-4">
@@ -54,6 +58,17 @@ export function AppSidebar() {
 					})}
 				</SidebarGroup>
 			</SidebarContent>
+
+			<SidebarFooter>
+				<SidebarUser
+					user={{
+						role: user?.role,
+						name: user?.name,
+						token: user?.access_token,
+					}}
+				/>
+			</SidebarFooter>
+			<SidebarRail />
 		</Sidebar>
 	);
 }
