@@ -21,9 +21,9 @@ import {
 	HiOutlineArrowRightOnRectangle,
 	HiOutlineChevronUpDown,
 } from 'react-icons/hi2';
-import { logout } from '@/modules/Auth/services/oauthService';
+import { logout } from '@/modules/auth/services/oauthService';
 import { useDispatch } from 'react-redux';
-import { clearOAuthData } from '@/modules/Auth/oauthSlice';
+import { clearOAuthData } from '@/modules/auth/oauthSlice';
 import { useNavigate } from 'react-router-dom';
 import AppRoutes from '@/router/routes';
 import { toast } from 'react-toastify';

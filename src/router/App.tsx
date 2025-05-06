@@ -4,10 +4,10 @@ import Error from '../modules/Error';
 import Admin from '../modules/admin';
 import BaseLayout from '@/components/layout/Base';
 import Public from '@/modules/Public';
-import Auth from '@/modules/Auth';
-import AuthMiddleware from '@/modules/Auth/middleware/AuthMiddleware';
-import ProtectedRoutes from '@/modules/Auth/middleware/ProtectedRoutes';
-import AuthorizedRoute from '@/modules/Auth/middleware/AuthorizedRoute';
+import Auth from '@/modules/auth';
+import AuthMiddleware from '@/modules/auth/middleware/AuthMiddleware';
+import ProtectedRoutes from '@/modules/auth/middleware/ProtectedRoutes';
+import AuthorizedRoute from '@/modules/auth/middleware/AuthorizedRoute';
 
 function App() {
 	return (

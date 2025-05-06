@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import oauthReducer from '@/modules/Auth/oauthSlice';
+import oauthReducer from '@/modules/auth/oauthSlice';
 
 const RootReducer = combineReducers({
 	oauth: oauthReducer,
