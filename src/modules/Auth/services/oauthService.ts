@@ -25,7 +25,24 @@ const oauth = async (credentials: CredentialsProps): Promise<OAuthData> => {
 			},
 			{ headers: { Authorization: `Basic ${token}` } }
 		);
-		console.log(response.data);
+
+		const oauthData: OAuthData = response.data;
+		localStorage.setItem('oauthData', JSON.stringify(oauthData));
+		return oauthData;
+	} catch (error) {
+		console.error('Error handling redirect:', error);
+		throw error;
+	}
+};
+
+const refresh = async (
+	token: string | undefined | null
+): Promise<OAuthData> => {
+	try {
+		const response = await axios.get(VITE_SERVER_BASE_URL + '/oauth/refresh', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
 		const oauthData: OAuthData = response.data;
 		localStorage.setItem('oauthData', JSON.stringify(oauthData));
 		return oauthData;
@@ -43,4 +60,4 @@ const logout = async (token: string | undefined | null) => {
 	return response.status;
 };
 
-export { oauth, logout };
+export { oauth, refresh, logout };

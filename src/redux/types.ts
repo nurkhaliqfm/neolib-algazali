@@ -1,8 +1,8 @@
 export interface OAuthData {
-	expires_in: number | null;
-	access_token: string | null;
-	name: string | null;
-	role: string | null;
+	expires_in: number;
+	access_token: string;
+	name: string;
+	role: string;
 }
 
 export interface SetTokenAction {

@@ -65,7 +65,7 @@ export function LoginForm({
 				setIsLoading(false);
 				toast.error('Username atau Password salah', {
 					theme: 'colored',
-					autoClose: false,
+					autoClose: 700,
 				});
 			});
 	}
