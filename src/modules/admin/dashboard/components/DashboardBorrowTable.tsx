@@ -11,13 +11,10 @@ import {
 import dayjs from 'dayjs';
 import { Key, useCallback } from 'react';
 import { HiOutlineCalendarDateRange } from 'react-icons/hi2';
-import {
-	LastBorrowDashboardHeader,
-	LastBorrowHeaderSlug,
-} from '../types/dashboard.type';
 import { BorrowHistoryReponse } from '@/types/borrow';
+import { TableHeaderComponent } from '@/types/global';
 
-const lastBorrowHeaderTable: LastBorrowDashboardHeader[] = [
+const lastBorrowHeaderTable: TableHeaderComponent[] = [
 	{ name: 'NAME', slug: 'name' },
 	{ name: 'PEMINJAMAN', slug: 'peminjaman' },
 	{ name: 'STATUS', slug: 'status' },
@@ -44,7 +41,7 @@ export function DashboardBorrowTable({
 }) {
 	const renderCell = useCallback(
 		(data: BorrowHistoryReponse, columnKey: Key) => {
-			const cellValue = data[columnKey as LastBorrowHeaderSlug];
+			const cellValue = data[columnKey as keyof BorrowHistoryReponse];
 			const startTime = dayjs(data.peminjaman);
 			const endTime = dayjs(data.pengembalian);
 

@@ -1,19 +1,23 @@
 import { ApiError } from '@/types/global';
-import { StatistikResponse } from '@/types/statistik';
 import axios, { AxiosError } from 'axios';
+import { RepositoryResponse } from '../types/koleksi.type';
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
-const getDataStatistik = async ({
+const getListRepository = async ({
 	token,
+	type,
+	page,
 	onDone,
 }: {
 	token: string | null | undefined;
-	onDone?: (data: StatistikResponse) => void | undefined;
+	type: string;
+	page: string;
+	onDone?: (data: RepositoryResponse) => void | undefined;
 }) => {
 	try {
 		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/statistik/repository`,
+			`${VITE_SERVER_BASE_URL}/admin/repository/${type}s?page=${page}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -34,4 +38,4 @@ const getDataStatistik = async ({
 	}
 };
 
-export { getDataStatistik };
+export { getListRepository };

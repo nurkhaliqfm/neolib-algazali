@@ -37,47 +37,11 @@ function App() {
 						}
 					/>
 					<Route
-						path={AppRoutes.AdminKoleksiJurnal.path}
+						path={AppRoutes.AdminKoleksi.path}
 						element={
 							<AuthorizedRoute
 								allowedRoles={['Admin']}
-								page={<Admin.KoleksiPage.KoleksiJurnalPage />}
-							/>
-						}
-					/>
-					<Route
-						path={AppRoutes.AdminKoleksiEjurnal.path}
-						element={
-							<AuthorizedRoute
-								allowedRoles={['Admin']}
-								page={<Admin.KoleksiPage.KoleksiEjurnalPage />}
-							/>
-						}
-					/>
-					<Route
-						path={AppRoutes.AdminKoleksiBuku.path}
-						element={
-							<AuthorizedRoute
-								allowedRoles={['Admin']}
-								page={<Admin.KoleksiPage.KoleksBukuiPage />}
-							/>
-						}
-					/>
-					<Route
-						path={AppRoutes.AdminKoleksiEbook.path}
-						element={
-							<AuthorizedRoute
-								allowedRoles={['Admin']}
-								page={<Admin.KoleksiPage.KoleksiEbookPage />}
-							/>
-						}
-					/>
-					<Route
-						path={AppRoutes.AdminKoleksiSkripsi.path}
-						element={
-							<AuthorizedRoute
-								allowedRoles={['Admin']}
-								page={<Admin.KoleksiPage.KoleksiSkripsiPage />}
+								page={<Admin.KoleksiPage.ListKoleksiPage />}
 							/>
 						}
 					/>

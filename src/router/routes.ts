@@ -1,11 +1,34 @@
 const AppRoutes = {
 	//NOTE: Admin Route
-	AdminDashboard: { path: '/admin/dashboard', label: 'Dashboard' },
-	AdminKoleksiJurnal: { path: '/admin/koleksi-jurnal', label: 'Koleksi' },
-	AdminKoleksiEjurnal: { path: '/admin/koleksi-ejurnal', label: 'Koleksi' },
-	AdminKoleksiBuku: { path: '/admin/koleksi-buku', label: 'Koleksi' },
-	AdminKoleksiEbook: { path: '/admin/koleksi-ebook', label: 'Koleksi' },
-	AdminKoleksiSkripsi: { path: '/admin/koleksi-skripsi', label: 'Koleksi' },
+	AdminDashboard: {
+		path: '/admin/dashboard',
+		label: 'Dashboard Admin E-Library',
+	},
+	AdminKoleksi: {
+		path: '/admin/koleksi/:koleksi',
+		label: 'Admin Koleksi E-Library',
+	},
+	AdminKoleksiJurnal: {
+		path: '/admin/koleksi/jurnal',
+		label: 'Admin Koleksi Jurnal E-library',
+	},
+	AdminKoleksiEjurnal: {
+		path: '/admin/koleksi/ejurnal',
+		label: 'Admin Koleksi E-jurnal E-library',
+	},
+	AdminKoleksiBuku: {
+		path: '/admin/koleksi/buku',
+		label: 'Admin Koleksi Buku E-library',
+	},
+	AdminKoleksiEbook: {
+		path: '/admin/koleksi/ebook',
+		label: 'Admin Koleksi Ebook E-library',
+	},
+	AdminKoleksiSkripsi: {
+		path: '/admin/koleksi/skripsi',
+		label: 'Admin Koleksi Skripsi E-library',
+	},
+
 	AdminAnggota: { path: '/admin/anggota', label: 'Anggota' },
 	AdminPassword: { path: '/admin/password', label: 'Password' },
 	AdminTransaksi: { path: '/admin/transaksi', label: 'Transaksi' },
