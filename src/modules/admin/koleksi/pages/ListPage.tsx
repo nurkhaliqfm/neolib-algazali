@@ -1,15 +1,17 @@
-import { RepositoryItemKey } from '@/types/repository';
-import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { getListRepository } from '../services/koleksiService';
-import { useTypedSelector } from '@/hooks/useTypedSelector';
-import { RepositoryResponse } from '../types/koleksi.type';
-import { RepositoryTable } from '../components/KoleksiTable';
+import { RepositoryItemKey } from "@/types/repository";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { getListRepository } from "../services/koleksiService";
+import { useTypedSelector } from "@/hooks/useTypedSelector";
+import { RepositoryResponse } from "../types/koleksi.type";
+import { RepositoryTable } from "../components/KoleksiTable";
+import { Button } from "@heroui/react";
+import { HiOutlinePlus } from "react-icons/hi2";
 
 const ListKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const [searchParams, setSearchParams] = useSearchParams();
-	const page = searchParams.get('page') || '1';
+	const page = searchParams.get("page") || "1";
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [repositoryData, setrepositoryData] =
@@ -31,12 +33,23 @@ const ListKoleksiPage = () => {
 
 	return (
 		<>
-			{repositoryData ? (
+			{repositoryData && koleksi ? (
 				<>
-					<h3 className="">Data Koleksi {koleksi}</h3>
+					<section className="flex justify-between my-2 px-4 capitalize">
+						<h3 className="capitalize text-xl font-light">
+							Data Koleksi {koleksi}
+						</h3>
+						<Button
+							startContent={<HiOutlinePlus />}
+							size="sm"
+							color="primary"
+							variant="solid"
+							className="capitalize">{`${koleksi} Baru`}</Button>
+					</section>
 					<RepositoryTable
 						data={repositoryData}
 						page={Number(page)}
+						slug={koleksi}
 						setSearchParams={setSearchParams}
 					/>
 				</>

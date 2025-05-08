@@ -5,7 +5,10 @@ export type RepositoryJurnal = {
 	jurnal: string | null;
 	tahun_terbit: number;
 	isbn: string | null;
-	id_lokasi: number;
+	lokasi: {
+		id: string;
+		nama: string;
+	};
 };
 
 export type RepositoryEjurnal = {
@@ -25,6 +28,10 @@ export type RepositoryBuku = {
 	tempat_terbit: string | null;
 	tahun_terbit: number;
 	isbn: string | null;
+	lokasi: {
+		id: string;
+		nama: string;
+	};
 };
 
 export type RepositoryEbook = {
@@ -51,14 +58,18 @@ export type RepositorySkripsi = {
 	fakultas: string | null;
 	prodi: string;
 	tahun_terbit: number;
-	id_lokasi: number;
+	lokasi: {
+		id: string;
+		nama: string;
+	};
 };
 
 export interface BaseRepository {
+	id: string;
 	judul: string;
 	nama_sampul: string | null;
 	nama_file: string | null;
-	type: 'EJURNAL' | 'JURNAL' | 'EBOOK' | 'BUKU' | 'SKRIPSI';
+	type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
 }
 
 export interface RepositoryResponse {
@@ -66,9 +77,10 @@ export interface RepositoryResponse {
 	pages: { total: number; start: number; end: number; current: number };
 }
 
-export type RepositoryHeaderSlug =
-	| 'judul'
-	| 'nama_sampul'
-	| 'nama_file'
-	| 'type'
-	| 'actions';
+export interface RepositoryDetailResponse extends BaseRepository {
+	jurnal?: RepositoryJurnal;
+	ejurnal?: RepositoryEjurnal;
+	buku?: RepositoryBuku;
+	ebook?: RepositoryEbook;
+	skripsi?: RepositorySkripsi;
+}

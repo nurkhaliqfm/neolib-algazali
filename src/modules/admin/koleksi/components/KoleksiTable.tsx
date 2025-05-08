@@ -8,52 +8,46 @@ import {
 	TableHeader,
 	TableRow,
 	Tooltip,
-} from '@heroui/react';
-import { Key, useCallback } from 'react';
-import { BaseRepository, RepositoryResponse } from '../types/koleksi.type';
-import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi2';
-import { TableHeaderComponent } from '@/types/global';
-import { SetURLSearchParams } from 'react-router-dom';
+} from "@heroui/react";
+import { Key, useCallback } from "react";
+import { BaseRepository, RepositoryResponse } from "../types/koleksi.type";
+import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from "react-icons/hi2";
+import { TableHeaderComponent } from "@/types/global";
+import { SetURLSearchParams, useNavigate } from "react-router-dom";
+import AppRoutes from "@/router/routes";
+import { typeColorMap } from "@/constants/repository";
 
 const RepositoryHeaderTable: TableHeaderComponent[] = [
-	{ name: 'JUDUL', slug: 'judul' },
-	{ name: 'NAMA SAMPUL', slug: 'nama_sampul' },
-	{ name: 'NAMA FILE', slug: 'nama_file' },
-	{ name: 'JENIS', slug: 'type' },
-	{ name: 'ACTIONS', slug: 'actions' },
+	{ name: "JUDUL", slug: "judul" },
+	{ name: "NAMA SAMPUL", slug: "nama_sampul" },
+	{ name: "NAMA FILE", slug: "nama_file" },
+	{ name: "JENIS", slug: "type" },
+	{ name: "ACTIONS", slug: "actions" },
 ];
-
-const typeColorMap: Record<
-	string,
-	'success' | 'danger' | 'default' | 'warning' | 'primary' | undefined
-> = {
-	JURNAL: 'danger',
-	EJURNAL: 'success',
-	EBOOK: 'default',
-	BUKU: 'primary',
-	SKRIPSI: 'warning',
-};
 
 export function RepositoryTable({
 	data,
 	page,
+	slug,
 	setSearchParams,
 }: {
 	data: RepositoryResponse;
 	page: number;
+	slug: string;
 	setSearchParams: SetURLSearchParams;
 }) {
+	const navigate = useNavigate();
 	const renderCell = useCallback((data: BaseRepository, columnKey: Key) => {
 		const cellValue = data[columnKey as keyof BaseRepository];
 
 		switch (columnKey) {
-			case 'judul':
+			case "judul":
 				return <>{data.judul}</>;
-			case 'nama_sampul':
+			case "nama_sampul":
 				return <>{data.nama_sampul}</>;
-			case 'nama_file':
+			case "nama_file":
 				return <>{data.nama_file}</>;
-			case 'type':
+			case "type":
 				return (
 					<Chip
 						className="capitalize"
@@ -63,11 +57,20 @@ export function RepositoryTable({
 						{cellValue}
 					</Chip>
 				);
-			case 'actions':
+			case "actions":
 				return (
 					<div className="relative flex items-center gap-2">
 						<Tooltip color="warning" content="Detail Repository">
-							<span className="text-lg text-warning cursor-pointer active:opacity-50">
+							<span
+								onClick={() =>
+									navigate(
+										`${AppRoutes.AdminDetailKoleksi.path.replace(
+											":koleksi",
+											slug
+										)}?repos=${data.id}`
+									)
+								}
+								className="text-lg text-warning cursor-pointer active:opacity-50">
 								<HiOutlineEye />
 							</span>
 						</Tooltip>
@@ -86,10 +89,13 @@ export function RepositoryTable({
 			default:
 				return cellValue;
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<Table
+			isStriped={true}
+			shadow="none"
 			aria-label="Data koleksi perpustakaan"
 			bottomContent={
 				<div className="flex w-full justify-center">
@@ -111,7 +117,10 @@ export function RepositoryTable({
 					</TableColumn>
 				)}
 			</TableHeader>
-			<TableBody items={data.repository} className="overflow-y-scroll">
+			<TableBody
+				emptyContent={`Koleksi ${slug} tidak ditemukan `}
+				items={data.repository}
+				className="overflow-y-scroll">
 				{(item) => (
 					<TableRow key={item.judul}>
 						{(columnKey) => (
