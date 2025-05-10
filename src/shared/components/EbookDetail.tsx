@@ -7,36 +7,28 @@ interface Props {
 export const EbookDetail: React.FC<Props> = ({ data }) => (
 	<>
 		<div className="flex flex-col">
-			<p className="text-sm">Abstrak</p>
+			<p className="text-sm">Pengarang</p>
 			<p>{data.pengarang}</p>
 		</div>
-		{/* <div className="flex flex-col">
-			<p className="text-sm">Abstrak</p>
-			<p>{data.abstrak}</p>
+		<div className="flex flex-col">
+			<p className="text-sm">Sinopsis</p>
+			<p>{data.sinopsis}</p>
 		</div>
 		<div className="flex flex-col">
-			<p className="text-sm">Tahun Terbit</p>
-			<p>{data.tahun_terbit}</p>
-		</div>
-		<div className="flex flex-col">
-			<p className="text-sm">ISBN</p>
-			<p>{data.isbn}</p>
+			<p className="text-sm">Cetak</p>
+			<p>{data.cetakan}</p>
 		</div>
 		<div className="flex flex-col">
 			<p className="text-sm">Penerbit</p>
 			<p>{data.penerbit}</p>
 		</div>
 		<div className="flex flex-col">
-			<p className="text-sm">Pengarang</p>
-			<p>{data.pengarang}</p>
+			<p className="text-sm">Tempat Terbit</p>
+			<p>{data.tempat_terbit}</p>
 		</div>
 		<div className="flex flex-col">
-			<p className="text-sm">Jurnal</p>
-			<p>{data.jurnal}</p>
+			<p className="text-sm">Tahun Terbit</p>
+			<p>{data.tahun_terbit}</p>
 		</div>
-		<div className="flex flex-col">
-			<p className="text-sm">Lokasi</p>
-			<p>{data.lokasi.nama}</p>
-		</div> */}
 	</>
 );

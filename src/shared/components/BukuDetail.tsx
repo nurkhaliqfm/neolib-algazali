@@ -10,9 +10,25 @@ export const BukuDetail: React.FC<Props> = ({ data }) => (
 			<p className="text-sm">Abstrak</p>
 			<p>{data.pengarang}</p>
 		</div>
-		{/* <div className="flex flex-col">
-			<p className="text-sm">Abstrak</p>
-			<p>{data.abstrak}</p>
+		<div className="flex flex-col">
+			<p className="text-sm">Sinopsis</p>
+			<p>{data.sinopsis}</p>
+		</div>
+		<div className="flex flex-col">
+			<p className="text-sm">Cetakan</p>
+			<p>{data.cetakan}</p>
+		</div>
+		<div className="flex flex-col">
+			<p className="text-sm">Penerbit</p>
+			<p>{data.penerbit}</p>
+		</div>
+		<div className="flex flex-col">
+			<p className="text-sm">Tempat Terbit</p>
+			<p>{data.tempat_terbit}</p>
+		</div>
+		<div className="flex flex-col">
+			<p className="text-sm">Tempat Terbit</p>
+			<p>{data.tempat_terbit}</p>
 		</div>
 		<div className="flex flex-col">
 			<p className="text-sm">Tahun Terbit</p>
@@ -23,20 +39,8 @@ export const BukuDetail: React.FC<Props> = ({ data }) => (
 			<p>{data.isbn}</p>
 		</div>
 		<div className="flex flex-col">
-			<p className="text-sm">Penerbit</p>
-			<p>{data.penerbit}</p>
-		</div>
-		<div className="flex flex-col">
-			<p className="text-sm">Pengarang</p>
-			<p>{data.pengarang}</p>
-		</div>
-		<div className="flex flex-col">
-			<p className="text-sm">Jurnal</p>
-			<p>{data.jurnal}</p>
-		</div>
-		<div className="flex flex-col">
 			<p className="text-sm">Lokasi</p>
-			<p>{data.lokasi.nama}</p>
-		</div> */}
+			<p>{data.lokasi ? data.lokasi.nama : "Lokasi tidak ditemukan"}</p>
+		</div>
 	</>
 );

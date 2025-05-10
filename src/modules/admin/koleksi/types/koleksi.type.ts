@@ -22,7 +22,7 @@ export type RepositoryEjurnal = {
 	isbn: string | null;
 };
 
-export type RepositoryBuku = {
+export type RepositoryEbook = {
 	pengarang: string;
 	sinopsis: string | null;
 	cetakan: string | null;
@@ -30,13 +30,9 @@ export type RepositoryBuku = {
 	tempat_terbit: string | null;
 	tahun_terbit: number;
 	isbn: string | null;
-	lokasi: {
-		id: string;
-		nama: string;
-	};
 };
 
-export type RepositoryEbook = {
+export type RepositoryBuku = {
 	tanggal: string | null;
 	no_regist: string | null;
 	pengarang: string;
@@ -51,7 +47,10 @@ export type RepositoryEbook = {
 	harga: number;
 	jumlah_buku: number;
 	keterangan: string | null;
-	id_lokasi: number;
+	lokasi: {
+		id: string;
+		nama: string;
+	};
 };
 
 export type RepositorySkripsi = {

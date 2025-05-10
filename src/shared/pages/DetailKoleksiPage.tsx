@@ -20,7 +20,7 @@ import {
 import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
 import { JurnalDetail } from "../components/JurnalDetail";
 import { BukuDetail } from "../components/BukuDetail";
-import { EbookDetail } from "../components/EbookDetial";
+import { EbookDetail } from "../components/EbookDetail";
 import { SkripsiDetail } from "../components/SkripsiDetail";
 import { EjurnalDetail } from "../components/EJurnalDetail";
 
@@ -66,6 +66,7 @@ const DetailKoleksiPage = () => {
 				type: koleksi,
 				repos: repos,
 				onDone: (data) => {
+					console.log(data);
 					setrepositoryDetailData(data);
 				},
 			});
@@ -119,7 +120,7 @@ const DetailKoleksiPage = () => {
 						<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
 							<p className="text-tiny uppercase font-bold">Detail {koleksi}</p>
 						</CardHeader>
-						<CardBody className="overflow-visible py-2">
+						<CardBody className="overflow-visible py-2 px-4">
 							{renderDetailRepository(
 								detailKey,
 								detailData as RepositoryDetailItem[typeof detailKey]
