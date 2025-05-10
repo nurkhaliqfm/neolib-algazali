@@ -62,8 +62,6 @@ const getDetailRepository = async ({
 			}
 		);
 
-		console.log(response.data);
-
 		if (onDone) onDone(response.data);
 	} catch (error) {
 		if (axios.isAxiosError(error)) {

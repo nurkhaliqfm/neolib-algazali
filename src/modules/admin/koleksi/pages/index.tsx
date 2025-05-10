@@ -1,7 +1,5 @@
-import ListKoleksiPage from './ListPage';
-import DetailKoleksiPage from './DetailPage'
+import ListKoleksiPage from "./ListPage";
 
 export default {
 	ListKoleksiPage,
-	DetailKoleksiPage
 };

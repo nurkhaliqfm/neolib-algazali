@@ -26,12 +26,12 @@ const RepositoryHeaderTable: TableHeaderComponent[] = [
 ];
 
 export function RepositoryTable({
-	data,
+	repos,
 	page,
 	slug,
 	setSearchParams,
 }: {
-	data: RepositoryResponse;
+	repos: RepositoryResponse;
 	page: number;
 	slug: string;
 	setSearchParams: SetURLSearchParams;
@@ -105,7 +105,7 @@ export function RepositoryTable({
 						showShadow
 						color="primary"
 						page={page}
-						total={data.pages.total}
+						total={repos.pages.total}
 						onChange={(page) => setSearchParams({ page: page.toString() })}
 					/>
 				</div>
@@ -119,7 +119,7 @@ export function RepositoryTable({
 			</TableHeader>
 			<TableBody
 				emptyContent={`Koleksi ${slug} tidak ditemukan `}
-				items={data.repository}
+				items={repos.repository}
 				className="overflow-y-scroll">
 				{(item) => (
 					<TableRow key={item.judul}>

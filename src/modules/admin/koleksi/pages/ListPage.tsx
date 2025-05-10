@@ -47,7 +47,7 @@ const ListKoleksiPage = () => {
 							className="capitalize">{`${koleksi} Baru`}</Button>
 					</section>
 					<RepositoryTable
-						data={repositoryData}
+						repos={repositoryData}
 						page={Number(page)}
 						slug={koleksi}
 						setSearchParams={setSearchParams}

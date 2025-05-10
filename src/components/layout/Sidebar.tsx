@@ -10,13 +10,13 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 	SidebarRail,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 
-import LogoKampus from '@/assets/logo.svg';
-import { SIDEBAR_LIST } from '@/constants/sidebar';
-import { Fragment } from 'react/jsx-runtime';
-import { SidebarUser } from './SidebarUser';
-import { useTypedSelector } from '@/hooks/useTypedSelector';
+import LogoKampus from "@/assets/logo.svg";
+import { SIDEBAR_LIST } from "@/constants/sidebar";
+import { Fragment } from "react/jsx-runtime";
+import { SidebarUser } from "./SidebarUser";
+import { useTypedSelector } from "@/hooks/useTypedSelector";
 
 export function AppSidebar() {
 	const user = useTypedSelector((state) => state.oauth.oauthData);

@@ -8,3 +8,11 @@ export const typeColorMap: Record<
 	BUKU: "primary",
 	SKRIPSI: "warning",
 };
+
+export const repositoryTypeMap = {
+	JURNAL: "jurnal",
+	EJURNAL: "ejurnal",
+	BUKU: "buku",
+	EBOOK: "ebook",
+	SKRIPSI: "skripsi",
+} as const;

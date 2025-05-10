@@ -1,15 +1,16 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import AppRoutes from './routes';
-import Error from '../modules/Error';
-import Admin from '../modules/admin';
-import BaseLayout from '@/components/layout/Base';
-import Public from '@/modules/Public';
-import Auth from '@/modules/auth';
-import AuthMiddleware from '@/modules/auth/middleware/AuthMiddleware';
-import ProtectedRoutes from '@/modules/auth/middleware/ProtectedRoutes';
-import AuthorizedRoute from '@/modules/auth/middleware/AuthorizedRoute';
+import { Navigate, Route, Routes } from "react-router-dom";
+import AppRoutes from "./routes";
+import Error from "../modules/Error";
+import Admin from "../modules/admin";
+import Shared from "../shared/pages";
+import BaseLayout from "@/components/layout/Base";
+import Public from "@/modules/Public";
+import Auth from "@/modules/auth";
+import AuthMiddleware from "@/modules/auth/middleware/AuthMiddleware";
+import ProtectedRoutes from "@/modules/auth/middleware/ProtectedRoutes";
+import AuthorizedRoute from "@/modules/auth/middleware/AuthorizedRoute";
 
-function App() {
+function AppRouter() {
 	return (
 		<Routes>
 			{/* NOTE: Error Route */}
@@ -31,7 +32,7 @@ function App() {
 						path={AppRoutes.AdminDashboard.path}
 						element={
 							<AuthorizedRoute
-								allowedRoles={['Admin']}
+								allowedRoles={["Admin"]}
 								page={<Admin.DashboardPage />}
 							/>
 						}
@@ -40,7 +41,7 @@ function App() {
 						path={AppRoutes.AdminKoleksi.path}
 						element={
 							<AuthorizedRoute
-								allowedRoles={['Admin']}
+								allowedRoles={["Admin"]}
 								page={<Admin.KoleksiPage.ListKoleksiPage />}
 							/>
 						}
@@ -49,8 +50,8 @@ function App() {
 						path={AppRoutes.AdminDetailKoleksi.path}
 						element={
 							<AuthorizedRoute
-								allowedRoles={['Admin']}
-								page={<Admin.KoleksiPage.DetailKoleksiPage />}
+								allowedRoles={["Admin"]}
+								page={<Shared.DetailKoleksiPage />}
 							/>
 						}
 					/>
@@ -58,7 +59,7 @@ function App() {
 						path={AppRoutes.AdminTransaksi.path}
 						element={
 							<AuthorizedRoute
-								allowedRoles={['Admin']}
+								allowedRoles={["Admin"]}
 								page={<Admin.TransaksiPage />}
 							/>
 						}
@@ -67,7 +68,7 @@ function App() {
 						path={AppRoutes.AdminAnggota.path}
 						element={
 							<AuthorizedRoute
-								allowedRoles={['Admin']}
+								allowedRoles={["Admin"]}
 								page={<Admin.AnggotaPage />}
 							/>
 						}
@@ -76,7 +77,7 @@ function App() {
 						path={AppRoutes.AdminPassword.path}
 						element={
 							<AuthorizedRoute
-								allowedRoles={['Admin']}
+								allowedRoles={["Admin"]}
 								page={<Admin.PasswordPage />}
 							/>
 						}
@@ -91,4 +92,4 @@ function App() {
 	);
 }
 
-export default App;
+export default AppRouter;

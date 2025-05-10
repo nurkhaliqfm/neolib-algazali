@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { getDetailRepository } from "../services/koleksiService";
-import { RepositoryDetailResponse } from "../types/koleksi.type";
+import { createElement, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { RepositoryItemKey } from "@/types/repository";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
@@ -14,11 +12,43 @@ import {
 	Image,
 } from "@heroui/react";
 import { HiOutlineEye } from "react-icons/hi2";
-import { typeColorMap } from "@/constants/repository";
+import { repositoryTypeMap, typeColorMap } from "@/constants/repository";
+import {
+	RepositoryDetailItem,
+	RepositoryDetailResponse,
+} from "@/modules/admin/koleksi/types/koleksi.type";
+import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
+import { JurnalDetail } from "../components/JurnalDetail";
+import { BukuDetail } from "../components/BukuDetail";
+import { EbookDetail } from "../components/EbookDetial";
+import { SkripsiDetail } from "../components/SkripsiDetail";
+import { EjurnalDetail } from "../components/EJurnalDetail";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
-const DetailPage = () => {
+const detailComponentMap: {
+	[K in keyof RepositoryDetailItem]: React.FC<{
+		data: RepositoryDetailItem[K];
+	}>;
+} = {
+	jurnal: JurnalDetail,
+	ejurnal: EjurnalDetail,
+	buku: BukuDetail,
+	ebook: EbookDetail,
+	skripsi: SkripsiDetail,
+};
+
+function renderDetailRepository<T extends keyof RepositoryDetailItem>(
+	key: T,
+	data: RepositoryDetailItem[T]
+) {
+	const Component = detailComponentMap[key] as React.ComponentType<{
+		data: RepositoryDetailItem[T];
+	}>;
+	return createElement(Component, { data });
+}
+
+const DetailKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const { search } = useLocation();
 
@@ -41,14 +71,21 @@ const DetailPage = () => {
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [koleksi, repos]);
+
+	if (!repositoryDetailData) return <p>No data found.</p>;
+
+	const detailKey = repositoryTypeMap[repositoryDetailData.type];
+	const detailData = repositoryDetailData[detailKey];
 
 	return (
 		<>
 			{repositoryDetailData && (
-				<section className="flex gap-x-4 p-4">
-					<Card className="py-4 w-80 border rounded-2xl" shadow="none">
-						<CardBody className="overflow-visible py-2">
+				<section className="flex gap-4 p-4 flex-col lg:flex-row">
+					<Card
+						className="py-4 md:max-w-80 w-full border rounded-2xl"
+						shadow="none">
+						<CardBody className="overflow-visible py-2 items-center">
 							<Image
 								alt="Card background"
 								className="object-cover rounded-xl"
@@ -83,57 +120,16 @@ const DetailPage = () => {
 							<p className="text-tiny uppercase font-bold">Detail {koleksi}</p>
 						</CardHeader>
 						<CardBody className="overflow-visible py-2">
-							<div className="flex flex-col">
-								<p className="text-sm">Abstrak</p>
-								<p>{repositoryDetailData.jurnal?.abstrak}</p>
-							</div>
-							<div className="flex flex-col">
-								<p className="text-sm">Tahun Terbit</p>
-								<p>{repositoryDetailData.jurnal?.tahun_terbit}</p>
-							</div>
-							<div className="flex flex-col">
-								<p className="text-sm">ISBN</p>
-								<p>{repositoryDetailData.jurnal?.isbn}</p>
-							</div>
-							<div className="flex flex-col">
-								<p className="text-sm">Penerbit</p>
-								<p>{repositoryDetailData.jurnal?.penerbit}</p>
-							</div>
-							<div className="flex flex-col">
-								<p className="text-sm">Pengarang</p>
-								<p>{repositoryDetailData.jurnal?.pengarang}</p>
-							</div>
-							<div className="flex flex-col">
-								<p className="text-sm">Jurnal</p>
-								<p>{repositoryDetailData.jurnal?.jurnal}</p>
-							</div>
-							<div className="flex flex-col">
-								<p className="text-sm">Lokasi</p>
-								<p>{repositoryDetailData.jurnal?.lokasi.nama}</p>
-							</div>
+							{renderDetailRepository(
+								detailKey,
+								detailData as RepositoryDetailItem[typeof detailKey]
+							)}
 						</CardBody>
 					</Card>
-					{/* <Card>
-						<div className="flex flex-col">
-							<p className="text-sm">Judul</p>
-							<p>{repositoryDetailData.judul}</p>
-						</div>
-						<div className="flex flex-col">
-							<p className="text-sm">Nama File</p>
-							<p>{repositoryDetailData.nama_file}</p>
-						</div>
-						<div className="flex flex-col">
-							<p className="text-sm">Nama Sampul</p>
-							<p>{repositoryDetailData.nama_sampul}</p>
-						</div>
-					</Card>
-					<Card>
-						
-					</Card> */}
 				</section>
 			)}
 		</>
 	);
 };
 
-export default DetailPage;
+export default DetailKoleksiPage;

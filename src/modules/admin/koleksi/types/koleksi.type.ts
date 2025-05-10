@@ -1,3 +1,5 @@
+import { repositoryTypeMap } from "@/constants/repository";
+
 export type RepositoryJurnal = {
 	abstrak: string | null;
 	pengarang: string;
@@ -84,3 +86,14 @@ export interface RepositoryDetailResponse extends BaseRepository {
 	ebook?: RepositoryEbook;
 	skripsi?: RepositorySkripsi;
 }
+
+export type RepositoryDetailItem = {
+	jurnal: RepositoryJurnal;
+	ejurnal: RepositoryEjurnal;
+	buku: RepositoryBuku;
+	ebook: RepositoryEbook;
+	skripsi: RepositorySkripsi;
+};
+
+type RepositoryType = keyof typeof repositoryTypeMap;
+export type DetailRepositoryKey = (typeof repositoryTypeMap)[RepositoryType];
