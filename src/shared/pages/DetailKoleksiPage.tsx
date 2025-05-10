@@ -66,7 +66,6 @@ const DetailKoleksiPage = () => {
 				type: koleksi,
 				repos: repos,
 				onDone: (data) => {
-					console.log(data);
 					setrepositoryDetailData(data);
 				},
 			});
