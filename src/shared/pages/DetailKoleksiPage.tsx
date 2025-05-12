@@ -18,11 +18,11 @@ import {
 	RepositoryDetailResponse,
 } from "@/modules/admin/koleksi/types/koleksi.type";
 import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
-import { JurnalDetail } from "../components/JurnalDetail";
-import { BukuDetail } from "../components/BukuDetail";
-import { EbookDetail } from "../components/EbookDetail";
-import { SkripsiDetail } from "../components/SkripsiDetail";
-import { EjurnalDetail } from "../components/EJurnalDetail";
+import { JurnalDetail } from "../components/DetailRepository/JurnalDetail";
+import { BukuDetail } from "../components/DetailRepository/BukuDetail";
+import { EbookDetail } from "../components/DetailRepository/EbookDetail";
+import { SkripsiDetail } from "../components/DetailRepository/SkripsiDetail";
+import { EjurnalDetail } from "../components/DetailRepository/EjurnalDetail";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
