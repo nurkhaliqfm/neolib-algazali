@@ -61,7 +61,7 @@ export function RepositoryTable({
 				return (
 					<div className="relative flex items-center gap-2">
 						<Tooltip color="warning" content="Detail Repository">
-							<span
+							<button
 								onClick={() =>
 									navigate(
 										`${AppRoutes.AdminDetailKoleksi.path.replace(
@@ -72,12 +72,21 @@ export function RepositoryTable({
 								}
 								className="text-lg text-warning cursor-pointer active:opacity-50">
 								<HiOutlineEye />
-							</span>
+							</button>
 						</Tooltip>
 						<Tooltip color="success" content="Edit Repository">
-							<span className="text-lg text-success cursor-pointer active:opacity-50">
+							<button
+								onClick={() =>
+									navigate(
+										`${AppRoutes.AdminEditKoleksi.path.replace(
+											":koleksi",
+											slug
+										)}?repos=${data.id}`
+									)
+								}
+								className="text-lg text-success cursor-pointer active:opacity-50">
 								<HiOutlinePencil />
-							</span>
+							</button>
 						</Tooltip>
 						<Tooltip color="danger" content="Delete Repository">
 							<span className="text-lg text-danger cursor-pointer active:opacity-50">

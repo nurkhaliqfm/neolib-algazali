@@ -1,28 +1,22 @@
 import { RepositorySkripsi } from "@/modules/admin/koleksi/types/koleksi.type";
 import { DetailRepositoryItem } from "./DetailItem";
+import { repositorySkripsiMetaFields } from "@/constants/repository";
 
 interface Props {
 	data: RepositorySkripsi;
 }
 
-const repositorySkripsiMap = {
-	abstrak: { slug: "Abstrak", isWajib: true },
-	pengarang: { slug: "Pengarang", isWajib: true },
-	fakultaspenerbit: { slug: "Fakultas", isWajib: true },
-	prodi: { slug: "Prodi", isWajib: true },
-	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
-	lokasi: { slug: "Lokasi", isWajib: true },
-} as const;
-
 export const SkripsiDetail: React.FC<Props> = ({ data }) => (
 	<>
-		{Object.keys(repositorySkripsiMap).map((key) => {
+		{Object.keys(repositorySkripsiMetaFields).map((key) => {
 			return (
 				<DetailRepositoryItem
 					key={key}
 					slug={key}
 					title={
-						repositorySkripsiMap[key as keyof typeof repositorySkripsiMap].slug
+						repositorySkripsiMetaFields[
+							key as keyof typeof repositorySkripsiMetaFields
+						].slug
 					}
 					value={
 						key === "lokasi"

@@ -4,13 +4,10 @@ const AppRoutes = {
 		path: "/admin/dashboard",
 		label: "Dashboard Admin E-Library",
 	},
+
 	AdminKoleksi: {
 		path: "/admin/koleksi/:koleksi",
 		label: "Admin Koleksi E-Library",
-	},
-	AdminDetailKoleksi: {
-		path: "/admin/koleksi/:koleksi/detail",
-		label: "Admin Detial Koleksi E-Library",
 	},
 	AdminKoleksiJurnal: {
 		path: "/admin/koleksi/jurnal",
@@ -31,6 +28,16 @@ const AppRoutes = {
 	AdminKoleksiSkripsi: {
 		path: "/admin/koleksi/skripsi",
 		label: "Admin Koleksi Skripsi E-library",
+	},
+
+	AdminDetailKoleksi: {
+		path: "/admin/koleksi/:koleksi/detail",
+		label: "Admin Detial Koleksi E-Library",
+	},
+
+	AdminEditKoleksi: {
+		path: "/admin/koleksi/:koleksi/edit",
+		label: "Admin Edit Koleksi E-Library",
 	},
 
 	AdminAnggota: { path: "/admin/anggota", label: "Anggota" },

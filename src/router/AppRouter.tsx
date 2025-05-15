@@ -56,6 +56,15 @@ function AppRouter() {
 						}
 					/>
 					<Route
+						path={AppRoutes.AdminEditKoleksi.path}
+						element={
+							<AuthorizedRoute
+								allowedRoles={["Admin"]}
+								page={<Admin.KoleksiPage.EditKoleksiPage />}
+							/>
+						}
+					/>
+					<Route
 						path={AppRoutes.AdminTransaksi.path}
 						element={
 							<AuthorizedRoute
