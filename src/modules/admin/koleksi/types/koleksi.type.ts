@@ -1,4 +1,4 @@
-import { repositoryTypeMap } from "@/constants/repository";
+import { repositoryTypeMap } from '@/constants/repository';
 
 export type RepositoryJurnal = {
 	abstrak: string | null;
@@ -20,6 +20,10 @@ export type RepositoryEjurnal = {
 	jurnal: string | null;
 	tahun_terbit: number;
 	isbn: string | null;
+	lokasi: {
+		id: string;
+		nama: string;
+	};
 };
 
 export type RepositoryEbook = {
@@ -30,6 +34,10 @@ export type RepositoryEbook = {
 	tempat_terbit: string | null;
 	tahun_terbit: number;
 	isbn: string | null;
+	lokasi: {
+		id: string;
+		nama: string;
+	};
 };
 
 export type RepositoryBuku = {
@@ -70,7 +78,7 @@ export interface BaseRepository {
 	judul: string;
 	nama_sampul: string | null;
 	nama_file: string | null;
-	type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
+	type: 'EJURNAL' | 'JURNAL' | 'EBOOK' | 'BUKU' | 'SKRIPSI';
 }
 
 export interface RepositoryResponse {

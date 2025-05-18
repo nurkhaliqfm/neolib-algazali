@@ -1,7 +1,7 @@
-import { createElement, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { RepositoryItemKey } from "@/types/repository";
-import { useTypedSelector } from "@/hooks/useTypedSelector";
+import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { RepositoryItemKey } from '@/types/repository';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
 import {
 	Button,
 	Card,
@@ -10,50 +10,28 @@ import {
 	CardHeader,
 	Chip,
 	Image,
-} from "@heroui/react";
-import { HiOutlineEye } from "react-icons/hi2";
-import { repositoryTypeMap, typeColorMap } from "@/constants/repository";
+} from '@heroui/react';
+import { HiOutlineEye } from 'react-icons/hi2';
+import {
+	repositoryMetaFileds,
+	repositoryTypeMap,
+	typeColorMap,
+} from '@/constants/repository';
 import {
 	RepositoryDetailItem,
 	RepositoryDetailResponse,
-} from "@/modules/admin/koleksi/types/koleksi.type";
-import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
-import { JurnalDetail } from "../components/DetailRepository/JurnalDetail";
-import { BukuDetail } from "../components/DetailRepository/BukuDetail";
-import { EbookDetail } from "../components/DetailRepository/EbookDetail";
-import { SkripsiDetail } from "../components/DetailRepository/SkripsiDetail";
-import { EjurnalDetail } from "../components/DetailRepository/EjurnalDetail";
+} from '@/modules/admin/koleksi/types/koleksi.type';
+import { getDetailRepository } from '@/modules/admin/koleksi/services/koleksiService';
+import { KoleksiDetail, KoleksiDetailItem } from '../components/KoleksiDetail';
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
-
-const detailComponentMap: {
-	[K in keyof RepositoryDetailItem]: React.FC<{
-		data: RepositoryDetailItem[K];
-	}>;
-} = {
-	jurnal: JurnalDetail,
-	ejurnal: EjurnalDetail,
-	buku: BukuDetail,
-	ebook: EbookDetail,
-	skripsi: SkripsiDetail,
-};
-
-function renderDetailRepository<T extends keyof RepositoryDetailItem>(
-	key: T,
-	data: RepositoryDetailItem[T]
-) {
-	const Component = detailComponentMap[key] as React.ComponentType<{
-		data: RepositoryDetailItem[T];
-	}>;
-	return createElement(Component, { data });
-}
 
 const DetailKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const { search } = useLocation();
 
 	const params = new URLSearchParams(search);
-	const repos = params.get("repos");
+	const repos = params.get('repos');
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [repositoryDetailData, setrepositoryDetailData] =
@@ -105,7 +83,7 @@ const DetailKoleksiPage = () => {
 								{repositoryDetailData.type}
 							</Chip>
 							{repositoryDetailData.nama_file &&
-								repositoryDetailData.nama_file !== "" && (
+								repositoryDetailData.nama_file !== '' && (
 									<Button
 										className="my-2"
 										startContent={<HiOutlineEye />}
@@ -120,10 +98,30 @@ const DetailKoleksiPage = () => {
 							<p className="text-tiny uppercase font-bold">Detail {koleksi}</p>
 						</CardHeader>
 						<CardBody className="overflow-visible py-2 px-4">
-							{renderDetailRepository(
-								detailKey,
-								detailData as RepositoryDetailItem[typeof detailKey]
-							)}
+							<KoleksiDetail
+								data={detailData as RepositoryDetailItem[typeof detailKey]}
+								renderFields={({ data, keys }) => {
+									const key = keys.filter((key) => (key as string) !== 'id');
+									return (
+										<>
+											{key.map((k) => (
+												<KoleksiDetailItem
+													key={k}
+													slug={k}
+													title={repositoryMetaFileds[k].slug}
+													value={
+														k === 'lokasi'
+															? data.lokasi
+																? data.lokasi.nama
+																: ''
+															: (data[k] as string)
+													}
+												/>
+											))}
+										</>
+									);
+								}}
+							/>
 						</CardBody>
 					</Card>
 				</section>
