@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { RepositoryItemKey } from '@/types/repository';
-import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { RepositoryItemKey } from "@/types/repository";
+import { useTypedSelector } from "@/hooks/useTypedSelector";
 import {
 	Button,
 	Card,
@@ -10,19 +10,19 @@ import {
 	CardHeader,
 	Chip,
 	Image,
-} from '@heroui/react';
-import { HiOutlineEye } from 'react-icons/hi2';
+} from "@heroui/react";
+import { HiOutlineEye } from "react-icons/hi2";
 import {
 	repositoryMetaFileds,
 	repositoryTypeMap,
 	typeColorMap,
-} from '@/constants/repository';
+} from "@/constants/repository";
 import {
 	RepositoryDetailItem,
 	RepositoryDetailResponse,
-} from '@/modules/admin/koleksi/types/koleksi.type';
-import { getDetailRepository } from '@/modules/admin/koleksi/services/koleksiService';
-import { KoleksiDetail, KoleksiDetailItem } from '../components/KoleksiDetail';
+} from "@/modules/admin/koleksi/types/koleksi.type";
+import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
+import { KoleksiDetail, KoleksiDetailItem } from "../components/KoleksiDetail";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -31,7 +31,7 @@ const DetailKoleksiPage = () => {
 	const { search } = useLocation();
 
 	const params = new URLSearchParams(search);
-	const repos = params.get('repos');
+	const repos = params.get("repos");
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [repositoryDetailData, setrepositoryDetailData] =
@@ -83,7 +83,7 @@ const DetailKoleksiPage = () => {
 								{repositoryDetailData.type}
 							</Chip>
 							{repositoryDetailData.nama_file &&
-								repositoryDetailData.nama_file !== '' && (
+								repositoryDetailData.nama_file !== "" && (
 									<Button
 										className="my-2"
 										startContent={<HiOutlineEye />}
@@ -101,7 +101,12 @@ const DetailKoleksiPage = () => {
 							<KoleksiDetail
 								data={detailData as RepositoryDetailItem[typeof detailKey]}
 								renderFields={({ data, keys }) => {
-									const key = keys.filter((key) => (key as string) !== 'id');
+									const key = keys.filter((key) => (key as string) !== "id");
+									// if (key.includes("lokasi" as (typeof keys)[number])) {
+									// 	if ("lokasi" in data) {
+									// 		console.log("lokasi", data["lokasi"]);
+									// 	}
+									// }
 									return (
 										<>
 											{key.map((k) => (
@@ -110,11 +115,12 @@ const DetailKoleksiPage = () => {
 													slug={k}
 													title={repositoryMetaFileds[k].slug}
 													value={
-														k === 'lokasi'
-															? data.lokasi
-																? data.lokasi.nama
-																: ''
-															: (data[k] as string)
+														typeof data[k] === "object"
+															? (data[k] &&
+																	(data[k] as { nama: string; id: number })
+																		?.nama) ||
+															  ""
+															: String(data[k] ?? "")
 													}
 												/>
 											))}

@@ -1,8 +1,8 @@
-import { moneyConverter } from '@/utils/moneyFormatter';
-import { useCallback } from 'react';
-import dayjs from 'dayjs';
-import 'dayjs/locale/id';
-dayjs.locale('id');
+import { moneyConverter } from "@/utils/moneyFormatter";
+import { useCallback } from "react";
+import dayjs from "dayjs";
+import "dayjs/locale/id";
+dayjs.locale("id");
 
 interface RepositoryDetailProps<T extends object> {
 	data: T;
@@ -13,7 +13,11 @@ export const KoleksiDetail = <T extends object>({
 	data,
 	renderFields,
 }: RepositoryDetailProps<T>) => {
-	const keys = Object.keys(data) as (keyof T)[];
+	// const keys = Object.keys(data) as (keyof T)[];
+	const keys = Object.keys(data).filter(
+		(key) => data[key as keyof T] !== undefined
+	) as (keyof T)[];
+
 	return <>{renderFields({ data, keys })}</>;
 };
 
@@ -28,10 +32,10 @@ export const KoleksiDetailItem = ({
 }) => {
 	const renderItem = useCallback((value: string, slug: string) => {
 		switch (slug) {
-			case 'harga':
+			case "harga":
 				return moneyConverter(value);
-			case 'tanggal':
-				return dayjs(new Date(value)).format('DD MMMM YYYY');
+			case "tanggal":
+				return dayjs(new Date(value)).format("DD MMMM YYYY");
 			default:
 				return value;
 		}
