@@ -13,7 +13,6 @@ export const KoleksiDetail = <T extends object>({
 	data,
 	renderFields,
 }: RepositoryDetailProps<T>) => {
-	// const keys = Object.keys(data) as (keyof T)[];
 	const keys = Object.keys(data).filter(
 		(key) => data[key as keyof T] !== undefined
 	) as (keyof T)[];
