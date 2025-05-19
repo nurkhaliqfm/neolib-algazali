@@ -1,4 +1,4 @@
-import { z } from "zod";
+// import { z } from "zod";
 
 export const typeColorMap: Record<
 	string,
@@ -19,84 +19,61 @@ export const repositoryTypeMap = {
 	SKRIPSI: "skripsi",
 } as const;
 
-export const repositoryBukuMetaFileds = {
-	tanggal: { slug: "Tanggal", isWajib: true },
-	no_regist: { slug: "Nomor Registrasi", isWajib: true },
-	pengarang: { slug: "Pengarang", isWajib: true },
-	sinopsis: { slug: "Sinopsis", isWajib: true },
-	cetakan: { slug: "Cetakan", isWajib: true },
-	penerbit: { slug: "Penerbit", isWajib: true },
-	tempat_terbit: { slug: "Tempat Terbit", isWajib: true },
-	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
-	asal_buku: { slug: "Asal Buku", isWajib: true },
-	isbn: { slug: "ISBN", isWajib: true },
-	no_klasifikasi: { slug: "Nomor Klasifikasi", isWajib: true },
-	harga: { slug: "Harga", isWajib: true },
-	jumlah_buku: { slug: "Jumlah Buku", isWajib: true },
-	keterangan: { slug: "Keterangan", isWajib: true },
-	lokasi: { slug: "Lokasi Buku", isWajib: true },
-} as const;
+// export const repositoryBukuMetaFileds = {
+// 	tanggal: { slug: "Tanggal", isWajib: true },
+// 	no_regist: { slug: "Nomor Registrasi", isWajib: true },
+// 	pengarang: { slug: "Pengarang", isWajib: true },
+// 	sinopsis: { slug: "Sinopsis", isWajib: true },
+// 	cetakan: { slug: "Cetakan", isWajib: true },
+// 	penerbit: { slug: "Penerbit", isWajib: true },
+// 	tempat_terbit: { slug: "Tempat Terbit", isWajib: true },
+// 	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
+// 	asal_buku: { slug: "Asal Buku", isWajib: true },
+// 	isbn: { slug: "ISBN", isWajib: true },
+// 	no_klasifikasi: { slug: "Nomor Klasifikasi", isWajib: true },
+// 	harga: { slug: "Harga", isWajib: true },
+// 	jumlah_buku: { slug: "Jumlah Buku", isWajib: true },
+// 	keterangan: { slug: "Keterangan", isWajib: true },
+// 	lokasi: { slug: "Lokasi Buku", isWajib: true },
+// } as const;
 
-export const repositoryBukuMetaScheme = z.object({
-	tanggal: z.string().optional().nullable(),
-	no_regist: z.string().optional().nullable(),
-	pengarang: z.string().min(2).max(50),
-	sinopsis: z.string().optional().nullable(),
-	cetakan: z.string().min(2).max(50),
-	penerbit: z.string().min(2).max(50),
-	tempat_terbit: z.string().min(2).max(50),
-	tahun_terbit: z.number(),
-	asal_buku: z.string().optional().nullable(),
-	isbn: z.string().min(2).max(50),
-	no_klasifikasi: z.string().optional().nullable(),
-	harga: z.number(),
-	jumlah_buku: z.number(),
-	keterangan: z.string().optional().nullable(),
-	lokasi: z
-		.object({
-			id: z.number(),
-			nama: z.string().min(2).max(50),
-		})
-		.nullable(),
-});
+// export const repositoryEbookMetaFields = {
+// 	pengarang: { slug: "Pengarang", isWajib: true },
+// 	sinopsis: { slug: "Sinopsis", isWajib: true },
+// 	cetakan: { slug: "Cetakan", isWajib: true },
+// 	penerbit: { slug: "Penerbit", isWajib: true },
+// 	tempat_terbit: { slug: "Tempat Terbit", isWajib: true },
+// 	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
+// 	isbn: { slug: "ISBN", isWajib: true },
+// } as const;
 
-export const repositoryEbookMetaFields = {
-	pengarang: { slug: "Pengarang", isWajib: true },
-	sinopsis: { slug: "Sinopsis", isWajib: true },
-	cetakan: { slug: "Cetakan", isWajib: true },
-	penerbit: { slug: "Penerbit", isWajib: true },
-	tempat_terbit: { slug: "Tempat Terbit", isWajib: true },
-	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
-	isbn: { slug: "ISBN", isWajib: true },
-} as const;
+// export const repositoryEjurnalMetaFields = {
+// 	abstrak: { slug: "Abstrak", isWajib: true },
+// 	pengarang: { slug: "Pengarang", isWajib: true },
+// 	penerbit: { slug: "Penerbit", isWajib: true },
+// 	jurnal: { slug: "Jurnal", isWajib: true },
+// 	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
+// 	isbn: { slug: "ISBN", isWajib: true },
+// } as const;
 
-export const repositoryEjurnalMetaFields = {
-	abstrak: { slug: "Abstrak", isWajib: true },
-	pengarang: { slug: "Pengarang", isWajib: true },
-	penerbit: { slug: "Penerbit", isWajib: true },
-	jurnal: { slug: "Jurnal", isWajib: true },
-	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
-	isbn: { slug: "ISBN", isWajib: true },
-} as const;
+// export const repositoryJurnalMetaFileds = {
+// 	abstrak: { slug: "Abstrak", isWajib: true },
+// 	pengarang: { slug: "Pengarang", isWajib: true },
+// 	penerbit: { slug: "Penerbit", isWajib: true },
+// 	jurnal: { slug: "Jurnal", isWajib: true },
+// 	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
+// 	isbn: { slug: "ISBN", isWajib: true },
+// 	lokasi: { slug: "Lokasi", isWajib: true },
+// } as const;
 
-export const repositoryJurnalMetaFileds = {
-	abstrak: { slug: "Abstrak", isWajib: true },
-	pengarang: { slug: "Pengarang", isWajib: true },
-	penerbit: { slug: "Penerbit", isWajib: true },
-	jurnal: { slug: "Jurnal", isWajib: true },
-	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
-	isbn: { slug: "ISBN", isWajib: true },
-	lokasi: { slug: "Lokasi", isWajib: true },
-} as const;
-
-export const repositorySkripsiMetaFields = {
-	abstrak: { slug: "Abstrak", isWajib: true },
-	pengarang: { slug: "Pengarang", isWajib: true },
-	fakultas: { slug: "Fakultas", isWajib: true },
-	prodi: { slug: "Prodi", isWajib: true },
-	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
-	lokasi: { slug: "Lokasi", isWajib: true },
-} as const;
+// export const repositorySkripsiMetaFields = {
+// 	abstrak: { slug: "Abstrak", isWajib: true },
+// 	pengarang: { slug: "Pengarang", isWajib: true },
+// 	fakultas: { slug: "Fakultas", isWajib: true },
+// 	prodi: { slug: "Prodi", isWajib: true },
+// 	tahun_terbit: { slug: "Tahun Terbit", isWajib: true },
+// 	lokasi: { slug: "Lokasi", isWajib: true },
+// } as const;
 
 export const repositoryMetaFileds = {
 	tanggal: { slug: "Tanggal", isWajib: true },

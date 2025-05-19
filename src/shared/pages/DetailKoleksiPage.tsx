@@ -13,16 +13,13 @@ import {
 } from "@heroui/react";
 import { HiOutlineEye } from "react-icons/hi2";
 import {
-	repositoryMetaFileds,
+	repositoryFieldConfig,
 	repositoryTypeMap,
 	typeColorMap,
 } from "@/constants/repository";
-import {
-	RepositoryDetailItem,
-	RepositoryDetailResponse,
-} from "@/modules/admin/koleksi/types/koleksi.type";
+import { RepositoryDetailResponse } from "@/modules/admin/koleksi/types/koleksi.type";
 import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
-import { KoleksiDetail, KoleksiDetailItem } from "../components/KoleksiDetail";
+import { KoleksiDetailItem } from "../components/KoleksiDetail";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -54,11 +51,17 @@ const DetailKoleksiPage = () => {
 	if (!repositoryDetailData) return <p>No data found.</p>;
 
 	const detailKey = repositoryTypeMap[repositoryDetailData.type];
+	const formFields = detailKey
+		? repositoryFieldConfig[detailKey].map((field) => ({
+				...field,
+		  }))
+		: [];
+
 	const detailData = repositoryDetailData[detailKey];
 
 	return (
 		<>
-			{repositoryDetailData && (
+			{detailData && (
 				<section className="flex gap-4 p-4 flex-col lg:flex-row">
 					<Card
 						className="py-4 md:max-w-80 w-full border rounded-2xl"
@@ -98,36 +101,24 @@ const DetailKoleksiPage = () => {
 							<p className="text-tiny uppercase font-bold">Detail {koleksi}</p>
 						</CardHeader>
 						<CardBody className="overflow-visible py-2 px-4">
-							<KoleksiDetail
-								data={detailData as RepositoryDetailItem[typeof detailKey]}
-								renderFields={({ data, keys }) => {
-									const key = keys.filter((key) => (key as string) !== "id");
-									// if (key.includes("lokasi" as (typeof keys)[number])) {
-									// 	if ("lokasi" in data) {
-									// 		console.log("lokasi", data["lokasi"]);
-									// 	}
-									// }
-									return (
-										<>
-											{key.map((k) => (
-												<KoleksiDetailItem
-													key={k}
-													slug={k}
-													title={repositoryMetaFileds[k].slug}
-													value={
-														typeof data[k] === "object"
-															? (data[k] &&
-																	(data[k] as { nama: string; id: number })
-																		?.nama) ||
-															  ""
-															: String(data[k] ?? "")
-													}
-												/>
-											))}
-										</>
-									);
-								}}
-							/>
+							{formFields.map((field) => {
+								return (
+									<KoleksiDetailItem
+										key={field.name}
+										slug={field.name}
+										title={field.label}
+										value={
+											field.name === "lokasi"
+												? ("lokasi" in detailData && detailData.lokasi?.nama) ||
+												  ""
+												: String(
+														detailData[field.name as keyof typeof detailData] ??
+															""
+												  )
+										}
+									/>
+								);
+							})}
 						</CardBody>
 					</Card>
 				</section>

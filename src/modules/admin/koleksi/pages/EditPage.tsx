@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 
 import {
-	repositoryBukuMetaScheme,
 	repositoryFieldConfig,
 	repositoryTypeMap,
 } from "@/constants/repository";
@@ -31,6 +30,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { generateZodSchema } from "@/shared/utils/getZodScheme";
 
 const lokasiOptions = [
 	{ id: 1, nama: "Rak 1" },
@@ -50,11 +50,28 @@ const EditKoleksiPage = () => {
 	const [repositoryDetailData, setrepositoryDetailData] =
 		useState<RepositoryDetailResponse | null>(null);
 
-	const form = useForm<z.infer<typeof repositoryBukuMetaScheme>>({
-		resolver: zodResolver(repositoryBukuMetaScheme),
+	const detailKey = repositoryDetailData
+		? repositoryTypeMap[repositoryDetailData.type]
+		: null;
+	const formFields = detailKey
+		? repositoryFieldConfig[detailKey].map((field) => ({
+				...field,
+				type: field.type as "number" | "textarea" | "text" | "select",
+				name: field.name as keyof z.infer<typeof formZodSchema>,
+		  }))
+		: [];
+
+	const formZodSchema = detailKey
+		? generateZodSchema(repositoryFieldConfig[detailKey])
+		: z.object({});
+
+	const form = useForm<z.infer<typeof formZodSchema>>({
+		resolver: zodResolver(formZodSchema),
+		defaultValues:
+			repositoryDetailData && detailKey ? repositoryDetailData[detailKey] : {},
 	});
 
-	function onSubmit(values: z.infer<typeof repositoryBukuMetaScheme>) {
+	function onSubmit(values: z.infer<typeof formZodSchema>) {
 		console.log(values);
 	}
 
@@ -66,11 +83,13 @@ const EditKoleksiPage = () => {
 				repos: repos,
 				onDone: (data) => {
 					setrepositoryDetailData(data);
-					form.reset(
-						data[repositoryTypeMap[data.type]] as unknown as z.infer<
-							typeof repositoryBukuMetaScheme
-						>
-					);
+					if (formZodSchema) {
+						form.reset(
+							data[repositoryTypeMap[data.type]] as unknown as z.infer<
+								typeof formZodSchema
+							>
+						);
+					}
 				},
 			});
 		}
@@ -78,14 +97,6 @@ const EditKoleksiPage = () => {
 	}, [koleksi, repos]);
 
 	if (!repositoryDetailData) return <p>No data found.</p>;
-
-	const detailKey = repositoryTypeMap[repositoryDetailData.type];
-	// const detailData = repositoryDetailData[detailKey];
-	const formFields = repositoryFieldConfig[detailKey].map((field) => ({
-		...field,
-		type: field.type as "number" | "textarea" | "text" | "select",
-		name: field.name as keyof z.infer<typeof repositoryBukuMetaScheme>,
-	}));
 
 	return (
 		<>
