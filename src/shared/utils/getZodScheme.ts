@@ -20,10 +20,15 @@ export const generateZodSchema = (
 					fieldSchema = z.number();
 					break;
 				case "select":
-					fieldSchema = z.object({
-						id: z.number(),
-						nama: z.string(),
-					});
+					fieldSchema = z
+						.object({
+							id: z.number(),
+							nama: z.string(),
+						})
+						.nullable()
+						.refine((val) => val !== null, {
+							message: `Field ${field.label} is required to select`,
+						});
 					break;
 				default:
 					fieldSchema = z.any();
