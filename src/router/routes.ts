@@ -40,6 +40,11 @@ const AppRoutes = {
 		label: "Admin Edit Koleksi E-Library",
 	},
 
+	AdminCreateKoleksi: {
+		path: "/admin/koleksi/:koleksi/create",
+		label: "Admin Tambah Koleksi E-Library",
+	},
+
 	AdminAnggota: { path: "/admin/anggota", label: "Anggota" },
 	AdminPassword: { path: "/admin/password", label: "Password" },
 	AdminTransaksi: { path: "/admin/transaksi", label: "Transaksi" },

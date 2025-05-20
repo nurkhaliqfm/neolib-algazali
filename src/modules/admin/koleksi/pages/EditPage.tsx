@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 
 import {
+	lokasiOptions,
 	repositoryFieldConfig,
 	repositoryTypeMap,
 } from "@/constants/repository";
@@ -20,7 +21,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import {
 	Select,
@@ -31,13 +31,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { generateZodSchema } from "@/shared/utils/getZodScheme";
-
-const lokasiOptions = [
-	{ id: 1, nama: "Rak 1" },
-	{ id: 2, nama: "Rak 2" },
-	{ id: 3, nama: "Rak 3" },
-	{ id: 4, nama: "Rak 4" },
-];
+import { Button } from "@heroui/react";
+import { HiChevronRight } from "react-icons/hi2";
 
 const EditKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
@@ -53,6 +48,7 @@ const EditKoleksiPage = () => {
 	const detailKey = repositoryDetailData
 		? repositoryTypeMap[repositoryDetailData.type]
 		: null;
+
 	const formFields = detailKey
 		? repositoryFieldConfig[detailKey].map((field) => ({
 				...field,
@@ -173,7 +169,15 @@ const EditKoleksiPage = () => {
 						);
 					})}
 
-					<Button type="submit">Submit</Button>
+					<div className="flex justify-end">
+						<Button
+							endContent={<HiChevronRight />}
+							className="mt-4"
+							color="primary"
+							type="submit">
+							Update Repository
+						</Button>
+					</div>
 				</form>
 			</Form>
 		</>

@@ -19,6 +19,13 @@ export const repositoryTypeMap = {
 	SKRIPSI: "skripsi",
 } as const;
 
+export const lokasiOptions = [
+	{ id: 1, nama: "Rak 1" },
+	{ id: 2, nama: "Rak 2" },
+	{ id: 3, nama: "Rak 3" },
+	{ id: 4, nama: "Rak 4" },
+];
+
 export const repositoryFieldConfig = {
 	jurnal: [
 		{ name: "abstrak", label: "Abstrak", type: "textarea", required: false },

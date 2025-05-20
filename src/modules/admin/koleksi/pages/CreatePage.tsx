@@ -1,9 +1,152 @@
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { lokasiOptions, repositoryFieldConfig } from "@/constants/repository";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
+import AppRoutes from "@/router/routes";
+import { generateZodSchema } from "@/shared/utils/getZodScheme";
+import { RepositoryItemKey } from "@/types/repository";
+import { Button } from "@heroui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { HiChevronRight } from "react-icons/hi2";
+import { Navigate, useParams } from "react-router-dom";
+import { z } from "zod";
 
 const CreateKoleksiPage = () => {
+	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 
-	return <>This is Create Koleksi Page {user?.name} </>;
+	const detailKey = koleksi
+		? (koleksi as keyof typeof repositoryFieldConfig)
+		: null;
+
+	const formFields = detailKey
+		? repositoryFieldConfig[detailKey].map((field) => ({
+				...field,
+				type: field.type as "number" | "textarea" | "text" | "select",
+				name: field.name as keyof z.infer<typeof formZodSchema>,
+		  }))
+		: [];
+
+	const formZodSchema = detailKey
+		? generateZodSchema(repositoryFieldConfig[detailKey])
+		: z.object({});
+
+	const form = useForm<z.infer<typeof formZodSchema>>({
+		resolver: zodResolver(formZodSchema),
+		defaultValues: {},
+	});
+
+	function onSubmit(values: z.infer<typeof formZodSchema>) {
+		console.log("token", user?.access_token);
+		console.log(values);
+	}
+
+	if (!koleksi) return <Navigate to={AppRoutes.Error.path} />;
+
+	return (
+		<>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+					{formFields.map((ff) => {
+						return (
+							<FormField
+								key={ff.name}
+								control={form.control}
+								name={ff.name}
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>{ff.label}</FormLabel>
+										<FormControl>
+											{ff.type === "select" ? (
+												<>
+													<Select
+														onValueChange={(value) => {
+															const selectedLokasi = lokasiOptions.find(
+																(lokasi) => lokasi.id === Number(value)
+															);
+															field.onChange(selectedLokasi || null);
+														}}
+														value={
+															field.value && typeof field.value === "object"
+																? String((field.value as { id: number }).id)
+																: undefined
+														}>
+														<SelectTrigger>
+															<SelectValue placeholder={`Pilih ${ff.label}`} />
+														</SelectTrigger>
+														<SelectContent>
+															{lokasiOptions.map((lokasi) => (
+																<SelectItem
+																	key={lokasi.id}
+																	value={String(lokasi.id)}>
+																	{lokasi.nama}
+																</SelectItem>
+															))}
+														</SelectContent>
+													</Select>
+												</>
+											) : ff.type === "textarea" ? (
+												<Textarea
+													placeholder={`Masukkan ${ff.label}`}
+													{...field}
+													rows={5}
+													// value={
+													// 	typeof field.value === "object" &&
+													// 	field.value !== null
+													// 		? ""
+													// 		: (field.value as typeof field.value) ?? ""
+													// }
+												/>
+											) : (
+												<Input
+													placeholder={`Masukkan ${ff.label}`}
+													{...field}
+													type={ff.type}
+													// value={
+													// 	typeof field.value === "object" &&
+													// 	field.value !== null
+													// 		? ""
+													// 		: (field.value as typeof field.value) ?? ""
+													// }
+												/>
+											)}
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						);
+					})}
+
+					<div className="flex justify-end">
+						<Button
+							endContent={<HiChevronRight />}
+							className="mt-4"
+							color="primary"
+							type="submit">
+							Simpan Repository
+						</Button>
+					</div>
+				</form>
+			</Form>
+		</>
+	);
 };
 
 export default CreateKoleksiPage;

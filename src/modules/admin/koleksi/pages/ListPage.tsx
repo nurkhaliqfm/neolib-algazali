@@ -1,14 +1,16 @@
 import { RepositoryItemKey } from "@/types/repository";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getListRepository } from "../services/koleksiService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { RepositoryResponse } from "../types/koleksi.type";
 import { RepositoryTable } from "../components/KoleksiTable";
 import { Button } from "@heroui/react";
 import { HiOutlinePlus } from "react-icons/hi2";
+import AppRoutes from "@/router/routes";
 
 const ListKoleksiPage = () => {
+	const navigate = useNavigate();
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const page = searchParams.get("page") || "1";
@@ -40,6 +42,14 @@ const ListKoleksiPage = () => {
 							Data Koleksi {koleksi}
 						</h3>
 						<Button
+							onPress={() =>
+								navigate(
+									`${AppRoutes.AdminCreateKoleksi.path.replace(
+										":koleksi",
+										koleksi
+									)}`
+								)
+							}
 							startContent={<HiOutlinePlus />}
 							size="sm"
 							color="primary"
