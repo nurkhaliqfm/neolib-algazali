@@ -22,6 +22,7 @@ import { generateZodSchema } from "@/shared/utils/getZodScheme";
 import { RepositoryItemKey } from "@/types/repository";
 import { Button } from "@heroui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiChevronRight } from "react-icons/hi2";
 import { Navigate, useParams } from "react-router-dom";
@@ -56,6 +57,29 @@ const CreateKoleksiPage = () => {
 		console.log("token", user?.access_token);
 		console.log(values);
 	}
+
+	useEffect(() => {
+		if (detailKey) {
+			form.reset({
+				...form.getValues(),
+				...(repositoryFieldConfig[detailKey].reduce(
+					(acc, field) => ({
+						...acc,
+						[field.name]:
+							field.type === "number"
+								? null
+								: field.type === "textarea"
+								? ""
+								: field.type === "select"
+								? null
+								: "",
+					}),
+					{}
+				) as z.infer<typeof formZodSchema>),
+			});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [detailKey]);
 
 	if (!koleksi) return <Navigate to={AppRoutes.Error.path} />;
 
@@ -112,6 +136,20 @@ const CreateKoleksiPage = () => {
 													// 		? ""
 													// 		: (field.value as typeof field.value) ?? ""
 													// }
+												/>
+											) : ff.type === "number" ? (
+												<Input
+													placeholder={`Masukkan ${ff.label}`}
+													{...field}
+													type="number"
+													onChange={(e) => {
+														const value = e.target.value;
+														if (value === "") {
+															field.onChange(null);
+														} else {
+															field.onChange(Number(value));
+														}
+													}}
 												/>
 											) : (
 												<Input

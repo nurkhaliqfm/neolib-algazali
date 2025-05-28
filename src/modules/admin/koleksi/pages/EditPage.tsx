@@ -148,6 +148,20 @@ const EditKoleksiPage = () => {
 															: (field.value as typeof field.value) ?? ""
 													}
 												/>
+											) : ff.type === "number" ? (
+												<Input
+													placeholder={`Masukkan ${ff.label}`}
+													{...field}
+													type="number"
+													onChange={(e) => {
+														const value = e.target.value;
+														if (value === "") {
+															field.onChange(null);
+														} else {
+															field.onChange(Number(value));
+														}
+													}}
+												/>
 											) : (
 												<Input
 													placeholder={`Masukkan ${ff.label}`}
