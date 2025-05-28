@@ -26,6 +26,24 @@ export const lokasiOptions = [
 	{ id: 4, nama: "Rak 4" },
 ];
 
+export const repositoryBaseFieldConfig = [
+	{ name: "judul", label: "Judul Repository", type: "text", required: true },
+	{
+		name: "nama_sampul",
+		label: "Nama Sampul",
+		type: "file",
+		required: true,
+		allowed: ["image/jpeg", "image/png"],
+	},
+	{
+		name: "nama_file",
+		label: "Nama File",
+		type: "file",
+		required: true,
+		allowed: ["application/pdf"],
+	},
+];
+
 export const repositoryFieldConfig = {
 	jurnal: [
 		{ name: "abstrak", label: "Abstrak", type: "textarea", required: false },

@@ -6,6 +6,7 @@ export const generateZodSchema = (
 		label: string;
 		type: string;
 		required: boolean;
+		allowed?: string[];
 	}>
 ) => {
 	return z.object(
@@ -18,6 +19,21 @@ export const generateZodSchema = (
 					break;
 				case "number":
 					fieldSchema = z.number();
+					break;
+				case "file":
+					fieldSchema = z
+						.any()
+						.refine(
+							(file) => file instanceof FileList && file.length > 0,
+							"file is required"
+						)
+						.refine((file) => {
+							return (
+								file instanceof FileList &&
+								file.length > 0 &&
+								field.allowed?.includes(file[0].type)
+							);
+						}, "files are allowed for this field");
 					break;
 				case "select":
 					fieldSchema = z

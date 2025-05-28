@@ -7,6 +7,7 @@ import { useTypedSelector } from "@/hooks/useTypedSelector";
 
 import {
 	lokasiOptions,
+	repositoryBaseFieldConfig,
 	repositoryFieldConfig,
 	repositoryTypeMap,
 } from "@/constants/repository";
@@ -49,22 +50,38 @@ const EditKoleksiPage = () => {
 		? repositoryTypeMap[repositoryDetailData.type]
 		: null;
 
-	const formFields = detailKey
-		? repositoryFieldConfig[detailKey].map((field) => ({
-				...field,
-				type: field.type as "number" | "textarea" | "text" | "select",
-				name: field.name as keyof z.infer<typeof formZodSchema>,
-		  }))
-		: [];
+	const formFields = [
+		...repositoryBaseFieldConfig,
+		...(detailKey
+			? repositoryFieldConfig[detailKey].map((field) => ({
+					...field,
+					type: field.type as "number" | "textarea" | "text" | "select",
+					name: field.name as keyof z.infer<typeof formZodSchema>,
+			  }))
+			: []),
+	];
 
 	const formZodSchema = detailKey
-		? generateZodSchema(repositoryFieldConfig[detailKey])
+		? generateZodSchema([
+				...repositoryBaseFieldConfig.map((field) => ({
+					...field,
+					type: field.type,
+					name: field.name,
+				})),
+				...repositoryFieldConfig[detailKey],
+		  ])
 		: z.object({});
 
 	const form = useForm<z.infer<typeof formZodSchema>>({
 		resolver: zodResolver(formZodSchema),
-		defaultValues:
-			repositoryDetailData && detailKey ? repositoryDetailData[detailKey] : {},
+		defaultValues: {
+			judul: repositoryDetailData?.judul || "",
+			nama_sampul: repositoryDetailData?.nama_sampul || null,
+			nama_file: repositoryDetailData?.nama_file || null,
+			...(repositoryDetailData && detailKey
+				? repositoryDetailData[detailKey]
+				: {}),
+		},
 	});
 
 	function onSubmit(values: z.infer<typeof formZodSchema>) {
@@ -80,11 +97,14 @@ const EditKoleksiPage = () => {
 				onDone: (data) => {
 					setrepositoryDetailData(data);
 					if (formZodSchema) {
-						form.reset(
-							data[repositoryTypeMap[data.type]] as unknown as z.infer<
+						form.reset({
+							...(data[repositoryTypeMap[data.type]] as unknown as z.infer<
 								typeof formZodSchema
-							>
-						);
+							>),
+							judul: data.judul || "",
+							nama_sampul: data.nama_sampul || null,
+							nama_file: data.nama_file || null,
+						});
 					}
 				},
 			});
@@ -103,7 +123,7 @@ const EditKoleksiPage = () => {
 							<FormField
 								key={ff.name}
 								control={form.control}
-								name={ff.name}
+								name={ff.name as keyof z.infer<typeof formZodSchema>}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>{ff.label}</FormLabel>
@@ -141,12 +161,7 @@ const EditKoleksiPage = () => {
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													rows={5}
-													value={
-														typeof field.value === "object" &&
-														field.value !== null
-															? ""
-															: (field.value as typeof field.value) ?? ""
-													}
+													value={(field.value as typeof field.value) ?? ""}
 												/>
 											) : ff.type === "number" ? (
 												<Input
@@ -162,17 +177,22 @@ const EditKoleksiPage = () => {
 														}
 													}}
 												/>
+											) : ff.type === "file" ? (
+												<Input
+													{...field}
+													type="file"
+													value={undefined}
+													onChange={(e) => {
+														const file = e.target.files as FileList;
+														field.onChange(file);
+													}}
+												/>
 											) : (
 												<Input
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													type={ff.type}
-													value={
-														typeof field.value === "object" &&
-														field.value !== null
-															? ""
-															: (field.value as typeof field.value) ?? ""
-													}
+													value={(field.value as typeof field.value) ?? ""}
 												/>
 											)}
 										</FormControl>

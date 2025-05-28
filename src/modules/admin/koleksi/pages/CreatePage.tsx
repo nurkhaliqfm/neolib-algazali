@@ -15,7 +15,11 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { lokasiOptions, repositoryFieldConfig } from "@/constants/repository";
+import {
+	lokasiOptions,
+	repositoryBaseFieldConfig,
+	repositoryFieldConfig,
+} from "@/constants/repository";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import AppRoutes from "@/router/routes";
 import { generateZodSchema } from "@/shared/utils/getZodScheme";
@@ -36,16 +40,26 @@ const CreateKoleksiPage = () => {
 		? (koleksi as keyof typeof repositoryFieldConfig)
 		: null;
 
-	const formFields = detailKey
-		? repositoryFieldConfig[detailKey].map((field) => ({
-				...field,
-				type: field.type as "number" | "textarea" | "text" | "select",
-				name: field.name as keyof z.infer<typeof formZodSchema>,
-		  }))
-		: [];
+	const formFields = [
+		...repositoryBaseFieldConfig,
+		...(detailKey
+			? repositoryFieldConfig[detailKey].map((field) => ({
+					...field,
+					type: field.type as "number" | "textarea" | "text" | "select",
+					name: field.name as keyof z.infer<typeof formZodSchema>,
+			  }))
+			: []),
+	];
 
 	const formZodSchema = detailKey
-		? generateZodSchema(repositoryFieldConfig[detailKey])
+		? generateZodSchema([
+				...repositoryBaseFieldConfig.map((field) => ({
+					...field,
+					type: field.type,
+					name: field.name,
+				})),
+				...repositoryFieldConfig[detailKey],
+		  ])
 		: z.object({});
 
 	const form = useForm<z.infer<typeof formZodSchema>>({
@@ -76,6 +90,9 @@ const CreateKoleksiPage = () => {
 					}),
 					{}
 				) as z.infer<typeof formZodSchema>),
+				judul: "",
+				nama_sampul: null,
+				nama_file: null,
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,7 +109,7 @@ const CreateKoleksiPage = () => {
 							<FormField
 								key={ff.name}
 								control={form.control}
-								name={ff.name}
+								name={ff.name as keyof z.infer<typeof formZodSchema>}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>{ff.label}</FormLabel>
@@ -130,12 +147,12 @@ const CreateKoleksiPage = () => {
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													rows={5}
-													// value={
-													// 	typeof field.value === "object" &&
-													// 	field.value !== null
-													// 		? ""
-													// 		: (field.value as typeof field.value) ?? ""
-													// }
+													value={
+														typeof field.value === "object" &&
+														field.value !== null
+															? ""
+															: (field.value as typeof field.value) ?? ""
+													}
 												/>
 											) : ff.type === "number" ? (
 												<Input
@@ -151,17 +168,27 @@ const CreateKoleksiPage = () => {
 														}
 													}}
 												/>
+											) : ff.type === "file" ? (
+												<Input
+													{...field}
+													type="file"
+													value={undefined}
+													onChange={(e) => {
+														const file = e.target.files as FileList;
+														field.onChange(file);
+													}}
+												/>
 											) : (
 												<Input
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													type={ff.type}
-													// value={
-													// 	typeof field.value === "object" &&
-													// 	field.value !== null
-													// 		? ""
-													// 		: (field.value as typeof field.value) ?? ""
-													// }
+													value={
+														typeof field.value === "object" &&
+														field.value !== null
+															? ""
+															: (field.value as typeof field.value) ?? ""
+													}
 												/>
 											)}
 										</FormControl>
