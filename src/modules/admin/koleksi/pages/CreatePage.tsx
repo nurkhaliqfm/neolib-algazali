@@ -17,6 +17,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import {
 	lokasiOptions,
+	reposHasFile,
 	repositoryBaseFieldConfig,
 	repositoryFieldConfig,
 } from "@/constants/repository";
@@ -47,7 +48,11 @@ const CreateKoleksiPage = () => {
 		: null;
 
 	const formFields = [
-		...repositoryBaseFieldConfig,
+		...repositoryBaseFieldConfig.filter((field) =>
+			field.name === "nama_file"
+				? koleksi && reposHasFile.includes(koleksi.toUpperCase())
+				: true
+		),
 		...(detailKey
 			? repositoryFieldConfig[detailKey].map((field) => ({
 					...field,

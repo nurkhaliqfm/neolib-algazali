@@ -13,6 +13,7 @@ import { useTypedSelector } from "@/hooks/useTypedSelector";
 
 import {
 	lokasiOptions,
+	reposHasFile,
 	repositoryBaseFieldConfig,
 	repositoryFieldConfig,
 	repositoryTypeMap,
@@ -63,7 +64,12 @@ const EditKoleksiPage = () => {
 		: null;
 
 	const formFields = [
-		...repositoryBaseFieldConfig,
+		...repositoryBaseFieldConfig.filter((field) =>
+			field.name === "nama_file"
+				? repositoryDetailData &&
+				  reposHasFile.includes(repositoryDetailData.type)
+				: true
+		),
 		...(detailKey
 			? repositoryFieldConfig[detailKey].map((field) => ({
 					...field,
