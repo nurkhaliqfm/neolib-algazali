@@ -1,6 +1,12 @@
 import { useLocation, useParams } from "react-router-dom";
-import { getDetailRepository } from "../services/koleksiService";
-import { RepositoryDetailResponse } from "../types/koleksi.type";
+import {
+	getDetailRepository,
+	updateRepository,
+} from "../services/koleksiService";
+import {
+	RepositoryDetailResponse,
+	RepositoryRequest,
+} from "../types/koleksi.type";
 import { RepositoryItemKey } from "@/types/repository";
 import { useEffect, useState } from "react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
@@ -32,8 +38,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { generateZodSchema } from "@/shared/utils/getZodScheme";
-import { Button } from "@heroui/react";
+import { Button, Image } from "@heroui/react";
 import { HiChevronRight } from "react-icons/hi2";
+import { toast } from "react-toastify";
+
+const { VITE_SERVER_BASE_URL } = import.meta.env;
 
 const EditKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
@@ -43,6 +52,7 @@ const EditKoleksiPage = () => {
 	const repos = params.get("repos");
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
+	const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
 	const [repositoryDetailData, setrepositoryDetailData] =
 		useState<RepositoryDetailResponse | null>(null);
 
@@ -76,8 +86,8 @@ const EditKoleksiPage = () => {
 		resolver: zodResolver(formZodSchema),
 		defaultValues: {
 			judul: repositoryDetailData?.judul || "",
-			nama_sampul: repositoryDetailData?.nama_sampul || null,
-			nama_file: repositoryDetailData?.nama_file || null,
+			nama_sampul: null,
+			nama_file: null,
 			...(repositoryDetailData && detailKey
 				? repositoryDetailData[detailKey]
 				: {}),
@@ -85,7 +95,47 @@ const EditKoleksiPage = () => {
 	});
 
 	function onSubmit(values: z.infer<typeof formZodSchema>) {
-		console.log(values);
+		setIsLoadingUpdate(true);
+		if (!repositoryDetailData) return "No repository data available.";
+
+		const { judul, nama_sampul, nama_file, ...reposData } =
+			values as RepositoryRequest;
+
+		updateRepository({
+			token: user?.access_token,
+			atr: { id: repos, slug: koleksi },
+			repos: {
+				judul,
+				nama_sampul: nama_sampul,
+				nama_file: nama_file,
+				old_file: repositoryDetailData?.nama_file,
+				old_sampul: repositoryDetailData?.nama_sampul,
+				type: repositoryDetailData.type,
+				[koleksi as string]: {
+					...reposData,
+				},
+			},
+			onDone: (data) => {
+				if (data.status === 200) {
+					toast.success(data.message, {
+						autoClose: 700,
+					});
+				} else {
+					toast.error(data.message, {
+						theme: "colored",
+						autoClose: 700,
+					});
+				}
+				setIsLoadingUpdate(false);
+			},
+			onError: (error) => {
+				toast.error(error.error, {
+					theme: "colored",
+					autoClose: 700,
+				});
+				setIsLoadingUpdate(false);
+			},
+		});
 	}
 
 	useEffect(() => {
@@ -102,10 +152,17 @@ const EditKoleksiPage = () => {
 								typeof formZodSchema
 							>),
 							judul: data.judul || "",
-							nama_sampul: data.nama_sampul || null,
-							nama_file: data.nama_file || null,
+							nama_sampul: null,
+							nama_file: null,
 						});
 					}
+				},
+				onError: (error) => {
+					toast.error(error.error, {
+						theme: "colored",
+						autoClose: 700,
+					});
+					setIsLoadingUpdate(false);
 				},
 			});
 		}
@@ -168,6 +225,7 @@ const EditKoleksiPage = () => {
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													type="number"
+													min={0}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
@@ -178,15 +236,32 @@ const EditKoleksiPage = () => {
 													}}
 												/>
 											) : ff.type === "file" ? (
-												<Input
-													{...field}
-													type="file"
-													value={undefined}
-													onChange={(e) => {
-														const file = e.target.files as FileList;
-														field.onChange(file);
-													}}
-												/>
+												<div className="flex flex-col gap-2">
+													{ff.name === "nama_sampul" &&
+														repositoryDetailData.nama_sampul && (
+															<div className="flex flex-col items-center">
+																<Image
+																	alt="Card background"
+																	className="object-cover rounded-xl"
+																	src={`${VITE_SERVER_BASE_URL}/public/${koleksi}/sampul/${repositoryDetailData.nama_sampul}`}
+																	width={320}
+																/>
+																<p className="text-xs italic ">
+																	{repositoryDetailData.nama_sampul}
+																</p>
+															</div>
+														)}
+
+													<Input
+														{...field}
+														type="file"
+														value={undefined}
+														onChange={(e) => {
+															const file = e.target.files as FileList;
+															field.onChange(file);
+														}}
+													/>
+												</div>
 											) : (
 												<Input
 													placeholder={`Masukkan ${ff.label}`}
@@ -205,6 +280,28 @@ const EditKoleksiPage = () => {
 
 					<div className="flex justify-end">
 						<Button
+							isLoading={isLoadingUpdate}
+							spinner={
+								<svg
+									className="animate-spin h-5 w-5 text-current"
+									fill="none"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg">
+									<circle
+										className="opacity-25"
+										cx="12"
+										cy="12"
+										r="10"
+										stroke="currentColor"
+										strokeWidth="4"
+									/>
+									<path
+										className="opacity-75"
+										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+										fill="currentColor"
+									/>
+								</svg>
+							}
 							endContent={<HiChevronRight />}
 							className="mt-4"
 							color="primary"

@@ -1,9 +1,16 @@
-import { ApiError } from "@/types/global";
+import { ApiError, ApiResponse } from "@/types/global";
 import axios, { AxiosError } from "axios";
 import {
+	RepositoryBuku,
 	RepositoryDetailResponse,
+	RepositoryEbook,
+	RepositoryEjurnal,
+	RepositoryJurnal,
+	RepositoryRequest,
 	RepositoryResponse,
+	RepositorySkripsi,
 } from "../types/koleksi.type";
+import { RepositoryItemKey } from "@/types/repository";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -12,11 +19,13 @@ const getListRepository = async ({
 	type,
 	page,
 	onDone,
+	onError,
 }: {
 	token: string | null | undefined;
 	type: string;
 	page: string;
 	onDone?: (data: RepositoryResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
 		const response = await axios.get(
@@ -32,6 +41,11 @@ const getListRepository = async ({
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
 				window.location.reload();
@@ -46,11 +60,13 @@ const getDetailRepository = async ({
 	type,
 	repos,
 	onDone,
+	onError,
 }: {
 	token: string | null | undefined;
 	type: string;
 	repos: string;
 	onDone?: (data: RepositoryDetailResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
 		const response = await axios.get(
@@ -66,6 +82,11 @@ const getDetailRepository = async ({
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
 				window.location.reload();
@@ -75,4 +96,195 @@ const getDetailRepository = async ({
 	}
 };
 
-export { getListRepository, getDetailRepository };
+const updateRepository = async ({
+	token,
+	atr,
+	repos,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	atr: {
+		id: string | null;
+		slug: RepositoryItemKey | undefined;
+	};
+	repos: RepositoryRequest;
+	onDone?: (data: ApiResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	const repositoryBodyRequest = new FormData();
+
+	repositoryBodyRequest.append("judul", repos.judul);
+	repositoryBodyRequest.append("type", repos.type);
+	if (repos.old_sampul) {
+		repositoryBodyRequest.append("nama_sampul", repos.old_sampul);
+	}
+	if (repos.old_file) {
+		repositoryBodyRequest.append("nama_file", repos.old_file);
+	}
+	if (repos.nama_sampul) {
+		const fileSampul = repos.nama_sampul as FileList;
+		repositoryBodyRequest.append("sampul", fileSampul[0], fileSampul[0]?.name);
+	}
+	if (repos.nama_file) {
+		const fileRepos = repos.nama_file as FileList;
+		repositoryBodyRequest.append("repos", fileRepos[0], fileRepos[0]?.name);
+	}
+	if (atr.slug) {
+		const data = repos[atr.slug as keyof RepositoryRequest] as
+			| RepositoryJurnal
+			| RepositoryEjurnal
+			| RepositoryBuku
+			| RepositoryEbook
+			| RepositorySkripsi;
+
+		Object.keys(data).forEach((key) => {
+			if (
+				key !== "judul" &&
+				key !== "nama_sampul" &&
+				key !== "nama_file" &&
+				key !== "id_lokasi"
+			) {
+				if (key === "lokasi") {
+					if ("lokasi" in data) {
+						repositoryBodyRequest.append(`data[id_lokasi]`, data?.lokasi?.id);
+					}
+				} else {
+					repositoryBodyRequest.append(
+						`data[${key}]`,
+						data[key as keyof typeof data] as string
+					);
+				}
+			}
+		});
+	}
+
+	try {
+		const response = await axios.patch(
+			`${VITE_SERVER_BASE_URL}/admin/repository/${atr.slug}?repos=${atr.id}`,
+			repositoryBodyRequest,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		if (onDone)
+			onDone({
+				status: response.status,
+				message: response.data.message || "Repository updated successfully",
+			});
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
+
+const createRepository = async ({
+	token,
+	atr,
+	repos,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	atr: {
+		slug: RepositoryItemKey | undefined;
+	};
+	repos: RepositoryRequest;
+	onDone?: (data: ApiResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	const repositoryBodyRequest = new FormData();
+
+	repositoryBodyRequest.append("judul", repos.judul);
+	repositoryBodyRequest.append("type", repos.type);
+	if (repos.nama_sampul) {
+		const fileSampul = repos.nama_sampul as FileList;
+		repositoryBodyRequest.append("sampul", fileSampul[0], fileSampul[0]?.name);
+	}
+	if (repos.nama_file) {
+		const fileRepos = repos.nama_file as FileList;
+		repositoryBodyRequest.append("repos", fileRepos[0], fileRepos[0]?.name);
+	}
+	if (atr.slug) {
+		const data = repos[atr.slug as keyof RepositoryRequest] as
+			| RepositoryJurnal
+			| RepositoryEjurnal
+			| RepositoryBuku
+			| RepositoryEbook
+			| RepositorySkripsi;
+
+		Object.keys(data).forEach((key) => {
+			if (
+				key !== "judul" &&
+				key !== "nama_sampul" &&
+				key !== "nama_file" &&
+				key !== "id_lokasi"
+			) {
+				if (key === "lokasi") {
+					if ("lokasi" in data) {
+						repositoryBodyRequest.append(`data[id_lokasi]`, data?.lokasi?.id);
+					}
+				} else {
+					repositoryBodyRequest.append(
+						`data[${key}]`,
+						data[key as keyof typeof data] as string
+					);
+				}
+			}
+		});
+	}
+
+	try {
+		const response = await axios.post(
+			`${VITE_SERVER_BASE_URL}/admin/repository/${atr.slug}/create`,
+			repositoryBodyRequest,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+		console.log("Response:", response);
+
+		if (onDone)
+			onDone({
+				status: response.status,
+				message: response.data.message || "Repository created successfully",
+			});
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
+
+export {
+	getListRepository,
+	getDetailRepository,
+	updateRepository,
+	createRepository,
+};

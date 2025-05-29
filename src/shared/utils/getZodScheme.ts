@@ -24,16 +24,19 @@ export const generateZodSchema = (
 					fieldSchema = z
 						.any()
 						.refine(
-							(file) => file instanceof FileList && file.length > 0,
-							"file is required"
+							(file) => !file || file instanceof FileList,
+							`${field.label} is required`
 						)
-						.refine((file) => {
-							return (
-								file instanceof FileList &&
-								file.length > 0 &&
-								field.allowed?.includes(file[0].type)
-							);
-						}, "files are allowed for this field");
+						.refine(
+							(file) =>
+								!file ||
+								file.length === 0 ||
+								(file instanceof FileList &&
+									file.length > 0 &&
+									field.allowed?.includes(file[0].type)),
+							`${field.allowed} are allowed for this field`
+						)
+						.optional();
 					break;
 				case "select":
 					fieldSchema = z

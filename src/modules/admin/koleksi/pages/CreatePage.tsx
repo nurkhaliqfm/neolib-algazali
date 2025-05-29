@@ -26,15 +26,20 @@ import { generateZodSchema } from "@/shared/utils/getZodScheme";
 import { RepositoryItemKey } from "@/types/repository";
 import { Button } from "@heroui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiChevronRight } from "react-icons/hi2";
 import { Navigate, useParams } from "react-router-dom";
 import { z } from "zod";
+import { RepositoryRequest } from "../types/koleksi.type";
+import { createRepository } from "../services/koleksiService";
+import { toast } from "react-toastify";
 
 const CreateKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const user = useTypedSelector((state) => state.oauth.oauthData);
+
+	const [isLoadingCreate, setIsLoadingCreate] = useState(false);
 
 	const detailKey = koleksi
 		? (koleksi as keyof typeof repositoryFieldConfig)
@@ -68,8 +73,49 @@ const CreateKoleksiPage = () => {
 	});
 
 	function onSubmit(values: z.infer<typeof formZodSchema>) {
-		console.log("token", user?.access_token);
-		console.log(values);
+		setIsLoadingCreate(true);
+
+		const { judul, nama_sampul, nama_file, ...reposData } =
+			values as RepositoryRequest;
+
+		createRepository({
+			token: user?.access_token,
+			atr: { slug: koleksi },
+			repos: {
+				judul,
+				nama_sampul: nama_sampul,
+				nama_file: nama_file,
+				type: koleksi?.toUpperCase() as
+					| "EJURNAL"
+					| "JURNAL"
+					| "EBOOK"
+					| "BUKU"
+					| "SKRIPSI",
+				[koleksi as string]: {
+					...reposData,
+				},
+			},
+			onDone: (data) => {
+				if (data.status === 201) {
+					toast.success(data.message, {
+						autoClose: 700,
+					});
+				} else {
+					toast.error(data.message, {
+						theme: "colored",
+						autoClose: 700,
+					});
+				}
+				setIsLoadingCreate(false);
+			},
+			onError: (error) => {
+				toast.error(error.error, {
+					theme: "colored",
+					autoClose: 700,
+				});
+				setIsLoadingCreate(false);
+			},
+		});
 	}
 
 	useEffect(() => {
@@ -159,6 +205,7 @@ const CreateKoleksiPage = () => {
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													type="number"
+													min={0}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
@@ -201,6 +248,28 @@ const CreateKoleksiPage = () => {
 
 					<div className="flex justify-end">
 						<Button
+							isLoading={isLoadingCreate}
+							spinner={
+								<svg
+									className="animate-spin h-5 w-5 text-current"
+									fill="none"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg">
+									<circle
+										className="opacity-25"
+										cx="12"
+										cy="12"
+										r="10"
+										stroke="currentColor"
+										strokeWidth="4"
+									/>
+									<path
+										className="opacity-75"
+										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+										fill="currentColor"
+									/>
+								</svg>
+							}
 							endContent={<HiChevronRight />}
 							className="mt-4"
 							color="primary"

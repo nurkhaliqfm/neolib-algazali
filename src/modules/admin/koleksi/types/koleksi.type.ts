@@ -73,12 +73,29 @@ export interface BaseRepository {
 	type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
 }
 
+export interface BaseRepositoryRequest {
+	judul: string;
+	old_sampul?: string | null;
+	old_file?: string | null;
+	nama_sampul: FileList | null;
+	nama_file: FileList | null;
+	type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
+}
+
 export interface RepositoryResponse {
 	repository: BaseRepository[];
 	pages: { total: number; start: number; end: number; current: number };
 }
 
 export interface RepositoryDetailResponse extends BaseRepository {
+	jurnal?: RepositoryJurnal;
+	ejurnal?: RepositoryEjurnal;
+	buku?: RepositoryBuku;
+	ebook?: RepositoryEbook;
+	skripsi?: RepositorySkripsi;
+}
+
+export interface RepositoryRequest extends BaseRepositoryRequest {
 	jurnal?: RepositoryJurnal;
 	ejurnal?: RepositoryEjurnal;
 	buku?: RepositoryBuku;
