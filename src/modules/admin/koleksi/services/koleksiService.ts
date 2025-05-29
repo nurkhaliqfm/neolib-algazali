@@ -258,7 +258,6 @@ const createRepository = async ({
 				},
 			}
 		);
-		console.log("Response:", response);
 
 		if (onDone)
 			onDone({
