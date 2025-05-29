@@ -281,9 +281,55 @@ const createRepository = async ({
 	}
 };
 
+const deleteRepository = async ({
+	token,
+	type,
+	repos,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	type: string;
+	repos: string;
+	onDone?: (data: ApiResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	try {
+		const response = await axios.get(
+			`${VITE_SERVER_BASE_URL}/admin/repository/${type}/delete?repos=${repos}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		if (onDone)
+			onDone({
+				status: response.status,
+				message: response.data.message || "Repository deleted successfully",
+			});
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
+
 export {
 	getListRepository,
 	getDetailRepository,
 	updateRepository,
 	createRepository,
+	deleteRepository,
 };

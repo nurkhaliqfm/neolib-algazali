@@ -29,7 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiChevronRight } from "react-icons/hi2";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { RepositoryRequest } from "../types/koleksi.type";
 import { createRepository } from "../services/koleksiService";
@@ -38,6 +38,7 @@ import { toast } from "react-toastify";
 const CreateKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const user = useTypedSelector((state) => state.oauth.oauthData);
+	const navigate = useNavigate();
 
 	const [isLoadingCreate, setIsLoadingCreate] = useState(false);
 
@@ -99,21 +100,30 @@ const CreateKoleksiPage = () => {
 				if (data.status === 201) {
 					toast.success(data.message, {
 						autoClose: 700,
+						onClose: () => {
+							navigate(
+								AppRoutes.AdminKoleksi.path.replace(":koleksi", koleksi || "")
+							);
+						},
 					});
 				} else {
 					toast.error(data.message, {
 						theme: "colored",
 						autoClose: 700,
+						onClose: () => {
+							setIsLoadingCreate(false);
+						},
 					});
 				}
-				setIsLoadingCreate(false);
 			},
 			onError: (error) => {
 				toast.error(error.error, {
 					theme: "colored",
 					autoClose: 700,
+					onClose: () => {
+						setIsLoadingCreate(false);
+					},
 				});
-				setIsLoadingCreate(false);
 			},
 		});
 	}

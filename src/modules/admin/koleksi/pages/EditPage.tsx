@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
 	getDetailRepository,
 	updateRepository,
@@ -41,12 +41,14 @@ import { generateZodSchema } from "@/shared/utils/getZodScheme";
 import { Button, Image } from "@heroui/react";
 import { HiChevronRight } from "react-icons/hi2";
 import { toast } from "react-toastify";
+import AppRoutes from "@/router/routes";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
 const EditKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const { search } = useLocation();
+	const navigate = useNavigate();
 
 	const params = new URLSearchParams(search);
 	const repos = params.get("repos");
@@ -119,21 +121,30 @@ const EditKoleksiPage = () => {
 				if (data.status === 200) {
 					toast.success(data.message, {
 						autoClose: 700,
+						onClose: () => {
+							navigate(
+								AppRoutes.AdminKoleksi.path.replace(":koleksi", koleksi || "")
+							);
+						},
 					});
 				} else {
 					toast.error(data.message, {
 						theme: "colored",
 						autoClose: 700,
+						onClose: () => {
+							setIsLoadingUpdate(false);
+						},
 					});
 				}
-				setIsLoadingUpdate(false);
 			},
 			onError: (error) => {
 				toast.error(error.error, {
 					theme: "colored",
 					autoClose: 700,
+					onClose: () => {
+						setIsLoadingUpdate(false);
+					},
 				});
-				setIsLoadingUpdate(false);
 			},
 		});
 	}
