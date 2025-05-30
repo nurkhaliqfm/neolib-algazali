@@ -41,6 +41,7 @@ const DetailKoleksiPage = () => {
 				type: koleksi,
 				repos: repos,
 				onDone: (data) => {
+					console.log(data);
 					setrepositoryDetailData(data);
 				},
 			});
@@ -110,6 +111,9 @@ const DetailKoleksiPage = () => {
 										value={
 											field.name === "lokasi"
 												? ("lokasi" in detailData && detailData.lokasi?.nama) ||
+												  ""
+												: field.name === "prodi"
+												? ("prodi" in detailData && detailData.prodi?.nama) ||
 												  ""
 												: String(
 														detailData[field.name as keyof typeof detailData] ??

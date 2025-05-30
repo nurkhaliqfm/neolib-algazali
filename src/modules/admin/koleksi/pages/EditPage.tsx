@@ -12,10 +12,10 @@ import { useEffect, useState } from "react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 
 import {
-	lokasiOptions,
 	reposHasFile,
 	repositoryBaseFieldConfig,
 	repositoryFieldConfig,
+	repositoryFormSelectOptios,
 	repositoryTypeMap,
 } from "@/constants/repository";
 import { z } from "zod";
@@ -206,10 +206,11 @@ const EditKoleksiPage = () => {
 												<>
 													<Select
 														onValueChange={(value) => {
-															const selectedLokasi = lokasiOptions.find(
-																(lokasi) => lokasi.id === Number(value)
-															);
-															field.onChange(selectedLokasi || null);
+															const selectedOptions =
+																repositoryFormSelectOptios[
+																	ff.name as keyof typeof repositoryFormSelectOptios
+																].find((item) => item.id === Number(value));
+															field.onChange(selectedOptions || null);
 														}}
 														value={
 															field.value && typeof field.value === "object"
@@ -220,11 +221,13 @@ const EditKoleksiPage = () => {
 															<SelectValue placeholder={`Pilih ${ff.label}`} />
 														</SelectTrigger>
 														<SelectContent>
-															{lokasiOptions.map((lokasi) => (
+															{repositoryFormSelectOptios[
+																ff.name as keyof typeof repositoryFormSelectOptios
+															].map((item) => (
 																<SelectItem
-																	key={lokasi.id}
-																	value={String(lokasi.id)}>
-																	{lokasi.nama}
+																	key={item.id}
+																	value={String(item.id)}>
+																	{item.nama}
 																</SelectItem>
 															))}
 														</SelectContent>

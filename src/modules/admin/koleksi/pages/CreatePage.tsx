@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
-	lokasiOptions,
 	reposHasFile,
 	repositoryBaseFieldConfig,
 	repositoryFieldConfig,
+	repositoryFormSelectOptios,
 } from "@/constants/repository";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import AppRoutes from "@/router/routes";
@@ -179,10 +179,11 @@ const CreateKoleksiPage = () => {
 												<>
 													<Select
 														onValueChange={(value) => {
-															const selectedLokasi = lokasiOptions.find(
-																(lokasi) => lokasi.id === Number(value)
-															);
-															field.onChange(selectedLokasi || null);
+															const selectedOptions =
+																repositoryFormSelectOptios[
+																	ff.name as keyof typeof repositoryFormSelectOptios
+																].find((item) => item.id === Number(value));
+															field.onChange(selectedOptions || null);
 														}}
 														value={
 															field.value && typeof field.value === "object"
@@ -193,11 +194,13 @@ const CreateKoleksiPage = () => {
 															<SelectValue placeholder={`Pilih ${ff.label}`} />
 														</SelectTrigger>
 														<SelectContent>
-															{lokasiOptions.map((lokasi) => (
+															{repositoryFormSelectOptios[
+																ff.name as keyof typeof repositoryFormSelectOptios
+															].map((item) => (
 																<SelectItem
-																	key={lokasi.id}
-																	value={String(lokasi.id)}>
-																	{lokasi.nama}
+																	key={item.id}
+																	value={String(item.id)}>
+																	{item.nama}
 																</SelectItem>
 															))}
 														</SelectContent>

@@ -57,9 +57,12 @@ export type RepositorySkripsi = {
 	abstrak: string | null;
 	pengarang: string | null;
 	fakultas: string | null;
-	prodi: string;
 	tahun_terbit: number;
 	lokasi: {
+		id: string;
+		nama: string;
+	};
+	prodi: {
 		id: string;
 		nama: string;
 	};

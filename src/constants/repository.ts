@@ -19,12 +19,23 @@ export const repositoryTypeMap = {
 	SKRIPSI: "skripsi",
 } as const;
 
-export const lokasiOptions = [
+const lokasiOptions = [
 	{ id: 1, nama: "Rak 1" },
 	{ id: 2, nama: "Rak 2" },
 	{ id: 3, nama: "Rak 3" },
 	{ id: 4, nama: "Rak 4" },
 ];
+
+const prodiOptions = [
+	{ id: 1, nama: "S1 - Administrasi Publik" },
+	{ id: 2, nama: "S1 - Sistem Informasi" },
+	{ id: 3, nama: "S1 - Bisnis Digital" },
+];
+
+export const repositoryFormSelectOptios = {
+	prodi: prodiOptions,
+	lokasi: lokasiOptions,
+};
 
 export const reposHasFile = ["EJURNAL", "SKRIPSI", "EBOOK"];
 
@@ -138,8 +149,8 @@ export const repositoryFieldConfig = {
 	skripsi: [
 		{ name: "abstrak", label: "Abstrak", type: "textarea", required: false },
 		{ name: "pengarang", label: "Pengarang", type: "text", required: true },
-		{ name: "fakultas", label: "Fakultas", type: "text", required: true },
-		{ name: "prodi", label: "Program Studi", type: "text", required: true },
+		{ name: "fakultas", label: "Fakultas", type: "text", required: false },
+		{ name: "prodi", label: "Program Studi", type: "select", required: true },
 		{
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
