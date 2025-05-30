@@ -87,6 +87,7 @@ export interface BaseRepositoryRequest {
 
 export interface RepositoryResponse {
 	repository: BaseRepository[];
+	total: number;
 	pages: { total: number; start: number; end: number; current: number };
 }
 

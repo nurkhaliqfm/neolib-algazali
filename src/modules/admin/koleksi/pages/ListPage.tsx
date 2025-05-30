@@ -14,6 +14,8 @@ const ListKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const page = searchParams.get("page") || "1";
+	const keyword = searchParams.get("keyword") || "";
+	const limit = searchParams.get("limit") || "5";
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [repositoryData, setrepositoryData] =
@@ -25,13 +27,15 @@ const ListKoleksiPage = () => {
 				token: user?.access_token,
 				page: page,
 				type: koleksi,
+				keyword: keyword,
+				limit: limit,
 				onDone: (data) => {
 					setrepositoryData(data);
 				},
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [page]);
+	}, [page, keyword, limit]);
 
 	return (
 		<>
@@ -59,7 +63,9 @@ const ListKoleksiPage = () => {
 					<RepositoryTable
 						repos={repositoryData}
 						page={Number(page)}
+						keyword={keyword}
 						slug={koleksi}
+						limit={limit}
 						setSearchParams={setSearchParams}
 					/>
 				</>

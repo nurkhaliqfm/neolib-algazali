@@ -1,7 +1,9 @@
 import {
 	Button,
 	Chip,
+	Input,
 	Pagination,
+	Spinner,
 	Table,
 	TableBody,
 	TableCell,
@@ -10,9 +12,14 @@ import {
 	TableRow,
 	Tooltip,
 } from "@heroui/react";
-import { Key, useCallback, useState } from "react";
+import { Key, useCallback, useMemo, useState } from "react";
 import { BaseRepository, RepositoryResponse } from "../types/koleksi.type";
-import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from "react-icons/hi2";
+import {
+	HiOutlineEye,
+	HiOutlineMagnifyingGlass,
+	HiOutlinePencil,
+	HiOutlineTrash,
+} from "react-icons/hi2";
 import { TableHeaderComponent } from "@/types/global";
 import { SetURLSearchParams, useNavigate } from "react-router-dom";
 import AppRoutes from "@/router/routes";
@@ -42,17 +49,109 @@ const RepositoryHeaderTable: TableHeaderComponent[] = [
 export function RepositoryTable({
 	repos,
 	page,
+	keyword,
+	limit,
 	slug,
 	setSearchParams,
 }: {
 	repos: RepositoryResponse;
 	page: number;
+	keyword: string;
+	limit: string;
 	slug: string;
 	setSearchParams: SetURLSearchParams;
 }) {
+	console.log(keyword);
 	const navigate = useNavigate();
 	const user = useTypedSelector((state) => state.oauth.oauthData);
-	const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+	const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
+	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
+	const [filterValue, setFilterValue] = useState<string>(keyword);
+
+	// const hasSearchFilter = Boolean(filterValue);
+
+	const onSearchChange = useCallback((value: string) => {
+		setFilterValue(value);
+		setIsLoadingData(true);
+		const debounceTimeout = setTimeout(() => {
+			if (value) {
+				setSearchParams({
+					keyword: value.toString(),
+					page: "1",
+					limit: limit,
+				});
+			} else {
+				setSearchParams({
+					page: "1",
+					limit: limit,
+				});
+			}
+			setIsLoadingData(false);
+		}, 700);
+
+		return () => clearTimeout(debounceTimeout);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const onClear = useCallback(() => {
+		setFilterValue("");
+	}, []);
+
+	const onRowsPerPageChange = useCallback(
+		(e: React.ChangeEvent<HTMLSelectElement>) => {
+			setFilterValue("");
+			setSearchParams({
+				page: "1",
+				limit: e.target.value,
+			});
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
+
+	const topContent = useMemo(() => {
+		return (
+			<div className="flex flex-col gap-4 px-4">
+				<div className="flex justify-between gap-3 items-end">
+					<Input
+						isClearable
+						className="w-full sm:max-w-[44%]"
+						placeholder="Search repository by judul or pengarang..."
+						startContent={<HiOutlineMagnifyingGlass />}
+						value={filterValue}
+						onClear={() => onClear()}
+						onValueChange={onSearchChange}
+					/>
+				</div>
+				<div className="flex justify-between items-center">
+					<span className="text-default-400 text-small">
+						Total {repos.total} {slug}
+					</span>
+					<label className="flex items-center text-default-400 text-small">
+						Rows per page:
+						<select
+							className="bg-transparent outline-none text-default-400 text-small"
+							onChange={onRowsPerPageChange}>
+							<option selected={limit === "5" ? true : false} value="5">
+								5
+							</option>
+							<option selected={limit === "10" ? true : false} value="10">
+								10
+							</option>
+							<option selected={limit === "15" ? true : false} value="15">
+								15
+							</option>
+							<option selected={limit === "20" ? true : false} value="20">
+								20
+							</option>
+						</select>
+					</label>
+				</div>
+			</div>
+		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [filterValue, onSearchChange]);
+
 	const renderCell = useCallback((data: BaseRepository, columnKey: Key) => {
 		const cellValue = data[columnKey as keyof BaseRepository];
 
@@ -206,9 +305,13 @@ export function RepositoryTable({
 
 	return (
 		<Table
+			isHeaderSticky
 			isStriped={true}
 			shadow="none"
 			aria-label="Data koleksi perpustakaan"
+			topContent={topContent}
+			topContentPlacement="outside"
+			bottomContentPlacement="outside"
 			bottomContent={
 				<div className="flex w-full justify-center">
 					<Pagination
@@ -218,7 +321,13 @@ export function RepositoryTable({
 						color="primary"
 						page={page}
 						total={repos.pages.total}
-						onChange={(page) => setSearchParams({ page: page.toString() })}
+						onChange={(page) =>
+							setSearchParams({
+								page: page.toString(),
+								keyword: filterValue,
+								limit: limit,
+							})
+						}
 					/>
 				</div>
 			}>
@@ -230,6 +339,12 @@ export function RepositoryTable({
 				)}
 			</TableHeader>
 			<TableBody
+				isLoading={isLoadingData}
+				loadingContent={
+					<div className="bg-white rounded-xl shadow-md z-50">
+						<Spinner className="m-4" label="Loading data..." />
+					</div>
+				}
 				emptyContent={`Koleksi ${slug} tidak ditemukan `}
 				items={repos.repository}
 				className="overflow-y-scroll">

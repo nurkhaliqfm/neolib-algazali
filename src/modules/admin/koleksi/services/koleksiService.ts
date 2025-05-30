@@ -18,18 +18,24 @@ const getListRepository = async ({
 	token,
 	type,
 	page,
+	keyword,
+	limit,
 	onDone,
 	onError,
 }: {
 	token: string | null | undefined;
 	type: string;
 	page: string;
+	keyword?: string;
+	limit?: string;
 	onDone?: (data: RepositoryResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
 		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/repository/${type}s?page=${page}`,
+			`${VITE_SERVER_BASE_URL}/admin/repository/${type}s?page=${page}${
+				keyword ? `&keyword=${keyword}` : ""
+			}${limit ? `&limit=${limit}` : ""}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -113,7 +119,6 @@ const updateRepository = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	const repositoryBodyRequest = new FormData();
-	console.log(repos);
 
 	repositoryBodyRequest.append("judul", repos.judul);
 	repositoryBodyRequest.append("type", repos.type);
