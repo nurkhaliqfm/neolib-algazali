@@ -243,11 +243,16 @@ const createRepository = async ({
 				key !== "judul" &&
 				key !== "nama_sampul" &&
 				key !== "nama_file" &&
-				key !== "id_lokasi"
+				key !== "id_lokasi" &&
+				key !== "id_prodi"
 			) {
 				if (key === "lokasi") {
 					if ("lokasi" in data) {
 						repositoryBodyRequest.append(`data[id_lokasi]`, data?.lokasi?.id);
+					}
+				} else if (key === "prodi") {
+					if ("prodi" in data) {
+						repositoryBodyRequest.append(`data[id_prodi]`, data?.prodi?.id);
 					}
 				} else {
 					repositoryBodyRequest.append(
