@@ -17,7 +17,13 @@ import {
 	useDisclosure,
 } from "@heroui/react";
 
-import { HiChevronLeft, HiChevronRight, HiOutlineEye } from "react-icons/hi2";
+import {
+	HiMagnifyingGlassMinus,
+	HiMagnifyingGlassPlus,
+	HiOutlineEye,
+} from "react-icons/hi2";
+
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import {
 	repositoryFieldConfig,
 	repositoryTypeMap,
@@ -30,6 +36,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { cn } from "@/lib/utils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -84,18 +91,24 @@ const DetailKoleksiPage = () => {
 	return (
 		<>
 			<Modal
-				scrollBehavior="inside"
 				isOpen={isOpen}
-				size="2xl"
+				size="full"
+				scrollBehavior="normal"
 				onOpenChange={onOpenChange}>
 				<ModalContent>
 					{() => (
 						<>
-							{repositoryDetailData.nama_file &&
+							{detailData &&
+								repositoryDetailData.nama_file &&
 								repositoryDetailData.nama_file !== "" && (
 									<div>
 										<ModalHeader className="flex flex-col gap-1">
-											<p>{repositoryDetailData.judul}</p>
+											<p className="leading-3 mt-2">
+												{repositoryDetailData.judul}
+											</p>
+											<span className="text-xs italic font-thin">
+												{detailData.pengarang}
+											</span>
 											<Chip
 												className="capitalize my-2"
 												color={typeColorMap[repositoryDetailData.type]}
@@ -105,35 +118,58 @@ const DetailKoleksiPage = () => {
 											</Chip>
 										</ModalHeader>
 										<ModalBody>
-											<div className="overflow-y-auto">
+											<div className="absolute rounded-2xl flex right-7 justify-between items-center top-50 mt-1 p-2 z-10 gap-2">
+												<Button
+													isIconOnly
+													size="sm"
+													color="primary"
+													isDisabled={pageScale <= 1}
+													onPress={() => setPageScale((scale) => scale - 0.2)}>
+													<HiMagnifyingGlassMinus />
+												</Button>
+
+												<Button
+													isIconOnly
+													size="sm"
+													color="primary"
+													isDisabled={pageScale >= 10}
+													onPress={() => setPageScale((scale) => scale + 0.2)}>
+													<HiMagnifyingGlassPlus />
+												</Button>
+											</div>
+
+											<div className="overflow-auto max-h-[82vh] rounded-xl">
 												<Document
 													file={`${VITE_SERVER_BASE_URL}/public/${koleksi}/file/${repositoryDetailData.nama_file}`}
 													onLoadSuccess={onDocumentLoadSuccess}>
-													<div className="flex justify-center  rounded-md bg-gray-200 overflow-y-auto gap-8 items-center">
-														<Button
-															isIconOnly
-															color="primary"
-															isDisabled={pageNumber <= 1}
-															onPress={() => setPageNumber((prev) => prev - 1)}>
-															<HiChevronLeft />
-														</Button>
-														<Page
-															scale={pageScale}
-															canvasBackground="#f4f4f4"
-															pageNumber={pageNumber}
-														/>
-														<Button
-															isIconOnly
-															color="primary"
-															isDisabled={pageNumber >= numPages}
-															onPress={() => setPageNumber((prev) => prev + 1)}>
-															<HiChevronRight />
-														</Button>
+													<div className="flex justify-center px-4 bg-gray-200 gap-4 items-center p-14">
+														<Page scale={pageScale} pageNumber={pageNumber} />
 													</div>
 												</Document>
-												<div className="bg-white p-4 rounded-2xl border-2 border-primary">
-													Page {pageNumber} of {numPages}
+											</div>
+
+											<div className="absolute rounded-2xl flex right-1/2 translate-x-1/2  justify-between items-center bottom-0 mb-8 p-1 bg-white/70 border-2 border-primary z-10 gap-2">
+												<button
+													className={cn(
+														"text-primary p-2",
+														pageNumber <= 1 ? "text-primary/40" : ""
+													)}
+													disabled={pageNumber <= 1}
+													onClick={() => setPageNumber((page) => page - 1)}>
+													<FaChevronLeft />
+												</button>
+												<div className="py-1 px-2 rounded-md">
+													Page {pageNumber} of {numPages}{" "}
 												</div>
+												<button
+													className={cn(
+														"text-primary p-2",
+														pageNumber >= numPages ? "text-primary/40" : ""
+													)}
+													disabled={pageNumber >= numPages}
+													onClick={() => setPageNumber((page) => page + 1)}>
+													<FaChevronRight />
+												</button>
 											</div>
 										</ModalBody>
 									</div>
