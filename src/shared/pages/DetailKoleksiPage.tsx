@@ -20,6 +20,18 @@ import {
 import { RepositoryDetailResponse } from "@/modules/admin/koleksi/types/koleksi.type";
 import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
 import { KoleksiDetailItem } from "../components/KoleksiDetail";
+import { Document, Page } from "react-pdf";
+import "react-pdf/dist/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+
+// import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+// 	"pdfjs-dist/build/pdf.worker.min.mjs",
+// 	import.meta.url
+// ).toString();
+
+// pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -33,6 +45,9 @@ const DetailKoleksiPage = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [repositoryDetailData, setrepositoryDetailData] =
 		useState<RepositoryDetailResponse | null>(null);
+
+	const [numPages, setNumPages] = useState<number>();
+	const [pageNumber, setPageNumber] = useState<number>(1);
 
 	useEffect(() => {
 		if (koleksi && repos) {
@@ -59,6 +74,10 @@ const DetailKoleksiPage = () => {
 		: [];
 
 	const detailData = repositoryDetailData[detailKey];
+
+	function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+		setNumPages(numPages);
+	}
 
 	return (
 		<>
@@ -97,6 +116,23 @@ const DetailKoleksiPage = () => {
 								)}
 						</CardFooter>
 					</Card>
+					{repositoryDetailData.nama_file &&
+						repositoryDetailData.nama_file !== "" && (
+							<div>
+								<Document
+									file={`${VITE_SERVER_BASE_URL}/public/${koleksi}/file/${repositoryDetailData.nama_file}`}
+									onLoadSuccess={onDocumentLoadSuccess}
+									onError={(error) => {
+										console.log(error);
+									}}>
+									<Page pageNumber={pageNumber} />
+								</Document>
+								<p>
+									Page {pageNumber} of {numPages}
+								</p>
+							</div>
+						)}
+
 					<Card className="py-4 flex-1 border rounded-2xl" shadow="none">
 						<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
 							<p className="text-tiny uppercase font-bold">Detail {koleksi}</p>

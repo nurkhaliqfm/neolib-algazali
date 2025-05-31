@@ -70,7 +70,7 @@ export function RepositoryTable({
 
 	// const hasSearchFilter = Boolean(filterValue);
 
-	const onSearchChange = useCallback((value: string) => {
+	const onSearchChange = (value: string) => {
 		setFilterValue(value);
 		setIsLoadingData(true);
 		const debounceTimeout = setTimeout(() => {
@@ -90,24 +90,19 @@ export function RepositoryTable({
 		}, 700);
 
 		return () => clearTimeout(debounceTimeout);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	};
 
 	const onClear = useCallback(() => {
 		setFilterValue("");
 	}, []);
 
-	const onRowsPerPageChange = useCallback(
-		(e: React.ChangeEvent<HTMLSelectElement>) => {
-			setFilterValue("");
-			setSearchParams({
-				page: "1",
-				limit: e.target.value,
-			});
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[]
-	);
+	const onRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setFilterValue("");
+		setSearchParams({
+			page: "1",
+			limit: e.target.value,
+		});
+	};
 
 	const topContent = useMemo(() => {
 		return (
@@ -131,19 +126,12 @@ export function RepositoryTable({
 						Rows per page:
 						<select
 							className="bg-transparent outline-none text-default-400 text-small"
+							defaultValue={limit || "5"}
 							onChange={onRowsPerPageChange}>
-							<option selected={limit === "5" ? true : false} value="5">
-								5
-							</option>
-							<option selected={limit === "10" ? true : false} value="10">
-								10
-							</option>
-							<option selected={limit === "15" ? true : false} value="15">
-								15
-							</option>
-							<option selected={limit === "20" ? true : false} value="20">
-								20
-							</option>
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="20">20</option>
 						</select>
 					</label>
 				</div>
@@ -349,7 +337,7 @@ export function RepositoryTable({
 				items={repos.repository}
 				className="overflow-y-scroll">
 				{(item) => (
-					<TableRow key={item.judul}>
+					<TableRow key={`${item.judul}-item-${item.id}`}>
 						{(columnKey) => (
 							<TableCell>{renderCell(item, columnKey)}</TableCell>
 						)}
