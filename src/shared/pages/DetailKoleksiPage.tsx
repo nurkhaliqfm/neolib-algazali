@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { RepositoryItemKey } from "@/types/repository";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
@@ -14,6 +14,8 @@ import {
 	ModalBody,
 	ModalContent,
 	ModalHeader,
+	Select,
+	SelectItem,
 	useDisclosure,
 } from "@heroui/react";
 
@@ -41,8 +43,16 @@ import { cn } from "@/lib/utils";
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
+const pageViewOptions = [
+	{
+		key: "single-page",
+		label: "Single Page",
+	},
+	{ key: "single-page-continuous", label: "Single Page Continuous" },
+];
 
 const DetailKoleksiPage = () => {
+	const observer = useRef<IntersectionObserver | null>(null);
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const { search } = useLocation();
@@ -57,6 +67,39 @@ const DetailKoleksiPage = () => {
 	const [numPages, setNumPages] = useState<number>(0);
 	const [pageNumber, setPageNumber] = useState<number>(1);
 	const [pageScale, setPageScale] = useState<number>(1);
+	const [pageView, setPageView] = useState<Set<string>>(
+		new Set(["single-page"])
+	);
+
+	useEffect(() => {
+		if (numPages) {
+			const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						setPageNumber(Number(entry.target.id.replace("page-", "")));
+					}
+				});
+			};
+
+			observer.current = new IntersectionObserver(handleIntersect, {
+				rootMargin: "0px 0px -70% 0px",
+				threshold: 0.1,
+			});
+
+			const targets = document.querySelectorAll(".document-observer-section");
+			targets.forEach((el) => observer.current?.observe(el));
+
+			return () => {
+				targets.forEach((el) => observer.current?.unobserve(el));
+			};
+		}
+	}, [numPages]);
+
+	const handlePageJumpTo = (page: number) => {
+		document
+			.getElementById(`page-${page}`)
+			?.scrollIntoView({ behavior: "smooth" });
+	};
 
 	useEffect(() => {
 		if (koleksi && repos) {
@@ -65,7 +108,6 @@ const DetailKoleksiPage = () => {
 				type: koleksi,
 				repos: repos,
 				onDone: (data) => {
-					console.log(data);
 					setrepositoryDetailData(data);
 				},
 			});
@@ -118,6 +160,20 @@ const DetailKoleksiPage = () => {
 											</Chip>
 										</ModalHeader>
 										<ModalBody>
+											<div className="absolute rounded-2xl flex left-7 justify-between items-center top-50 mt-1 p-2 z-10">
+												<Select
+													size="sm"
+													color="primary"
+													className="min-w-40 sm:w-56"
+													selectedKeys={pageView}
+													onSelectionChange={(keys) =>
+														setPageView(new Set(Array.from(keys) as string[]))
+													}>
+													{pageViewOptions.map((view) => (
+														<SelectItem key={view.key}>{view.label}</SelectItem>
+													))}
+												</Select>
+											</div>
 											<div className="absolute rounded-2xl flex right-7 justify-between items-center top-50 mt-1 p-2 z-10 gap-2">
 												<Button
 													isIconOnly
@@ -142,24 +198,56 @@ const DetailKoleksiPage = () => {
 												<Document
 													file={`${VITE_SERVER_BASE_URL}/public/${koleksi}/file/${repositoryDetailData.nama_file}`}
 													onLoadSuccess={onDocumentLoadSuccess}>
-													<div className="flex justify-center px-4 bg-gray-200 gap-4 items-center p-14">
-														<Page scale={pageScale} pageNumber={pageNumber} />
+													<div className="flex flex-col justify-center px-4 bg-gray-200 gap-4 items-center p-14">
+														{pageView.has("single-page-continuous") &&
+														numPages ? (
+															Array.from(
+																{ length: numPages },
+																(_, index) => index + 1
+															).map((pageNumber) => (
+																<div
+																	key={pageNumber}
+																	id={`page-${pageNumber}`}
+																	className={cn(
+																		"document-observer-section transition-transform duration-300",
+																		pageNumber === pageNumber
+																			? "scroll-mt-20"
+																			: ""
+																	)}>
+																	<Page
+																		renderTextLayer={false}
+																		scale={pageScale}
+																		pageNumber={pageNumber}
+																	/>
+																</div>
+															))
+														) : (
+															<Page
+																renderTextLayer={false}
+																scale={pageScale}
+																pageNumber={pageNumber}
+															/>
+														)}
 													</div>
 												</Document>
 											</div>
 
-											<div className="absolute rounded-2xl flex right-1/2 translate-x-1/2  justify-between items-center bottom-0 mb-8 p-1 bg-white/70 border-2 border-primary z-10 gap-2">
+											<div className="absolute rounded-2xl w-60 flex right-1/2 translate-x-1/2  justify-between items-center bottom-0 mb-8 p-1 bg-white/70 border-2 border-primary z-10 gap-2">
 												<button
 													className={cn(
 														"text-primary p-2",
 														pageNumber <= 1 ? "text-primary/40" : ""
 													)}
 													disabled={pageNumber <= 1}
-													onClick={() => setPageNumber((page) => page - 1)}>
+													onClick={() =>
+														pageView.has("single-page")
+															? setPageNumber((page) => page - 1)
+															: handlePageJumpTo(pageNumber - 1)
+													}>
 													<FaChevronLeft />
 												</button>
-												<div className="py-1 px-2 rounded-md">
-													Page {pageNumber} of {numPages}{" "}
+												<div className="py-1 px-2">
+													Page {pageNumber} of {numPages}
 												</div>
 												<button
 													className={cn(
@@ -167,7 +255,11 @@ const DetailKoleksiPage = () => {
 														pageNumber >= numPages ? "text-primary/40" : ""
 													)}
 													disabled={pageNumber >= numPages}
-													onClick={() => setPageNumber((page) => page + 1)}>
+													onClick={() =>
+														pageView.has("single-page")
+															? setPageNumber((page) => page + 1)
+															: handlePageJumpTo(pageNumber + 1)
+													}>
 													<FaChevronRight />
 												</button>
 											</div>
