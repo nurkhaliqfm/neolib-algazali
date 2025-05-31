@@ -72,7 +72,7 @@ const DetailKoleksiPage = () => {
 	);
 
 	useEffect(() => {
-		if (numPages && pageView.has("single-page-continuous")) {
+		if (pageView.has("single-page-continuous")) {
 			const handleIntersect = (entries: IntersectionObserverEntry[]) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
@@ -82,7 +82,7 @@ const DetailKoleksiPage = () => {
 			};
 
 			observer.current = new IntersectionObserver(handleIntersect, {
-				rootMargin: "0px 0px -70% 0px",
+				rootMargin: "0px 0px 0px 0px",
 				threshold: 0.1,
 			});
 
@@ -93,7 +93,7 @@ const DetailKoleksiPage = () => {
 				targets.forEach((el) => observer.current?.unobserve(el));
 			};
 		}
-	}, [numPages, pageView]);
+	}, [numPages, pageView, pageScale]);
 
 	const handlePageJumpTo = (page: number) => {
 		setPageNumber(page);
