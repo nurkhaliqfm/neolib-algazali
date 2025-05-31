@@ -10,8 +10,14 @@ import {
 	CardHeader,
 	Chip,
 	Image,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalHeader,
+	useDisclosure,
 } from "@heroui/react";
-import { HiOutlineEye } from "react-icons/hi2";
+
+import { HiChevronLeft, HiChevronRight, HiOutlineEye } from "react-icons/hi2";
 import {
 	repositoryFieldConfig,
 	repositoryTypeMap,
@@ -20,22 +26,17 @@ import {
 import { RepositoryDetailResponse } from "@/modules/admin/koleksi/types/koleksi.type";
 import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
 import { KoleksiDetailItem } from "../components/KoleksiDetail";
-import { Document, Page } from "react-pdf";
+import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
+import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
-// import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-// 	"pdfjs-dist/build/pdf.worker.min.mjs",
-// 	import.meta.url
-// ).toString();
-
-// pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
+pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
 const DetailKoleksiPage = () => {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
 	const { search } = useLocation();
 
@@ -46,8 +47,9 @@ const DetailKoleksiPage = () => {
 	const [repositoryDetailData, setrepositoryDetailData] =
 		useState<RepositoryDetailResponse | null>(null);
 
-	const [numPages, setNumPages] = useState<number>();
+	const [numPages, setNumPages] = useState<number>(0);
 	const [pageNumber, setPageNumber] = useState<number>(1);
+	const [pageScale, setPageScale] = useState<number>(1);
 
 	useEffect(() => {
 		if (koleksi && repos) {
@@ -75,12 +77,72 @@ const DetailKoleksiPage = () => {
 
 	const detailData = repositoryDetailData[detailKey];
 
-	function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+	const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
 		setNumPages(numPages);
-	}
+	};
 
 	return (
 		<>
+			<Modal
+				scrollBehavior="inside"
+				isOpen={isOpen}
+				size="2xl"
+				onOpenChange={onOpenChange}>
+				<ModalContent>
+					{() => (
+						<>
+							{repositoryDetailData.nama_file &&
+								repositoryDetailData.nama_file !== "" && (
+									<div>
+										<ModalHeader className="flex flex-col gap-1">
+											<p>{repositoryDetailData.judul}</p>
+											<Chip
+												className="capitalize my-2"
+												color={typeColorMap[repositoryDetailData.type]}
+												size="sm"
+												variant="flat">
+												{repositoryDetailData.type}
+											</Chip>
+										</ModalHeader>
+										<ModalBody>
+											<div className="overflow-y-auto">
+												<Document
+													file={`${VITE_SERVER_BASE_URL}/public/${koleksi}/file/${repositoryDetailData.nama_file}`}
+													onLoadSuccess={onDocumentLoadSuccess}>
+													<div className="flex justify-center  rounded-md bg-gray-200 overflow-y-auto gap-8 items-center">
+														<Button
+															isIconOnly
+															color="primary"
+															isDisabled={pageNumber <= 1}
+															onPress={() => setPageNumber((prev) => prev - 1)}>
+															<HiChevronLeft />
+														</Button>
+														<Page
+															scale={pageScale}
+															canvasBackground="#f4f4f4"
+															pageNumber={pageNumber}
+														/>
+														<Button
+															isIconOnly
+															color="primary"
+															isDisabled={pageNumber >= numPages}
+															onPress={() => setPageNumber((prev) => prev + 1)}>
+															<HiChevronRight />
+														</Button>
+													</div>
+												</Document>
+												<div className="bg-white p-4 rounded-2xl border-2 border-primary">
+													Page {pageNumber} of {numPages}
+												</div>
+											</div>
+										</ModalBody>
+									</div>
+								)}
+						</>
+					)}
+				</ModalContent>
+			</Modal>
+
 			{detailData && (
 				<section className="flex gap-4 p-4 flex-col lg:flex-row">
 					<Card
@@ -110,28 +172,13 @@ const DetailKoleksiPage = () => {
 									<Button
 										className="my-2"
 										startContent={<HiOutlineEye />}
-										size="sm">
+										size="sm"
+										onPress={() => onOpen()}>
 										Preview
 									</Button>
 								)}
 						</CardFooter>
 					</Card>
-					{repositoryDetailData.nama_file &&
-						repositoryDetailData.nama_file !== "" && (
-							<div>
-								<Document
-									file={`${VITE_SERVER_BASE_URL}/public/${koleksi}/file/${repositoryDetailData.nama_file}`}
-									onLoadSuccess={onDocumentLoadSuccess}
-									onError={(error) => {
-										console.log(error);
-									}}>
-									<Page pageNumber={pageNumber} />
-								</Document>
-								<p>
-									Page {pageNumber} of {numPages}
-								</p>
-							</div>
-						)}
 
 					<Card className="py-4 flex-1 border rounded-2xl" shadow="none">
 						<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
