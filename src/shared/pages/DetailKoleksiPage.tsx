@@ -72,7 +72,7 @@ const DetailKoleksiPage = () => {
 	);
 
 	useEffect(() => {
-		if (numPages) {
+		if (numPages && pageView.has("single-page-continuous")) {
 			const handleIntersect = (entries: IntersectionObserverEntry[]) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
@@ -93,9 +93,10 @@ const DetailKoleksiPage = () => {
 				targets.forEach((el) => observer.current?.unobserve(el));
 			};
 		}
-	}, [numPages]);
+	}, [numPages, pageView]);
 
 	const handlePageJumpTo = (page: number) => {
+		setPageNumber(page);
 		document
 			.getElementById(`page-${page}`)
 			?.scrollIntoView({ behavior: "smooth" });
@@ -198,9 +199,8 @@ const DetailKoleksiPage = () => {
 												<Document
 													file={`${VITE_SERVER_BASE_URL}/public/${koleksi}/file/${repositoryDetailData.nama_file}`}
 													onLoadSuccess={onDocumentLoadSuccess}>
-													<div className="flex flex-col justify-center px-4 bg-gray-200 gap-4 items-center p-14">
-														{pageView.has("single-page-continuous") &&
-														numPages ? (
+													<div className="flex flex-col justify-center overflow-x-scroll bg-gray-200 gap-4 px-8 py-14">
+														{pageView.has("single-page-continuous") ? (
 															Array.from(
 																{ length: numPages },
 																(_, index) => index + 1
@@ -209,12 +209,15 @@ const DetailKoleksiPage = () => {
 																	key={pageNumber}
 																	id={`page-${pageNumber}`}
 																	className={cn(
-																		"document-observer-section transition-transform duration-300",
+																		"document-observer-section transition-transform duration-300 flex justify-center items-center w-fit mx-auto",
 																		pageNumber === pageNumber
-																			? "scroll-mt-20"
+																			? "scroll-mt-0"
 																			: ""
 																	)}>
 																	<Page
+																		className={
+																			"flex justify-center items-center w-fit mx-auto"
+																		}
 																		renderTextLayer={false}
 																		scale={pageScale}
 																		pageNumber={pageNumber}
@@ -223,6 +226,9 @@ const DetailKoleksiPage = () => {
 															))
 														) : (
 															<Page
+																className={
+																	"flex justify-center items-center w-fit mx-auto"
+																}
 																renderTextLayer={false}
 																scale={pageScale}
 																pageNumber={pageNumber}
@@ -232,7 +238,7 @@ const DetailKoleksiPage = () => {
 												</Document>
 											</div>
 
-											<div className="absolute rounded-2xl w-60 flex right-1/2 translate-x-1/2  justify-between items-center bottom-0 mb-8 p-1 bg-white/70 border-2 border-primary z-10 gap-2">
+											<div className="absolute rounded-2xl w-60 flex right-1/2 translate-x-1/2 justify-between items-center bottom-0 mb-8 p-1 bg-white/70 border-2 border-primary z-10 gap-2">
 												<button
 													className={cn(
 														"text-primary p-2",
