@@ -4,9 +4,10 @@ function HomePage() {
 	return (
 		<section>
 			<CarouselBanner />
-			<section>Body</section>
 			<section>Rekomendasi Repository</section>
-			<section>List Rekomendasi</section>
+			<section>
+				<p>Koleksi Perpustakaan</p>
+			</section>
 			<section>Publikasi Jurnal</section>
 		</section>
 	);
