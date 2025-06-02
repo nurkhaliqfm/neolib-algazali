@@ -2,7 +2,7 @@ import CarouselBanner from '../components/CarouselBanner';
 
 function HomePage() {
 	return (
-		<section className="px-6">
+		<section>
 			<CarouselBanner />
 			<section>Body</section>
 			<section>Rekomendasi Repository</section>
