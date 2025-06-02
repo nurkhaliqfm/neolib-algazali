@@ -1,50 +1,103 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
+import {
+	Navbar,
+	NavbarBrand,
+	NavbarContent,
+	NavbarItem,
+	NavbarMenu,
+	NavbarMenuItem,
+	NavbarMenuToggle,
+} from '@heroui/navbar';
 import { Button, Link } from '@heroui/react';
 import LogoKampus from '@/assets/logo.svg';
 import AppRoutes from '@/router/routes';
 import { HiOutlineHome } from 'react-icons/hi2';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const HeaderLayout = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
+	const location = useLocation();
+	const currentPathLocation = location.pathname;
+	console.log(currentPathLocation);
+
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 	const isAuthenticated = !!localStorage.getItem('oauthData');
 	const isTokenExpired = user ? Date.now() >= user.expires_in : true;
 
+	const routeNavbarList = [
+		{
+			label: 'Jurnal',
+			key: 'jurnal',
+			route: AppRoutes.KoleksiJurnal.path,
+		},
+		{
+			label: 'E-Jurnal',
+			key: 'ejurnal',
+			route: AppRoutes.KoleksiEjurnal.path,
+		},
+		{
+			label: 'Buku',
+			key: 'buku',
+			route: AppRoutes.KoleksiBuku.path,
+		},
+		{
+			label: 'E-Book',
+			key: 'ebook',
+			route: AppRoutes.KoleksiEbook.path,
+		},
+		{
+			label: 'Skripsi',
+			key: 'skripsi',
+			route: AppRoutes.KoleksiSkripsi.path,
+		},
+	];
+
 	return (
 		<>
-			<Navbar position="static" className="bg-primary-foreground">
+			<Navbar
+				isBordered
+				isBlurred
+				isMenuOpen={isMenuOpen}
+				onMenuOpenChange={setIsMenuOpen}
+				position="static"
+				className="bg-primary-foreground">
+				<NavbarMenuToggle
+					aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+					className="sm:hidden"
+				/>
 				<NavbarBrand>
 					<img src={LogoKampus} width={50} />
 				</NavbarBrand>
+
 				<NavbarContent className="hidden sm:flex gap-4" justify="center">
-					<NavbarItem isActive>
-						<Link href={AppRoutes.Home.path}>Home</Link>
-					</NavbarItem>
-					<NavbarItem>
-						<Link color="foreground" href="#">
-							Jurnal
+					<NavbarItem
+						isActive={currentPathLocation === '/'}
+						key={`header-navbar-home`}>
+						<Link
+							color={currentPathLocation === '/' ? 'primary' : 'foreground'}
+							href={AppRoutes.Home.path}>
+							Home
 						</Link>
 					</NavbarItem>
-					<NavbarItem>
-						<Link color="foreground" href="#">
-							E-Jurnal
-						</Link>
-					</NavbarItem>
-					<NavbarItem>
-						<Link color="foreground" href="#">
-							Buku
-						</Link>
-					</NavbarItem>
-					<NavbarItem>
-						<Link color="foreground" href="#">
-							E-Book
-						</Link>
-					</NavbarItem>
-					<NavbarItem>
-						<Link color="foreground" href="#">
-							Skripsi
-						</Link>
-					</NavbarItem>
+					{routeNavbarList.map((item) => {
+						return (
+							<NavbarItem
+								isActive={currentPathLocation === item.route}
+								key={`header-navbar-${item.key}`}>
+								<Link
+									color={
+										currentPathLocation === item.route
+											? 'primary'
+											: 'foreground'
+									}
+									href={item.route}>
+									{item.label}
+								</Link>
+							</NavbarItem>
+						);
+					})}
 				</NavbarContent>
 
 				<NavbarContent justify="end">
@@ -70,6 +123,35 @@ const HeaderLayout = () => {
 						</NavbarItem>
 					)}
 				</NavbarContent>
+
+				<NavbarMenu>
+					<NavbarMenuItem
+						isActive={currentPathLocation === '/'}
+						key={`toggle-navbar-home`}>
+						<Link
+							color={currentPathLocation === '/' ? 'primary' : 'foreground'}
+							href={AppRoutes.Home.path}>
+							Home
+						</Link>
+					</NavbarMenuItem>
+					{routeNavbarList.map((item) => {
+						return (
+							<NavbarMenuItem
+								isActive={currentPathLocation === item.route}
+								key={`toggle-navbar-${item.key}`}>
+								<Link
+									color={
+										currentPathLocation === item.route
+											? 'primary'
+											: 'foreground'
+									}
+									href={item.route}>
+									{item.label}
+								</Link>
+							</NavbarMenuItem>
+						);
+					})}
+				</NavbarMenu>
 			</Navbar>
 		</>
 	);
