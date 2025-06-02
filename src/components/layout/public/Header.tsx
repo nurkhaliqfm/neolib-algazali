@@ -10,7 +10,11 @@ import {
 import { Button, Link } from '@heroui/react';
 import LogoKampus from '@/assets/logo.svg';
 import AppRoutes from '@/router/routes';
-import { HiOutlineHome } from 'react-icons/hi2';
+import {
+	HiOutlineHome,
+	HiOutlineSquares2X2,
+	HiOutlineXMark,
+} from 'react-icons/hi2';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -64,10 +68,18 @@ const HeaderLayout = () => {
 				position="static"
 				className="bg-primary-foreground">
 				<NavbarMenuToggle
+					icon={
+						isMenuOpen ? (
+							<HiOutlineXMark size={60} />
+						) : (
+							<HiOutlineSquares2X2 size={60} />
+						)
+					}
 					aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
 					className="sm:hidden"
 				/>
-				<NavbarBrand>
+
+				<NavbarBrand className="hidden sm:flex gap-4">
 					<img src={LogoKampus} width={50} />
 				</NavbarBrand>
 
