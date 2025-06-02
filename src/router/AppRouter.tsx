@@ -3,7 +3,7 @@ import AppRoutes from './routes';
 import Error from '../modules/error';
 import Admin from '../modules/admin';
 import Shared from '../shared/pages';
-import BaseLayout from '@/components/layout/Base';
+import BaseLayout from '@/components/layout/public';
 import Public from '@/modules/public';
 import Auth from '@/modules/auth';
 import AuthMiddleware from '@/modules/auth/middleware/AuthMiddleware';

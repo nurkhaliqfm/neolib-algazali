@@ -10,15 +10,15 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 	SidebarRail,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 
-import LogoKampus from "@/assets/logo.svg";
-import { SIDEBAR_LIST } from "@/constants/sidebar";
-import { Fragment } from "react/jsx-runtime";
-import { SidebarUser } from "./SidebarUser";
-import { useTypedSelector } from "@/hooks/useTypedSelector";
+import LogoKampus from '@/assets/logo.svg';
+import { SIDEBAR_LIST } from '@/constants/sidebar';
+import { Fragment } from 'react/jsx-runtime';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { SidebarLayoutUser } from './User';
 
-export function AppSidebar() {
+export function SidebarLayout() {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 
 	return (
@@ -60,7 +60,7 @@ export function AppSidebar() {
 			</SidebarContent>
 
 			<SidebarFooter>
-				<SidebarUser
+				<SidebarLayoutUser
 					user={{
 						role: user?.role,
 						name: user?.name,

@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import AppRoutes from '@/router/routes';
-import DashboardLayout from '@/components/layout/Dashboard';
+import DashboardLayout from '@/components/layout/dashboard';
 
 const ProtectedRoutes = () => {
 	const role = useTypedSelector((state) => state.oauth.oauthData?.role);

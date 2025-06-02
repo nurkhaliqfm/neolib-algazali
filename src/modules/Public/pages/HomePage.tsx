@@ -1,5 +1,14 @@
+import PublicFooter from '../../../components/layout/public/Footer';
+import PublicHeader from '../../../components/layout/public/Header';
+
 function HomePage() {
-	return <div>Home Page</div>;
+	return (
+		<>
+			<PublicHeader />
+			<section>Body</section>
+			<PublicFooter />
+		</>
+	);
 }
 
 export default HomePage;

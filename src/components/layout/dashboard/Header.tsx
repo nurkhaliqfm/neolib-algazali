@@ -1,11 +1,11 @@
 import {
 	Breadcrumb,
-	BreadcrumbList,
 	BreadcrumbItem,
+	BreadcrumbList,
 	BreadcrumbPage,
-} from '../ui/breadcrumb';
-import { SidebarTrigger } from '../ui/sidebar';
-import { Separator } from '../ui/separator';
+} from '@/components/ui/breadcrumb';
+import { Separator } from '@/components/ui/separator';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 const HeaderLayout = () => {
 	return (
