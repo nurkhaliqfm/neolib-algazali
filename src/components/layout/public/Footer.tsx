@@ -21,45 +21,45 @@ const FooterLayout = () => {
 					<div className="flex gap-x-2 mt-4 md:mt-0 h-full">
 						<Link
 							color="foreground"
-							className="font-light"
+							className="font-light text-xs sm:text-base hidden sm:inline"
 							href={AppRoutes.Home.path}>
 							Home
 						</Link>
 						<Link
 							color="foreground"
-							className="font-light"
-							href={AppRoutes.Home.path}>
+							className="font-light text-xs sm:text-base"
+							href={AppRoutes.KoleksiJurnal.path}>
 							Jurnal
 						</Link>
 						<Link
 							color="foreground"
-							className="font-light"
-							href={AppRoutes.Home.path}>
+							className="font-light text-xs sm:text-base"
+							href={AppRoutes.KoleksiEjurnal.path}>
 							E-jurnal
 						</Link>
 						<Link
 							color="foreground"
-							className="font-light"
-							href={AppRoutes.Home.path}>
+							className="font-light text-xs sm:text-base"
+							href={AppRoutes.KoleksiBuku.path}>
 							Buku
 						</Link>
 						<Link
 							color="foreground"
-							className="font-light"
-							href={AppRoutes.Home.path}>
+							className="font-light text-xs sm:text-base"
+							href={AppRoutes.KoleksiEbook.path}>
 							E-Book
 						</Link>
 						<Link
 							color="foreground"
-							className="font-light"
-							href={AppRoutes.Home.path}>
+							className="font-light text-xs sm:text-base"
+							href={AppRoutes.KoleksiSkripsi.path}>
 							Skripsi
 						</Link>
 					</div>
 				</div>
 				<div className="flex justify-center py-4 mb-1 items-center">
 					<span className="text-xs font-light">
-						copyright © 2025. ITBA Al-Gazali Barru - 111FMLabs.
+						copyright © 2025. 111FMLabs.
 					</span>
 				</div>
 			</div>
