@@ -119,7 +119,7 @@ const HeaderLayout = () => {
 								as={Link}
 								color="primary"
 								href={AppRoutes.Login.path}
-								variant="bordered">
+								variant="light">
 								<HiOutlineHome /> Login
 							</Button>
 						</NavbarItem>
