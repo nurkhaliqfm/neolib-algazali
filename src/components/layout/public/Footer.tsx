@@ -58,9 +58,11 @@ const FooterLayout = () => {
 					</div>
 				</div>
 				<div className="flex justify-center py-4 mb-1 items-center">
-					<span className="text-xs font-light">
-						copyright © 2025. 111FMLabs.
-					</span>
+					<p className="text-xs font-light">
+						<span>copyright © 2025. </span>
+						<span className="hidden sm:inline">ITBA Al-Gazali Barru - </span>
+						<span>111FMLabs</span>.
+					</p>
 				</div>
 			</div>
 			<div className="w-full bg-primary-900 h-5"></div>
