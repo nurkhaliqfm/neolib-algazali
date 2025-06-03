@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import CarouselBanner from '../components/CarouselBanner';
-import { Button, Image } from '@heroui/react';
+import { Button, Chip, Image } from '@heroui/react';
 import { repositoryTypeMap } from '@/constants/repository';
 import { useEffect, useState } from 'react';
 import { getListRekomendasiRepository } from '../service/publicService';
@@ -107,7 +107,7 @@ const CardCustomeStyleBasic = ({
 					src={url}
 					width={148}
 				/>
-				<div className="mt-[12rem] leading-6 pt-10 h-32 p-4 bg-primary-200/50 rounded-xl overflow-hidden">
+				<div className="mt-[12rem] leading-6 pt-10 h-36 p-4 bg-primary-200/50 rounded-xl overflow-hidden">
 					<p className="font-light text-xs line-clamp-2 text-ellipsis">
 						{pengarang}
 					</p>
@@ -123,11 +123,17 @@ const CardCustomeStyleDetail = ({
 	pengarang,
 	title,
 	type,
+	tahun_terbit,
+	abstrak,
+	sinopsis,
 }: {
 	url: string;
 	pengarang: string;
 	title: string;
 	type: string;
+	tahun_terbit: string;
+	abstrak?: string;
+	sinopsis?: string;
 }) => {
 	const Icon = typeColorMapCustom[type].icon;
 
@@ -153,9 +159,19 @@ const CardCustomeStyleDetail = ({
 				<div></div>
 				<div className="leading-6 h-full p-3 mt-36"></div>
 			</div>
-			<div className="flex-1 leading-6 p-4">
-				<p className="font-light text-sm">{pengarang}</p>
-				<p className="text-sm line-clamp-2 text-ellipsis">{title}</p>
+			<div className="flex flex-col justify-between flex-1 leading-6 p-4">
+				<div>
+					<p className="text-sm font-medium line-clamp-2">{title}</p>
+					<p className="font-light text-sm italic">{pengarang}</p>
+					<p className="mt-2 text-xs font-light line-clamp-4">
+						{abstrak || sinopsis || '-'}
+					</p>
+				</div>
+				<div className="flex mt-4">
+					<Chip className="capitalize" color="default" size="sm" variant="flat">
+						{tahun_terbit}
+					</Chip>
+				</div>
 			</div>
 		</div>
 	);
@@ -258,6 +274,14 @@ function HomePage() {
 				<section className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 my-6">
 					{listRepository &&
 						listRepository.map((repos, index) => {
+							const detailKey = repositoryTypeMap[repos.type];
+							const selectedReposByType = repos[detailKey];
+							// const formFields = detailKey
+							// 	? repositoryFieldConfig[detailKey].map((field) => ({
+							// 			...field,
+							// 	  }))
+							// 	: [];
+
 							return (
 								<SwiperSlide
 									key={`repos-${repos.judul.toLowerCase()}-${index}`}>
@@ -265,8 +289,23 @@ function HomePage() {
 										url={`${VITE_SERVER_BASE_URL}/public/${repos.type}/sampul/${repos.nama_sampul}`}
 										title={repos.judul}
 										type={repos.type}
-										pengarang={
-											repos[repositoryTypeMap[repos.type]]?.pengarang as string
+										pengarang={selectedReposByType?.pengarang as string}
+										tahun_terbit={
+											selectedReposByType?.tahun_terbit.toString() as string
+										}
+										sinopsis={
+											selectedReposByType
+												? ('sinopsis' in selectedReposByType &&
+														selectedReposByType.sinopsis) ||
+												  undefined
+												: undefined
+										}
+										abstrak={
+											selectedReposByType
+												? ('abstrak' in selectedReposByType &&
+														selectedReposByType.abstrak) ||
+												  undefined
+												: undefined
 										}
 									/>
 								</SwiperSlide>
