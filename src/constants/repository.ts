@@ -1,4 +1,45 @@
-// import { z } from "zod";
+import {
+	HiOutlineAcademicCap,
+	HiOutlineBookOpen,
+	HiOutlineDocumentText,
+} from 'react-icons/hi2';
+import { IconType } from 'react-icons/lib';
+
+export const typeColorMapCustom: Record<
+	string,
+	{ color: string; background: string; gradient: string; icon: IconType }
+> = {
+	EJURNAL: {
+		color: 'text-red-400',
+		background: 'bg-red-400',
+		gradient: 'bg-gradient-to-r from-red-200 to-red-500',
+		icon: HiOutlineDocumentText,
+	},
+	JURNAL: {
+		color: 'text-yellow-400',
+		background: 'bg-yellow-400',
+		gradient: 'bg-gradient-to-r from-yellow-200 to-yellow-500',
+		icon: HiOutlineDocumentText,
+	},
+	BUKU: {
+		color: 'text-blue-400',
+		background: 'bg-blue-400',
+		gradient: 'bg-gradient-to-r from-blue-200 to-blue-500',
+		icon: HiOutlineBookOpen,
+	},
+	EBOOK: {
+		color: 'text-green-400',
+		background: 'bg-green-400',
+		gradient: 'bg-gradient-to-r from-green-200 to-green-500',
+		icon: HiOutlineBookOpen,
+	},
+	SKRIPSI: {
+		color: 'text-cyan-400',
+		background: 'bg-cyan-400',
+		gradient: 'bg-gradient-to-r from-cyan-200 to-cyan-500',
+		icon: HiOutlineAcademicCap,
+	},
+};
 
 export const typeColorMap: Record<
 	string,

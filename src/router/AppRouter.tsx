@@ -106,6 +106,10 @@ function AppRouter() {
 			<Route element={<BaseLayout />}>
 				<Route path={AppRoutes.Home.path} element={<Public.HomePage />} />
 				<Route path={AppRoutes.Koleksi.path} element={<Public.KoleksiPage />} />
+				<Route
+					path={AppRoutes.KoleksiDetail.path}
+					element={<Shared.DetailKoleksiPage />}
+				/>
 			</Route>
 		</Routes>
 	);

@@ -104,8 +104,12 @@ const DetailKoleksiPage = () => {
 
 	useEffect(() => {
 		if (koleksi && repos) {
+			const isAuthenticated = !!localStorage.getItem('oauthData');
+			const isTokenExpired = user ? Date.now() >= user.expires_in : true;
+
 			getDetailRepository({
 				token: user?.access_token,
+				isPublic: !isAuthenticated || isTokenExpired,
 				type: koleksi,
 				repos: repos,
 				onDone: (data) => {

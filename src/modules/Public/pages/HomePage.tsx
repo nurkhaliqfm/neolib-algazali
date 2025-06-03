@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import CarouselBanner from '../components/CarouselBanner';
-import { Button, Chip, Image } from '@heroui/react';
+import { Button } from '@heroui/react';
 import { repositoryTypeMap } from '@/constants/repository';
 import { useEffect, useState } from 'react';
 import { getListRekomendasiRepository } from '../service/publicService';
@@ -9,50 +9,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 
 import '/node_modules/swiper/swiper-bundle.min.css';
-import { IconType } from 'react-icons/lib';
-import {
-	HiOutlineAcademicCap,
-	HiOutlineBookOpen,
-	HiOutlineDocumentText,
-} from 'react-icons/hi2';
+import CardCustomeStyleDetail from '../components/CardRepositorcDetail';
+import CardCustomeStyleBasic from '../components/CardRepositoryBasic';
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
-
-const typeColorMapCustom: Record<
-	string,
-	{ color: string; background: string; gradient: string; icon: IconType }
-> = {
-	EJURNAL: {
-		color: 'text-red-400',
-		background: 'bg-red-400',
-		gradient: 'bg-gradient-to-r from-red-200 to-red-500',
-		icon: HiOutlineDocumentText,
-	},
-	JURNAL: {
-		color: 'text-yellow-400',
-		background: 'bg-yellow-400',
-		gradient: 'bg-gradient-to-r from-yellow-200 to-yellow-500',
-		icon: HiOutlineDocumentText,
-	},
-	BUKU: {
-		color: 'text-blue-400',
-		background: 'bg-blue-400',
-		gradient: 'bg-gradient-to-r from-blue-200 to-blue-500',
-		icon: HiOutlineBookOpen,
-	},
-	EBOOK: {
-		color: 'text-green-400',
-		background: 'bg-green-400',
-		gradient: 'bg-gradient-to-r from-green-200 to-green-500',
-		icon: HiOutlineBookOpen,
-	},
-	SKRIPSI: {
-		color: 'text-cyan-400',
-		background: 'bg-cyan-400',
-		gradient: 'bg-gradient-to-r from-cyan-200 to-cyan-500',
-		icon: HiOutlineAcademicCap,
-	},
-};
 
 const TitleSection = ({
 	title,
@@ -72,108 +32,6 @@ const TitleSection = ({
 				{description}
 			</span>
 		</>
-	);
-};
-
-const CardCustomeStyleBasic = ({
-	url,
-	pengarang,
-	title,
-	type,
-}: {
-	url: string;
-	pengarang: string;
-	title: string;
-	type: string;
-}) => {
-	const Icon = typeColorMapCustom[type].icon;
-
-	return (
-		<div className="flex justify-center mb-10">
-			<section className="relative w-48">
-				<div
-					className={cn(
-						`absolute flex items-center gap-x-1 z-20 px-2 py-1 shadow-md font-light text-xs rounded-l-md rounded-br-md right-3 top-5`,
-						typeColorMapCustom[type].gradient
-					)}>
-					<Icon />
-					{type}
-				</div>
-				<Image
-					shadow="lg"
-					radius="none"
-					alt="Cover Repository"
-					className="object-cover absolute translate-x-1/2 right-14"
-					src={url}
-					width={148}
-				/>
-				<div className="mt-[12rem] leading-6 pt-10 h-36 p-4 bg-primary-200/50 rounded-xl overflow-hidden">
-					<p className="font-light text-xs line-clamp-2 text-ellipsis">
-						{pengarang}
-					</p>
-					<p className="text-sm line-clamp-3 text-ellipsis">{title}</p>
-				</div>
-			</section>
-		</div>
-	);
-};
-
-const CardCustomeStyleDetail = ({
-	url,
-	pengarang,
-	title,
-	type,
-	tahun_terbit,
-	abstrak,
-	sinopsis,
-}: {
-	url: string;
-	pengarang: string;
-	title: string;
-	type: string;
-	tahun_terbit: string;
-	abstrak?: string;
-	sinopsis?: string;
-}) => {
-	const Icon = typeColorMapCustom[type].icon;
-
-	return (
-		<div className="flex w-full rounded-xl border-2 border-primary-800/50 my-6">
-			<div className="relative w-40 bg-primary-200/50 rounded-l-xl">
-				<div
-					className={cn(
-						`absolute flex items-center gap-x-1 z-20 px-2 py-1 shadow-md font-light text-xs rounded-l-md rounded-br-md right-2 -top-4`,
-						typeColorMapCustom[type].gradient
-					)}>
-					<Icon />
-					{type}
-				</div>
-				<Image
-					shadow="lg"
-					radius="none"
-					alt="Cover Repository"
-					className="object-cover absolute translate-x-1/2 right-10 -bottom-36"
-					src={url}
-					width={120}
-				/>
-				<div></div>
-				<div className="leading-6 h-full p-3 mt-36"></div>
-			</div>
-			<div className="flex flex-col justify-between flex-1 leading-6 p-4">
-				<div>
-					<p className="text-sm font-medium line-clamp-2">{title}</p>
-					<p className="font-light text-sm italic">{pengarang}</p>
-					<p className="mt-2 text-xs font-light line-clamp-4">
-						{abstrak || sinopsis || '-'}
-					</p>
-				</div>
-				<div className="flex mt-4">
-					<Chip className="capitalize" color="default" size="sm" variant="flat">
-						{tahun_terbit}
-					</Chip>
-				</div>
-			</div>
-		</div>
 	);
 };
 
@@ -239,6 +97,7 @@ function HomePage() {
 											url={`${VITE_SERVER_BASE_URL}/public/skripsi/sampul/ss.jpg`}
 											title={repos.judul}
 											type={repos.type}
+											repos={repos.id}
 											pengarang={
 												repos[repositoryTypeMap[repos.type]]
 													?.pengarang as string
@@ -276,11 +135,6 @@ function HomePage() {
 						listRepository.map((repos, index) => {
 							const detailKey = repositoryTypeMap[repos.type];
 							const selectedReposByType = repos[detailKey];
-							// const formFields = detailKey
-							// 	? repositoryFieldConfig[detailKey].map((field) => ({
-							// 			...field,
-							// 	  }))
-							// 	: [];
 
 							return (
 								<SwiperSlide
@@ -289,6 +143,7 @@ function HomePage() {
 										url={`${VITE_SERVER_BASE_URL}/public/${repos.type}/sampul/${repos.nama_sampul}`}
 										title={repos.judul}
 										type={repos.type}
+										repos={repos.id}
 										pengarang={selectedReposByType?.pengarang as string}
 										tahun_terbit={
 											selectedReposByType?.tahun_terbit.toString() as string

@@ -55,6 +55,10 @@ const AppRoutes = {
 		path: '/koleksi/:koleksi',
 		label: 'Koleksi E-Library | ITB Al-Gazali Barru',
 	},
+	KoleksiDetail: {
+		path: '/koleksi/detail/:koleksi',
+		label: 'Koleksi Detail E-Library | ITB Al-Gazali Barru',
+	},
 	KoleksiJurnal: {
 		path: '/koleksi/jurnal',
 		label: 'Koleksi Jurnal E-Library | ITB Al-Gazali Barru',
