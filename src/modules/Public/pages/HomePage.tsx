@@ -165,15 +165,31 @@ function HomePage() {
 	const [rekomendasiRepository, setRekomendasiRepository] = useState<
 		RepositoryDetailResponse[]
 	>([]);
+	const [listRepository, setListRepository] = useState<
+		RepositoryDetailResponse[]
+	>([]);
+	const [typeRepos, setTypeRepos] =
+		useState<keyof typeof repositoryTypeMap>('JURNAL');
 
 	useEffect(() => {
 		getListRekomendasiRepository({
 			onDone: (data) => {
-				console.log(data);
 				setRekomendasiRepository(data);
 			},
 		});
 	}, []);
+
+	useEffect(() => {
+		if (typeRepos) {
+			getListRekomendasiRepository({
+				limit: '6',
+				repos: typeRepos,
+				onDone: (data) => {
+					setListRepository(data);
+				},
+			});
+		}
+	}, [typeRepos]);
 
 	return (
 		<section>
@@ -226,10 +242,13 @@ function HomePage() {
 							<Button
 								key={`tag-${item.toLowerCase()}`}
 								className="capitalize my-2"
-								color="default"
+								color={item === typeRepos ? 'primary' : 'default'}
 								size="sm"
 								radius="lg"
-								variant="ghost">
+								variant={item === typeRepos ? 'flat' : 'ghost'}
+								onPress={() =>
+									setTypeRepos(item as keyof typeof repositoryTypeMap)
+								}>
 								{item}
 							</Button>
 						);
@@ -237,8 +256,8 @@ function HomePage() {
 				</section>
 
 				<section className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 my-6">
-					{rekomendasiRepository &&
-						rekomendasiRepository.map((repos, index) => {
+					{listRepository &&
+						listRepository.map((repos, index) => {
 							return (
 								<SwiperSlide
 									key={`repos-${repos.judul.toLowerCase()}-${index}`}>
@@ -253,21 +272,6 @@ function HomePage() {
 								</SwiperSlide>
 							);
 						})}
-					{/* <CardCustomeStyleDetail
-						url={`${VITE_SERVER_BASE_URL}/public/skripsi/sampul/ss.jpg`}
-						title="Title"
-						pengarang="Pengarang"
-					/>
-					<CardCustomeStyleDetail
-						url={`${VITE_SERVER_BASE_URL}/public/skripsi/sampul/ss.jpg`}
-						title="Title"
-						pengarang="Pengarang"
-					/>
-					<CardCustomeStyleDetail
-						url={`${VITE_SERVER_BASE_URL}/public/skripsi/sampul/ss.jpg`}
-						title="Title"
-						pengarang="Pengarang"
-					/> */}
 				</section>
 			</section>
 			<section className="leading-3 my-2">
