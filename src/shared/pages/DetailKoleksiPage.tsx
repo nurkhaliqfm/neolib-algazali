@@ -284,7 +284,7 @@ const DetailKoleksiPage = () => {
 			{detailData && (
 				<section className="flex gap-4 p-4 flex-col lg:flex-row">
 					<Card
-						className="py-4 md:max-w-80 w-full border rounded-2xl"
+						className="py-4 md:max-w-80 w-full h-fit border rounded-2xl"
 						shadow="none">
 						<CardBody className="overflow-visible py-2 items-center">
 							<Image
@@ -318,7 +318,7 @@ const DetailKoleksiPage = () => {
 						</CardFooter>
 					</Card>
 
-					<Card className="py-4 flex-1 border rounded-2xl" shadow="none">
+					<Card className="py-4 flex-1 border rounded-2xl h-fit" shadow="none">
 						<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
 							<p className="text-tiny uppercase font-bold">Detail {koleksi}</p>
 						</CardHeader>

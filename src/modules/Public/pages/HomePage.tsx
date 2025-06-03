@@ -68,7 +68,7 @@ function HomePage() {
 	return (
 		<section>
 			<CarouselBanner />
-			<section className="leading-3 my-2">
+			<section className="leading-3 my-2 px-6">
 				<TitleSection
 					title="Rekomendasi"
 					description="Berikut beberapa rekomendasi repositori"
@@ -109,7 +109,8 @@ function HomePage() {
 					</Swiper>
 				</section>
 			</section>
-			<section className="leading-3 my-2">
+
+			<section className="leading-3 my-2 px-6">
 				<TitleSection title="Koleksi Perpustakaan" />
 				<section className="flex gap-x-2">
 					{Object.keys(repositoryTypeMap).map((item) => {
@@ -168,7 +169,8 @@ function HomePage() {
 						})}
 				</section>
 			</section>
-			<section className="leading-3 my-2">
+
+			<section className="leading-3 my-2 px-6">
 				<TitleSection
 					title="Publikasi Jurnal"
 					description="Berikut beberapa publikasi jurnal ITBA Al-Gazali Barru"
