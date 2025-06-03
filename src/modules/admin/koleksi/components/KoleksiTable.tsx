@@ -11,19 +11,19 @@ import {
 	TableHeader,
 	TableRow,
 	Tooltip,
-} from "@heroui/react";
-import { Key, useCallback, useMemo, useState } from "react";
-import { BaseRepository, RepositoryResponse } from "../types/koleksi.type";
+} from '@heroui/react';
+import { Key, useCallback, useMemo, useState } from 'react';
+import { BaseRepository, RepositoryResponse } from '../types/koleksi.type';
 import {
 	HiOutlineEye,
 	HiOutlineMagnifyingGlass,
 	HiOutlinePencil,
 	HiOutlineTrash,
-} from "react-icons/hi2";
-import { TableHeaderComponent } from "@/types/global";
-import { SetURLSearchParams, useNavigate } from "react-router-dom";
-import AppRoutes from "@/router/routes";
-import { typeColorMap } from "@/constants/repository";
+} from 'react-icons/hi2';
+import { TableHeaderComponent } from '@/types/global';
+import { SetURLSearchParams, useNavigate } from 'react-router-dom';
+import AppRoutes from '@/router/routes';
+import { typeColorMap } from '@/constants/repository';
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -33,17 +33,17 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { deleteRepository } from "../services/koleksiService";
-import { useTypedSelector } from "@/hooks/useTypedSelector";
-import { toast } from "react-toastify";
+} from '@/components/ui/alert-dialog';
+import { deleteRepository } from '../services/koleksiService';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { toast } from 'react-toastify';
 
 const RepositoryHeaderTable: TableHeaderComponent[] = [
-	{ name: "JUDUL", slug: "judul" },
-	{ name: "NAMA SAMPUL", slug: "nama_sampul" },
-	{ name: "NAMA FILE", slug: "nama_file" },
-	{ name: "JENIS", slug: "type" },
-	{ name: "ACTIONS", slug: "actions" },
+	{ name: 'JUDUL', slug: 'judul' },
+	{ name: 'NAMA SAMPUL', slug: 'nama_sampul' },
+	{ name: 'NAMA FILE', slug: 'nama_file' },
+	{ name: 'JENIS', slug: 'type' },
+	{ name: 'ACTIONS', slug: 'actions' },
 ];
 
 export function RepositoryTable({
@@ -61,7 +61,6 @@ export function RepositoryTable({
 	slug: string;
 	setSearchParams: SetURLSearchParams;
 }) {
-	console.log(keyword);
 	const navigate = useNavigate();
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
@@ -77,12 +76,12 @@ export function RepositoryTable({
 			if (value) {
 				setSearchParams({
 					keyword: value.toString(),
-					page: "1",
+					page: '1',
 					limit: limit,
 				});
 			} else {
 				setSearchParams({
-					page: "1",
+					page: '1',
 					limit: limit,
 				});
 			}
@@ -93,13 +92,13 @@ export function RepositoryTable({
 	};
 
 	const onClear = useCallback(() => {
-		setFilterValue("");
+		setFilterValue('');
 	}, []);
 
 	const onRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setFilterValue("");
+		setFilterValue('');
 		setSearchParams({
-			page: "1",
+			page: '1',
 			limit: e.target.value,
 		});
 	};
@@ -126,7 +125,7 @@ export function RepositoryTable({
 						Rows per page:
 						<select
 							className="bg-transparent outline-none text-default-400 text-small"
-							defaultValue={limit || "5"}
+							defaultValue={limit || '5'}
 							onChange={onRowsPerPageChange}>
 							<option value="5">5</option>
 							<option value="10">10</option>
@@ -144,13 +143,13 @@ export function RepositoryTable({
 		const cellValue = data[columnKey as keyof BaseRepository];
 
 		switch (columnKey) {
-			case "judul":
+			case 'judul':
 				return <>{data.judul}</>;
-			case "nama_sampul":
+			case 'nama_sampul':
 				return <>{data.nama_sampul}</>;
-			case "nama_file":
+			case 'nama_file':
 				return <>{data.nama_file}</>;
-			case "type":
+			case 'type':
 				return (
 					<Chip
 						className="capitalize"
@@ -160,7 +159,7 @@ export function RepositoryTable({
 						{cellValue}
 					</Chip>
 				);
-			case "actions":
+			case 'actions':
 				return (
 					<div className="relative flex items-center gap-2">
 						<Tooltip color="warning" content="Detail Repository">
@@ -168,7 +167,7 @@ export function RepositoryTable({
 								onClick={() =>
 									navigate(
 										`${AppRoutes.AdminDetailKoleksi.path.replace(
-											":koleksi",
+											':koleksi',
 											slug
 										)}?repos=${data.id}`
 									)
@@ -182,7 +181,7 @@ export function RepositoryTable({
 								onClick={() =>
 									navigate(
 										`${AppRoutes.AdminEditKoleksi.path.replace(
-											":koleksi",
+											':koleksi',
 											slug
 										)}?repos=${data.id}`
 									)
@@ -251,7 +250,7 @@ export function RepositoryTable({
 															onClose: () => {
 																navigate(
 																	AppRoutes.AdminKoleksi.path.replace(
-																		":koleksi",
+																		':koleksi',
 																		slug
 																	)
 																);
@@ -259,7 +258,7 @@ export function RepositoryTable({
 														});
 													} else {
 														toast.error(data.message, {
-															theme: "colored",
+															theme: 'colored',
 															autoClose: 700,
 															onClose: () => {
 																setIsLoadingDelete(false);
@@ -269,7 +268,7 @@ export function RepositoryTable({
 												},
 												onError: (error) => {
 													toast.error(error.error, {
-														theme: "colored",
+														theme: 'colored',
 														autoClose: 700,
 														onClose: () => {
 															setIsLoadingDelete(false);

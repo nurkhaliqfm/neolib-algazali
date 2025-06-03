@@ -23,7 +23,6 @@ const HeaderLayout = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const location = useLocation();
 	const currentPathLocation = location.pathname;
-	console.log(currentPathLocation);
 
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
