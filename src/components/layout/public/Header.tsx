@@ -63,6 +63,7 @@ const HeaderLayout = () => {
 			isBlurred
 			isMenuOpen={isMenuOpen}
 			onMenuOpenChange={setIsMenuOpen}
+			isBordered
 			className="bg-primary-foreground">
 			<NavbarMenuToggle
 				icon={
