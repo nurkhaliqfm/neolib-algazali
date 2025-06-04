@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 
 import '/node_modules/swiper/swiper-bundle.min.css';
+import { Image } from '@heroui/react';
 
 const CarouselBanner = () => {
 	const bannerList = [
@@ -19,9 +20,9 @@ const CarouselBanner = () => {
 
 	return (
 		<div className="sm:p-6 p-0">
-			<div className="bg-primary-50 relative mb-2 sm:rounded-xl overflow-hidden ">
+			<div className="relative mb-2 sm:rounded-xl overflow-hidden ">
 				<div className="absolute top-0 left-0 w-full h-full z-20">
-					<div className="bg-gradient-to-r from-transparent to-primary-400/80 w-full h-full absolute z-20"></div>
+					<div className="bg-gradient-to-b from-transparent to-primary-400/60 w-full h-full absolute z-20"></div>
 				</div>
 
 				<Swiper
@@ -34,10 +35,11 @@ const CarouselBanner = () => {
 					{bannerList.map((item) => {
 						return (
 							<SwiperSlide key={`banner-${item.alt}`}>
-								<img
+								<Image
 									src={item.image}
 									alt={`banner-${item.alt}`}
-									className="sm:rounded-2xl"
+									className="rounded-none"
+									isBlurred
 								/>
 							</SwiperSlide>
 						);
