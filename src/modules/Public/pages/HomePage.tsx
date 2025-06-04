@@ -171,14 +171,16 @@ function HomePage() {
 							);
 						})}
 				</section>
-				<div className="flex justify-center">
-					<Button
-						variant="shadow"
-						color="primary"
-						onPress={() => AppRoutes.Koleksi.path}>
-						Lihat Repository Lainnya
-					</Button>
-				</div>
+				{listRepository && (
+					<div className="flex justify-center">
+						<Button
+							variant="shadow"
+							color="primary"
+							onPress={() => AppRoutes.Koleksi.path}>
+							Lihat Repository Lainnya
+						</Button>
+					</div>
+				)}
 			</section>
 
 			<section className="leading-3 my-2 px-6">
