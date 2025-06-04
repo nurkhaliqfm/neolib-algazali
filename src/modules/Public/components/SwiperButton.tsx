@@ -22,9 +22,10 @@ const SwiperControllButton = ({ swiperRef }: SwiperButtonProps) => {
 		}
 	};
 	return (
-		<div className="flex space-x-3 mb-4">
+		<div className="flex space-x-3">
 			<Button
 				isIconOnly
+				size="sm"
 				radius="full"
 				variant="bordered"
 				color="primary"
@@ -36,6 +37,7 @@ const SwiperControllButton = ({ swiperRef }: SwiperButtonProps) => {
 			<Button
 				isIconOnly
 				radius="full"
+				size="sm"
 				variant="bordered"
 				isDisabled={
 					activeIndexPagination ===
