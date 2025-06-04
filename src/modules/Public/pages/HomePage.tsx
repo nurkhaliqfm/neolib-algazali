@@ -2,10 +2,11 @@ import { cn } from '@/lib/utils';
 import CarouselBanner from '../components/CarouselBanner';
 import { Button } from '@heroui/react';
 import { repositoryTypeMap } from '@/constants/repository';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getListRekomendasiRepository } from '../service/publicService';
 import { RepositoryDetailResponse } from '@/modules/admin/koleksi/types/koleksi.type';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper as SwiperType } from 'swiper';
 import { Autoplay, Pagination } from 'swiper/modules';
 
 import '/node_modules/swiper/swiper-bundle.min.css';
@@ -14,6 +15,7 @@ import {
 	CardCustomeStyleBasic,
 	CardCustomeStyleDetail,
 } from '../components/CardRepository';
+import { SwiperControllButton } from '../components/SwiperButton';
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -25,7 +27,7 @@ const TitleSection = ({
 	description?: string;
 }) => {
 	return (
-		<>
+		<div>
 			<p className="text-primary-800 text-2xl font-medium">{title}</p>
 			<span
 				className={cn(
@@ -34,7 +36,7 @@ const TitleSection = ({
 				)}>
 				{description}
 			</span>
-		</>
+		</div>
 	);
 };
 
@@ -47,6 +49,8 @@ function HomePage() {
 	>([]);
 	const [typeRepos, setTypeRepos] =
 		useState<keyof typeof repositoryTypeMap>('JURNAL');
+
+	const swiperRef = useRef<SwiperType | null>(null);
 
 	useEffect(() => {
 		getListRekomendasiRepository({
@@ -72,20 +76,25 @@ function HomePage() {
 		<section>
 			<CarouselBanner />
 			<section className="leading-3 my-2 px-6">
-				<TitleSection
-					title="Rekomendasi"
-					description="Berikut beberapa rekomendasi repositori"
-				/>
+				<div className="flex justify-between">
+					<TitleSection
+						title="Rekomendasi"
+						description="Berikut beberapa rekomendasi repositori"
+					/>
+
+					<SwiperControllButton swiperRef={swiperRef} />
+				</div>
 
 				<section className="flex gap-x-4 my-6">
 					<Swiper
+						onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
 						breakpoints={{
 							320: { slidesPerView: 1, spaceBetween: 10 },
 							480: { slidesPerView: 2, spaceBetween: 10 },
 							768: { slidesPerView: 3, spaceBetween: 10 },
 							1024: { slidesPerView: 4, spaceBetween: 10 },
 						}}
-						loop={true}
+						// loop={true}
 						pagination={{
 							clickable: true,
 						}}

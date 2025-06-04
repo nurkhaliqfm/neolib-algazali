@@ -19,7 +19,7 @@ const CarouselBanner = () => {
 	];
 
 	return (
-		<div className="sm:p-6 p-0">
+		<div className="sm:p-6 p-0 mb-8 sm:mb-0">
 			<div className="relative mb-2 sm:rounded-xl overflow-hidden ">
 				<div className="absolute top-0 left-0 w-full h-full z-20">
 					<div className="bg-gradient-to-b from-transparent to-primary-400/60 w-full h-full absolute z-20"></div>
