@@ -9,9 +9,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 
 import '/node_modules/swiper/swiper-bundle.min.css';
-import CardCustomeStyleDetail from '../components/CardRepositorcDetail';
-import CardCustomeStyleBasic from '../components/CardRepositoryBasic';
 import AppRoutes from '@/router/routes';
+import {
+	CardCustomeStyleBasic,
+	CardCustomeStyleDetail,
+} from '../components/CardRepository';
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
