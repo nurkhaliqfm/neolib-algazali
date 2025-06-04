@@ -44,7 +44,7 @@ const CardCustomeStyleBasic = ({
 					shadow="lg"
 					radius="none"
 					alt="Cover Repository"
-					className="object-cover absolute translate-x-1/2 right-14"
+					className="object-cover absolute translate-x-1/2 right-[3.28rem]"
 					src={url}
 					width={148}
 				/>
