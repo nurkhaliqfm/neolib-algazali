@@ -134,7 +134,7 @@ function HomePage() {
 					})}
 				</section>
 
-				<section className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 my-6">
+				<section className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4  my-6">
 					{listRepository &&
 						listRepository.map((repos, index) => {
 							const detailKey = repositoryTypeMap[repos.type];

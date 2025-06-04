@@ -82,8 +82,8 @@ const CardCustomeStyleDetail = ({
 	const navigate = useNavigate();
 
 	return (
-		<div className="flex w-full rounded-xl border-2 border-primary-800/50 my-6">
-			<div className="relative w-40 h-44 bg-primary-200/50 rounded-l-xl shadow-xl">
+		<div className="flex w-full h-52 rounded-xl bg-primary-200/50  border-2 border-primary-800/50 my-6 shadow-xl">
+			<div className="relative flex w-40 h-full rounded-l-xl">
 				<div
 					className={cn(
 						`absolute flex items-center gap-x-1 z-20 px-2 py-1 shadow-md font-light text-xs rounded-l-md rounded-br-md right-2 -top-4`,
@@ -92,22 +92,24 @@ const CardCustomeStyleDetail = ({
 					<Icon />
 					{type}
 				</div>
-				<Image
-					shadow="lg"
-					radius="none"
-					alt="Cover Repository"
-					className="object-cover absolute translate-x-1/2 right-10 -bottom-36"
-					src={url}
-					width={120}
-				/>
-				<div></div>
-				<div className="leading-6 h-full p-3 mt-36"></div>
+
+				<div className="bg-white absolute translate-x-1/2 right-20 -top-10 h-48 w-32 overflow-hidden flex items-center justify-center">
+					<Image
+						as="img"
+						radius="none"
+						alt="Cover Repository"
+						className="object-cover"
+						width={200}
+						height={200}
+						src={url}
+					/>
+				</div>
 			</div>
-			<div className="flex flex-col justify-between flex-1 leading-6 p-4">
+			<div className="flex flex-col bg-white rounded-r-xl justify-between flex-1 leading-6 p-4">
 				<div>
 					<p className="text-sm font-medium line-clamp-2">{title}</p>
-					<p className="font-light text-sm italic">{pengarang}</p>
-					<p className="mt-2 text-xs font-light line-clamp-4">
+					<p className="font-light text-sm italic line-clamp-1">{pengarang}</p>
+					<p className="mt-2 text-[0.7rem] leading-4 font-light line-clamp-3">
 						{abstrak || sinopsis || '-'}
 					</p>
 				</div>
