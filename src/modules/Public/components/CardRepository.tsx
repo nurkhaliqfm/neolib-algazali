@@ -93,7 +93,7 @@ const CardCustomeStyleDetail = ({
 					{type}
 				</div>
 
-				<div className="bg-white absolute translate-x-1/2 right-20 -top-10 h-48 w-32 overflow-hidden flex items-center justify-center">
+				<div className="bg-white absolute translate-x-1/2 right-20 xs:right-[4rem] -top-10 xs:w-28 h-48 w-32 overflow-hidden flex items-center justify-center">
 					<Image
 						as="img"
 						radius="none"
