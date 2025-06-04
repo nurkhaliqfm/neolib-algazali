@@ -158,7 +158,7 @@ function HomePage() {
 
 			<section className="leading-3 my-2 px-6 mb-6">
 				<TitleSection icon={HiOutlineInboxStack} title="Koleksi Perpustakaan" />
-				<section className="flex gap-x-2">
+				<section className="flex gap-x-2 w-full overflow-x-scroll">
 					{Object.keys(repositoryTypeMap).map((item) => {
 						return (
 							<Button
@@ -235,7 +235,6 @@ function HomePage() {
 
 				<section className="flex gap-x-4 my-6">
 					<Swiper
-						onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
 						breakpoints={{
 							320: { slidesPerView: 1, spaceBetween: 10 },
 							480: { slidesPerView: 2, spaceBetween: 10 },

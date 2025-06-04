@@ -12,6 +12,7 @@ const SwiperControllButton = ({ swiperRef }: SwiperButtonProps) => {
 
 	const handleSwiperOnClick = ({ type }: { type: string }) => {
 		if (swiperRef.current) {
+			console.log(swiperRef.current);
 			if (type === 'next') {
 				setActiveIndexPagination(swiperRef.current.activeIndex + 1);
 				swiperRef.current.slideNext();
