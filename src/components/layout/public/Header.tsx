@@ -58,113 +58,106 @@ const HeaderLayout = () => {
 	];
 
 	return (
-		<>
-			<Navbar
-				isBordered
-				isBlurred
-				isMenuOpen={isMenuOpen}
-				onMenuOpenChange={setIsMenuOpen}
-				position="static"
-				className="bg-primary-foreground">
-				<NavbarMenuToggle
-					icon={
-						isMenuOpen ? (
-							<HiOutlineXMark size={60} />
-						) : (
-							<HiOutlineSquares2X2 size={60} />
-						)
-					}
-					aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-					className="sm:hidden"
-				/>
-
-				<NavbarBrand className="hidden sm:flex gap-4">
-					<img src={LogoKampus} width={50} />
-				</NavbarBrand>
-
-				<NavbarContent className="hidden sm:flex gap-4" justify="center">
-					<NavbarItem
-						isActive={currentPathLocation === '/'}
-						key={`header-navbar-home`}>
-						<Link
-							color={currentPathLocation === '/' ? 'primary' : 'foreground'}
-							href={AppRoutes.Home.path}>
-							Home
-						</Link>
-					</NavbarItem>
-					{routeNavbarList.map((item) => {
-						return (
-							<NavbarItem
-								isActive={currentPathLocation === item.route}
-								key={`header-navbar-${item.key}`}>
-								<Link
-									color={
-										currentPathLocation === item.route
-											? 'primary'
-											: 'foreground'
-									}
-									href={item.route}>
-									{item.label}
-								</Link>
-							</NavbarItem>
-						);
-					})}
-				</NavbarContent>
-
-				<NavbarContent justify="end">
-					{!isAuthenticated || isTokenExpired ? (
-						<NavbarItem>
-							<Button
-								as={Link}
-								color="primary"
-								href={AppRoutes.Login.path}
-								variant="light">
-								<HiOutlineHome /> Login
-							</Button>
-						</NavbarItem>
+		<Navbar
+			shouldHideOnScroll
+			isBlurred
+			isMenuOpen={isMenuOpen}
+			onMenuOpenChange={setIsMenuOpen}
+			className="bg-primary-foreground">
+			<NavbarMenuToggle
+				icon={
+					isMenuOpen ? (
+						<HiOutlineXMark size={60} />
 					) : (
-						<NavbarItem>
-							<Button
-								as={Link}
-								color="primary"
-								href={AppRoutes.AdminDashboard.path}
-								variant="flat">
-								<HiOutlineHome /> Dashboard
-							</Button>
-						</NavbarItem>
-					)}
-				</NavbarContent>
+						<HiOutlineSquares2X2 size={60} />
+					)
+				}
+				aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+				className="sm:hidden"
+			/>
 
-				<NavbarMenu>
-					<NavbarMenuItem
-						isActive={currentPathLocation === '/'}
-						key={`toggle-navbar-home`}>
-						<Link
-							color={currentPathLocation === '/' ? 'primary' : 'foreground'}
-							href={AppRoutes.Home.path}>
-							Home
-						</Link>
-					</NavbarMenuItem>
-					{routeNavbarList.map((item) => {
-						return (
-							<NavbarMenuItem
-								isActive={currentPathLocation === item.route}
-								key={`toggle-navbar-${item.key}`}>
-								<Link
-									color={
-										currentPathLocation === item.route
-											? 'primary'
-											: 'foreground'
-									}
-									href={item.route}>
-									{item.label}
-								</Link>
-							</NavbarMenuItem>
-						);
-					})}
-				</NavbarMenu>
-			</Navbar>
-		</>
+			<NavbarBrand className="hidden sm:flex gap-4">
+				<img src={LogoKampus} width={50} />
+			</NavbarBrand>
+
+			<NavbarContent className="hidden sm:flex gap-4" justify="center">
+				<NavbarItem
+					isActive={currentPathLocation === '/'}
+					key={`header-navbar-home`}>
+					<Link
+						color={currentPathLocation === '/' ? 'primary' : 'foreground'}
+						href={AppRoutes.Home.path}>
+						Home
+					</Link>
+				</NavbarItem>
+				{routeNavbarList.map((item) => {
+					return (
+						<NavbarItem
+							isActive={currentPathLocation === item.route}
+							key={`header-navbar-${item.key}`}>
+							<Link
+								color={
+									currentPathLocation === item.route ? 'primary' : 'foreground'
+								}
+								href={item.route}>
+								{item.label}
+							</Link>
+						</NavbarItem>
+					);
+				})}
+			</NavbarContent>
+
+			<NavbarContent justify="end">
+				{!isAuthenticated || isTokenExpired ? (
+					<NavbarItem>
+						<Button
+							as={Link}
+							color="primary"
+							href={AppRoutes.Login.path}
+							variant="light">
+							<HiOutlineHome /> Login
+						</Button>
+					</NavbarItem>
+				) : (
+					<NavbarItem>
+						<Button
+							as={Link}
+							color="primary"
+							href={AppRoutes.AdminDashboard.path}
+							variant="flat">
+							<HiOutlineHome /> Dashboard
+						</Button>
+					</NavbarItem>
+				)}
+			</NavbarContent>
+
+			<NavbarMenu>
+				<NavbarMenuItem
+					isActive={currentPathLocation === '/'}
+					key={`toggle-navbar-home`}>
+					<Link
+						color={currentPathLocation === '/' ? 'primary' : 'foreground'}
+						href={AppRoutes.Home.path}>
+						Home
+					</Link>
+				</NavbarMenuItem>
+				{routeNavbarList.map((item) => {
+					return (
+						<NavbarMenuItem
+							isActive={currentPathLocation === item.route}
+							key={`toggle-navbar-${item.key}`}>
+							<Link
+								color={
+									currentPathLocation === item.route ? 'primary' : 'foreground'
+								}
+								href={item.route}>
+								{item.label}
+							</Link>
+						</NavbarMenuItem>
+					);
+				})}
+			</NavbarMenu>
+		</Navbar>
 	);
 };
 

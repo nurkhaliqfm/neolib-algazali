@@ -11,6 +11,7 @@ import { Autoplay, Pagination } from 'swiper/modules';
 import '/node_modules/swiper/swiper-bundle.min.css';
 import CardCustomeStyleDetail from '../components/CardRepositorcDetail';
 import CardCustomeStyleBasic from '../components/CardRepositoryBasic';
+import AppRoutes from '@/router/routes';
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -168,6 +169,14 @@ function HomePage() {
 							);
 						})}
 				</section>
+				<div className="flex justify-center">
+					<Button
+						variant="shadow"
+						color="primary"
+						onPress={() => AppRoutes.Koleksi.path}>
+						Lihat Repository Lainnya
+					</Button>
+				</div>
 			</section>
 
 			<section className="leading-3 my-2 px-6">
