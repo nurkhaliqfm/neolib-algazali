@@ -1,4 +1,4 @@
-import { repositoryTypeMap } from '@/constants/repository';
+import { repositoryTypeMap } from "@/constants/repository";
 
 export type RepositoryJurnal = {
 	abstrak: string | null;
@@ -73,7 +73,7 @@ export interface BaseRepository {
 	judul: string;
 	nama_sampul: string | null;
 	nama_file: string | null;
-	type: 'EJURNAL' | 'JURNAL' | 'EBOOK' | 'BUKU' | 'SKRIPSI';
+	type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
 }
 
 export interface BaseRepositoryRequest {
@@ -82,11 +82,11 @@ export interface BaseRepositoryRequest {
 	old_file?: string | null;
 	nama_sampul: FileList | null;
 	nama_file: FileList | null;
-	type: 'EJURNAL' | 'JURNAL' | 'EBOOK' | 'BUKU' | 'SKRIPSI';
+	type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
 }
 
 export interface RepositoryResponse {
-	repository: BaseRepository[];
+	repository: RepositoryDetailResponse[];
 	total: number;
 	pages: { total: number; start: number; end: number; current: number };
 }

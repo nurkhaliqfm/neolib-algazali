@@ -1,7 +1,7 @@
-import { Button } from '@heroui/react';
-import { useState } from 'react';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
-import SwiperInstance from 'swiper';
+import { Button } from "@heroui/react";
+import { useState } from "react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
+import SwiperInstance from "swiper";
 
 interface SwiperButtonProps {
 	swiperRef: React.RefObject<SwiperInstance | null>;
@@ -12,11 +12,10 @@ const SwiperControllButton = ({ swiperRef }: SwiperButtonProps) => {
 
 	const handleSwiperOnClick = ({ type }: { type: string }) => {
 		if (swiperRef.current) {
-			console.log(swiperRef.current);
-			if (type === 'next') {
+			if (type === "next") {
 				setActiveIndexPagination(swiperRef.current.activeIndex + 1);
 				swiperRef.current.slideNext();
-			} else if (type === 'prev') {
+			} else if (type === "prev") {
 				setActiveIndexPagination(swiperRef.current.activeIndex - 1);
 				swiperRef.current.slidePrev();
 			}
@@ -31,7 +30,7 @@ const SwiperControllButton = ({ swiperRef }: SwiperButtonProps) => {
 				variant="bordered"
 				color="primary"
 				isDisabled={activeIndexPagination === 0}
-				onPress={() => handleSwiperOnClick({ type: 'prev' })}>
+				onPress={() => handleSwiperOnClick({ type: "prev" })}>
 				<HiChevronLeft />
 			</Button>
 
@@ -45,7 +44,7 @@ const SwiperControllButton = ({ swiperRef }: SwiperButtonProps) => {
 					(swiperRef.current?.pagination.bullets?.length ?? 0) - 2
 				}
 				color="primary"
-				onPress={() => handleSwiperOnClick({ type: 'next' })}>
+				onPress={() => handleSwiperOnClick({ type: "next" })}>
 				<HiChevronRight />
 			</Button>
 		</div>

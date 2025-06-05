@@ -1,5 +1,5 @@
-import { ApiError, ApiResponse } from '@/types/global';
-import axios, { AxiosError } from 'axios';
+import { ApiError, ApiResponse } from "@/types/global";
+import axios, { AxiosError } from "axios";
 import {
 	RepositoryBuku,
 	RepositoryDetailResponse,
@@ -9,8 +9,8 @@ import {
 	RepositoryRequest,
 	RepositoryResponse,
 	RepositorySkripsi,
-} from '../types/koleksi.type';
-import { RepositoryItemKey } from '@/types/repository';
+} from "../types/koleksi.type";
+import { RepositoryItemKey } from "@/types/repository";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -19,6 +19,7 @@ const getListRepository = async ({
 	type,
 	page,
 	keyword,
+	isPublic,
 	limit,
 	onDone,
 	onError,
@@ -26,16 +27,20 @@ const getListRepository = async ({
 	token: string | null | undefined;
 	type: string;
 	page: string;
+	isPublic: boolean;
 	keyword?: string;
 	limit?: string;
 	onDone?: (data: RepositoryResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
+	const baseUrl = isPublic
+		? `${VITE_SERVER_BASE_URL}/public`
+		: `${VITE_SERVER_BASE_URL}/admin/repository`;
 	try {
 		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/repository/${type}s?page=${page}${
-				keyword ? `&keyword=${keyword}` : ''
-			}${limit ? `&limit=${limit}` : ''}`,
+			`${baseUrl}/${type}s?page=${page}${keyword ? `&keyword=${keyword}` : ""}${
+				limit ? `&limit=${limit}` : ""
+			}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -53,7 +58,7 @@ const getListRepository = async ({
 					error: axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
-				localStorage.removeItem('authData');
+				localStorage.removeItem("authData");
 				window.location.reload();
 			}
 		}
@@ -76,15 +81,18 @@ const getDetailRepository = async ({
 	onDone?: (data: RepositoryDetailResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
-	const serviceUrl = isPublic
-		? `${VITE_SERVER_BASE_URL}/public/${type}/detail?repos=${repos}`
-		: `${VITE_SERVER_BASE_URL}/admin/repository/${type}/detail?repos=${repos}`;
+	const baseUrl = isPublic
+		? `${VITE_SERVER_BASE_URL}/public`
+		: `${VITE_SERVER_BASE_URL}/admin/repository`;
 	try {
-		const response = await axios.get(serviceUrl, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
+		const response = await axios.get(
+			`${baseUrl}/${type}/detail?repos=${repos}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 
 		if (onDone) onDone(response.data);
 	} catch (error) {
@@ -96,7 +104,7 @@ const getDetailRepository = async ({
 					error: axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
-				localStorage.removeItem('authData');
+				localStorage.removeItem("authData");
 				window.location.reload();
 			}
 		}
@@ -122,21 +130,21 @@ const updateRepository = async ({
 }) => {
 	const repositoryBodyRequest = new FormData();
 
-	repositoryBodyRequest.append('judul', repos.judul);
-	repositoryBodyRequest.append('type', repos.type);
+	repositoryBodyRequest.append("judul", repos.judul);
+	repositoryBodyRequest.append("type", repos.type);
 	if (repos.old_sampul) {
-		repositoryBodyRequest.append('nama_sampul', repos.old_sampul);
+		repositoryBodyRequest.append("nama_sampul", repos.old_sampul);
 	}
 	if (repos.old_file) {
-		repositoryBodyRequest.append('nama_file', repos.old_file);
+		repositoryBodyRequest.append("nama_file", repos.old_file);
 	}
 	if (repos.nama_sampul) {
 		const fileSampul = repos.nama_sampul as FileList;
-		repositoryBodyRequest.append('sampul', fileSampul[0], fileSampul[0]?.name);
+		repositoryBodyRequest.append("sampul", fileSampul[0], fileSampul[0]?.name);
 	}
 	if (repos.nama_file) {
 		const fileRepos = repos.nama_file as FileList;
-		repositoryBodyRequest.append('repos', fileRepos[0], fileRepos[0]?.name);
+		repositoryBodyRequest.append("repos", fileRepos[0], fileRepos[0]?.name);
 	}
 	if (atr.slug) {
 		const data = repos[atr.slug as keyof RepositoryRequest] as
@@ -148,18 +156,18 @@ const updateRepository = async ({
 
 		Object.keys(data).forEach((key) => {
 			if (
-				key !== 'judul' &&
-				key !== 'nama_sampul' &&
-				key !== 'nama_file' &&
-				key !== 'id_lokasi' &&
-				key !== 'id_prodi'
+				key !== "judul" &&
+				key !== "nama_sampul" &&
+				key !== "nama_file" &&
+				key !== "id_lokasi" &&
+				key !== "id_prodi"
 			) {
-				if (key === 'lokasi') {
-					if ('lokasi' in data) {
+				if (key === "lokasi") {
+					if ("lokasi" in data) {
 						repositoryBodyRequest.append(`data[id_lokasi]`, data?.lokasi?.id);
 					}
-				} else if (key === 'prodi') {
-					if ('prodi' in data) {
+				} else if (key === "prodi") {
+					if ("prodi" in data) {
 						repositoryBodyRequest.append(`data[id_prodi]`, data?.prodi?.id);
 					}
 				} else {
@@ -186,7 +194,7 @@ const updateRepository = async ({
 		if (onDone)
 			onDone({
 				status: response.status,
-				message: response.data.message || 'Repository updated successfully',
+				message: response.data.message || "Repository updated successfully",
 			});
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
@@ -197,7 +205,7 @@ const updateRepository = async ({
 					error: axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
-				localStorage.removeItem('authData');
+				localStorage.removeItem("authData");
 				window.location.reload();
 			}
 		}
@@ -222,15 +230,15 @@ const createRepository = async ({
 }) => {
 	const repositoryBodyRequest = new FormData();
 
-	repositoryBodyRequest.append('judul', repos.judul);
-	repositoryBodyRequest.append('type', repos.type);
+	repositoryBodyRequest.append("judul", repos.judul);
+	repositoryBodyRequest.append("type", repos.type);
 	if (repos.nama_sampul) {
 		const fileSampul = repos.nama_sampul as FileList;
-		repositoryBodyRequest.append('sampul', fileSampul[0], fileSampul[0]?.name);
+		repositoryBodyRequest.append("sampul", fileSampul[0], fileSampul[0]?.name);
 	}
 	if (repos.nama_file) {
 		const fileRepos = repos.nama_file as FileList;
-		repositoryBodyRequest.append('repos', fileRepos[0], fileRepos[0]?.name);
+		repositoryBodyRequest.append("repos", fileRepos[0], fileRepos[0]?.name);
 	}
 	if (atr.slug) {
 		const data = repos[atr.slug as keyof RepositoryRequest] as
@@ -242,18 +250,18 @@ const createRepository = async ({
 
 		Object.keys(data).forEach((key) => {
 			if (
-				key !== 'judul' &&
-				key !== 'nama_sampul' &&
-				key !== 'nama_file' &&
-				key !== 'id_lokasi' &&
-				key !== 'id_prodi'
+				key !== "judul" &&
+				key !== "nama_sampul" &&
+				key !== "nama_file" &&
+				key !== "id_lokasi" &&
+				key !== "id_prodi"
 			) {
-				if (key === 'lokasi') {
-					if ('lokasi' in data) {
+				if (key === "lokasi") {
+					if ("lokasi" in data) {
 						repositoryBodyRequest.append(`data[id_lokasi]`, data?.lokasi?.id);
 					}
-				} else if (key === 'prodi') {
-					if ('prodi' in data) {
+				} else if (key === "prodi") {
+					if ("prodi" in data) {
 						repositoryBodyRequest.append(`data[id_prodi]`, data?.prodi?.id);
 					}
 				} else {
@@ -280,7 +288,7 @@ const createRepository = async ({
 		if (onDone)
 			onDone({
 				status: response.status,
-				message: response.data.message || 'Repository created successfully',
+				message: response.data.message || "Repository created successfully",
 			});
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
@@ -291,7 +299,7 @@ const createRepository = async ({
 					error: axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
-				localStorage.removeItem('authData');
+				localStorage.removeItem("authData");
 				window.location.reload();
 			}
 		}
@@ -325,7 +333,7 @@ const deleteRepository = async ({
 		if (onDone)
 			onDone({
 				status: response.status,
-				message: response.data.message || 'Repository deleted successfully',
+				message: response.data.message || "Repository deleted successfully",
 			});
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
@@ -336,7 +344,7 @@ const deleteRepository = async ({
 					error: axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
-				localStorage.removeItem('authData');
+				localStorage.removeItem("authData");
 				window.location.reload();
 			}
 		}

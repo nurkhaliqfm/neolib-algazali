@@ -18,7 +18,7 @@ const ListKoleksiPage = () => {
 	const limit = searchParams.get("limit") || "5";
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
-	const [repositoryData, setrepositoryData] =
+	const [repositoryData, setRepositoryData] =
 		useState<RepositoryResponse | null>(null);
 
 	useEffect(() => {
@@ -28,9 +28,10 @@ const ListKoleksiPage = () => {
 				page: page,
 				type: koleksi,
 				keyword: keyword,
+				isPublic: false,
 				limit: limit,
 				onDone: (data) => {
-					setrepositoryData(data);
+					setRepositoryData(data);
 				},
 			});
 		}

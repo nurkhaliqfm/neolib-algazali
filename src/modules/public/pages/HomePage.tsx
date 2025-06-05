@@ -1,80 +1,51 @@
-import { cn } from '@/lib/utils';
-import CarouselBanner from '../components/CarouselBanner';
-import { Button, Image } from '@heroui/react';
-import { repositoryTypeMap } from '@/constants/repository';
-import { useEffect, useRef, useState } from 'react';
-import { getListRekomendasiRepository } from '../service/publicService';
-import { RepositoryDetailResponse } from '@/modules/admin/koleksi/types/koleksi.type';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperType } from 'swiper';
-import { Autoplay, Pagination } from 'swiper/modules';
+import CarouselBanner from "../components/CarouselBanner";
+import { Button, Image } from "@heroui/react";
+import { repositoryTypeMap, typePublicRouteMap } from "@/constants/repository";
+import { useEffect, useRef, useState } from "react";
+import { getListRekomendasiRepository } from "../service/publicService";
+import { RepositoryDetailResponse } from "@/modules/admin/koleksi/types/koleksi.type";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperType } from "swiper";
+import { Autoplay, Pagination } from "swiper/modules";
 
-import '/node_modules/swiper/swiper-bundle.min.css';
-import AppRoutes from '@/router/routes';
+import "/node_modules/swiper/swiper-bundle.min.css";
 import {
 	CardCustomeStyleBasic,
 	CardCustomeStyleDetail,
-} from '../components/CardRepository';
-import { SwiperControllButton } from '../components/SwiperButton';
+} from "../components/CardRepository";
+import { SwiperControllButton } from "../components/SwiperButton";
 import {
 	HiOutlineInboxStack,
 	HiOutlineRocketLaunch,
 	HiOutlineSparkles,
-} from 'react-icons/hi2';
-import { IconType } from 'react-icons/lib';
+} from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
+import { SectionTitleContent } from "@/shared/components/SectionTitle";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
-const TitleSection = ({
-	title,
-	description,
-	icon,
-}: {
-	icon: IconType;
-	title: string;
-	description?: string;
-}) => {
-	const Icon = icon;
-	return (
-		<div className="flex items-center gap-x-3">
-			<div className="hidden sm:inline rounded-full bg-primary/10">
-				<Icon size={35} className="text-primary-800 m-3" />
-			</div>
-			<div>
-				<p className="text-primary-800 text-2xl font-medium">{title}</p>
-				<span
-					className={cn(
-						'text-primary-800 text-sm font-light',
-						!description ? 'hidden' : ''
-					)}>
-					{description}
-				</span>
-			</div>
-		</div>
-	);
-};
-
-const ListPublication: {
+const listPublication: {
 	name: string;
 	label: string;
 	img: string;
 	url: string;
 }[] = [
 	{
-		name: 'Maraja Jurnal',
-		label: 'maraja-jurnal',
-		img: 'https://merajajournal.com/public/journals/1/homepageImage_en_US.png',
-		url: 'https://merajajournal.com/index.php/mrj',
+		name: "Maraja Jurnal",
+		label: "maraja-jurnal",
+		img: "https://merajajournal.com/public/journals/1/homepageImage_en_US.png",
+		url: "https://merajajournal.com/index.php/mrj",
 	},
 	{
-		name: 'Indonesian Jurnal of Analisis Public Policy and Inonvation',
-		label: 'ija-ppi',
-		img: 'https://ojs.algazali.ac.id/public/journals/2/homepageImage_en.jpg',
-		url: 'https://ojs.algazali.ac.id/index.php/IJAPPI',
+		name: "Indonesian Jurnal of Analisis Public Policy and Inonvation",
+		label: "ija-ppi",
+		img: "https://ojs.algazali.ac.id/public/journals/2/homepageImage_en.jpg",
+		url: "https://ojs.algazali.ac.id/index.php/IJAPPI",
 	},
 ];
 
 function HomePage() {
+	const navigate = useNavigate();
 	const [rekomendasiRepository, setRekomendasiRepository] = useState<
 		RepositoryDetailResponse[]
 	>([]);
@@ -82,7 +53,7 @@ function HomePage() {
 		RepositoryDetailResponse[]
 	>([]);
 	const [typeRepos, setTypeRepos] =
-		useState<keyof typeof repositoryTypeMap>('JURNAL');
+		useState<keyof typeof repositoryTypeMap>("JURNAL");
 
 	const swiperRef = useRef<SwiperType | null>(null);
 
@@ -97,7 +68,7 @@ function HomePage() {
 	useEffect(() => {
 		if (typeRepos) {
 			getListRekomendasiRepository({
-				limit: '6',
+				limit: "6",
 				repos: typeRepos,
 				onDone: (data) => {
 					setListRepository(data);
@@ -111,7 +82,7 @@ function HomePage() {
 			<CarouselBanner />
 			<section className="leading-3 my-2 px-6">
 				<div className="flex justify-between items-center">
-					<TitleSection
+					<SectionTitleContent
 						icon={HiOutlineSparkles}
 						title="Rekomendasi"
 						description="Berikut beberapa rekomendasi repositori"
@@ -122,7 +93,7 @@ function HomePage() {
 
 				<section className="flex gap-x-4 my-6">
 					<Swiper
-						onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
+						onSwiper={(swiper: SwiperType) => console.log(swiper)}
 						breakpoints={{
 							320: { slidesPerView: 1, spaceBetween: 10 },
 							480: { slidesPerView: 2, spaceBetween: 10 },
@@ -157,17 +128,20 @@ function HomePage() {
 			</section>
 
 			<section className="leading-3 my-2 px-6 mb-6">
-				<TitleSection icon={HiOutlineInboxStack} title="Koleksi Perpustakaan" />
+				<SectionTitleContent
+					icon={HiOutlineInboxStack}
+					title="Koleksi Perpustakaan"
+				/>
 				<section className="flex gap-x-2 w-full overflow-x-scroll">
 					{Object.keys(repositoryTypeMap).map((item) => {
 						return (
 							<Button
 								key={`tag-${item.toLowerCase()}`}
 								className="capitalize my-2"
-								color={item === typeRepos ? 'primary' : 'default'}
+								color={item === typeRepos ? "primary" : "default"}
 								size="sm"
 								radius="lg"
-								variant={item === typeRepos ? 'flat' : 'ghost'}
+								variant={item === typeRepos ? "flat" : "ghost"}
 								onPress={() =>
 									setTypeRepos(item as keyof typeof repositoryTypeMap)
 								}>
@@ -196,14 +170,14 @@ function HomePage() {
 										}
 										sinopsis={
 											selectedReposByType
-												? ('sinopsis' in selectedReposByType &&
+												? ("sinopsis" in selectedReposByType &&
 														selectedReposByType.sinopsis) ||
 												  undefined
 												: undefined
 										}
 										abstrak={
 											selectedReposByType
-												? ('abstrak' in selectedReposByType &&
+												? ("abstrak" in selectedReposByType &&
 														selectedReposByType.abstrak) ||
 												  undefined
 												: undefined
@@ -219,15 +193,18 @@ function HomePage() {
 						<Button
 							variant="shadow"
 							color="primary"
-							onPress={() => AppRoutes.Koleksi.path}>
-							Lihat Repository Lainnya
+							onPress={() =>
+								navigate(typePublicRouteMap[listRepository[0].type].url)
+							}>
+							Lihat Repository {typePublicRouteMap[listRepository[0].type].name}{" "}
+							Lainnya
 						</Button>
 					</div>
 				)}
 			</section>
 
 			<section className="leading-3 my-2 px-6">
-				<TitleSection
+				<SectionTitleContent
 					icon={HiOutlineRocketLaunch}
 					title="Publikasi Jurnal"
 					description="Berikut beberapa publikasi jurnal ITBA Al-Gazali Barru"
@@ -246,7 +223,7 @@ function HomePage() {
 						}}
 						modules={[Autoplay, Pagination]}
 						className="mySwiper">
-						{ListPublication.map((repos, index) => {
+						{listPublication.map((repos, index) => {
 							return (
 								<SwiperSlide
 									key={`publication-${repos.label.toLowerCase()}-${index}`}>
