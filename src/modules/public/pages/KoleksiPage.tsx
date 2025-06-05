@@ -8,6 +8,7 @@ import { KoleksiCardPagination } from "../components/KoleksiCardPagination";
 import { HiOutlineInboxStack } from "react-icons/hi2";
 import { SectionTitleContent } from "@/shared/components/SectionTitle";
 import { typePublicRouteMap } from "@/constants/repository";
+import { Spinner } from "@heroui/react";
 
 const KoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
@@ -19,9 +20,11 @@ const KoleksiPage = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [repositoryData, setRepositoryData] =
 		useState<RepositoryResponse | null>(null);
+	const [isLoadingData, setIsloadingData] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (koleksi) {
+			setIsloadingData(true);
 			getListRepository({
 				token: user?.access_token,
 				page: page,
@@ -30,7 +33,7 @@ const KoleksiPage = () => {
 				isPublic: true,
 				limit: limit,
 				onDone: (data) => {
-					console.log(data);
+					setIsloadingData(false);
 					setRepositoryData(data);
 				},
 			});
@@ -40,29 +43,39 @@ const KoleksiPage = () => {
 
 	return (
 		<>
-			{repositoryData && koleksi ? (
-				<section className="leading-3 mb-2 mt-4 px-6">
-					<SectionTitleContent
-						icon={HiOutlineInboxStack}
-						title={`Daftar Koleksi ${
-							typePublicRouteMap[repositoryData.repository[0].type].name
-						}`}
-						description="Berikut list repositori kami"
-					/>
-
-					<KoleksiCardPagination
-						data={repositoryData}
-						page={Number(page)}
-						keyword={keyword}
-						slug={koleksi}
-						limit={limit}
-						setSearchParams={setSearchParams}
-					/>
-				</section>
-			) : (
-				<div className="border-1 border-slate-100 p-2 rounded-lg text-center shadow-md">
-					Data koleksi tidak ditemukan
+			{isLoadingData ? (
+				<div className="flex justify-center my-4">
+					<div className="bg-white rounded-xl shadow-md z-50 w-fit">
+						<Spinner className="m-4" label="Loading data..." />
+					</div>
 				</div>
+			) : (
+				<>
+					{repositoryData && koleksi ? (
+						<section className="leading-3 mb-2 mt-4 px-6">
+							<SectionTitleContent
+								icon={HiOutlineInboxStack}
+								title={`Daftar Koleksi ${
+									typePublicRouteMap[repositoryData.repository[0].type].name
+								}`}
+								description="Berikut list repositori kami"
+							/>
+
+							<KoleksiCardPagination
+								data={repositoryData}
+								page={Number(page)}
+								keyword={keyword}
+								slug={koleksi}
+								limit={limit}
+								setSearchParams={setSearchParams}
+							/>
+						</section>
+					) : (
+						<div className="border-1 border-slate-100 p-2 rounded-lg text-center shadow-md">
+							Data koleksi tidak ditemukan
+						</div>
+					)}
+				</>
 			)}
 		</>
 	);
