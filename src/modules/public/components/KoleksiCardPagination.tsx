@@ -110,7 +110,9 @@ export function KoleksiCardPagination({
 								return (
 									<CardCustomeStyleDetail
 										key={`repository-item-${repository.id}-${repository.type}`}
-										url={`${VITE_SERVER_BASE_URL}/public/${repository.type}/sampul/${repository.nama_sampul}`}
+										url={`${VITE_SERVER_BASE_URL}/public/${
+											repository.type
+										}/sampul/${repository.nama_sampul || "-"}`}
 										title={repository.judul}
 										type={repository.type}
 										repos={repository.id}

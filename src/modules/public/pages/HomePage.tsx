@@ -111,7 +111,9 @@ function HomePage() {
 									<SwiperSlide
 										key={`repos-${repos.judul.toLowerCase()}-${index}`}>
 										<CardCustomeStyleBasic
-											url={`${VITE_SERVER_BASE_URL}/public/skripsi/sampul/ss.jpg`}
+											url={`${VITE_SERVER_BASE_URL}/public/${
+												repos.type
+											}/sampul/${repos.nama_sampul || "-"}`}
 											title={repos.judul}
 											type={repos.type}
 											repos={repos.id}
@@ -160,7 +162,9 @@ function HomePage() {
 							return (
 								<div key={`repos-${repos.judul.toLowerCase()}-${index}`}>
 									<CardCustomeStyleDetail
-										url={`${VITE_SERVER_BASE_URL}/public/${repos.type}/sampul/${repos.nama_sampul}`}
+										url={`${VITE_SERVER_BASE_URL}/public/${repos.type}/sampul/${
+											repos.nama_sampul || "-"
+										}`}
 										title={repos.judul}
 										type={repos.type}
 										repos={repos.id}

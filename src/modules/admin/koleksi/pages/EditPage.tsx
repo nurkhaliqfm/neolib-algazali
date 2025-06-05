@@ -1,15 +1,15 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
 	getDetailRepository,
 	updateRepository,
-} from '../services/koleksiService';
+} from "../services/koleksiService";
 import {
 	RepositoryDetailResponse,
 	RepositoryRequest,
-} from '../types/koleksi.type';
-import { RepositoryItemKey } from '@/types/repository';
-import { useEffect, useState } from 'react';
-import { useTypedSelector } from '@/hooks/useTypedSelector';
+} from "../types/koleksi.type";
+import { RepositoryItemKey } from "@/types/repository";
+import { useEffect, useState } from "react";
+import { useTypedSelector } from "@/hooks/useTypedSelector";
 
 import {
 	reposHasFile,
@@ -17,9 +17,9 @@ import {
 	repositoryFieldConfig,
 	repositoryFormSelectOptios,
 	repositoryTypeMap,
-} from '@/constants/repository';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@/constants/repository";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Form,
 	FormControl,
@@ -27,22 +27,22 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { generateZodSchema } from '@/shared/utils/getZodScheme';
-import { Button, Image } from '@heroui/react';
-import { HiChevronRight } from 'react-icons/hi2';
-import { toast } from 'react-toastify';
-import AppRoutes from '@/router/routes';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { generateZodSchema } from "@/shared/utils/getZodScheme";
+import { Button, Image } from "@heroui/react";
+import { HiChevronRight } from "react-icons/hi2";
+import { toast } from "react-toastify";
+import AppRoutes from "@/router/routes";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -52,7 +52,7 @@ const EditKoleksiPage = () => {
 	const navigate = useNavigate();
 
 	const params = new URLSearchParams(search);
-	const repos = params.get('repos');
+	const repos = params.get("repos");
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
@@ -65,7 +65,7 @@ const EditKoleksiPage = () => {
 
 	const formFields = [
 		...repositoryBaseFieldConfig.filter((field) =>
-			field.name === 'nama_file'
+			field.name === "nama_file"
 				? repositoryDetailData &&
 				  reposHasFile.includes(repositoryDetailData.type)
 				: true
@@ -73,7 +73,7 @@ const EditKoleksiPage = () => {
 		...(detailKey
 			? repositoryFieldConfig[detailKey].map((field) => ({
 					...field,
-					type: field.type as 'number' | 'textarea' | 'text' | 'select',
+					type: field.type as "number" | "textarea" | "text" | "select",
 					name: field.name as keyof z.infer<typeof formZodSchema>,
 			  }))
 			: []),
@@ -93,7 +93,7 @@ const EditKoleksiPage = () => {
 	const form = useForm<z.infer<typeof formZodSchema>>({
 		resolver: zodResolver(formZodSchema),
 		defaultValues: {
-			judul: repositoryDetailData?.judul || '',
+			judul: repositoryDetailData?.judul || "",
 			nama_sampul: null,
 			nama_file: null,
 			...(repositoryDetailData && detailKey
@@ -104,7 +104,7 @@ const EditKoleksiPage = () => {
 
 	function onSubmit(values: z.infer<typeof formZodSchema>) {
 		setIsLoadingUpdate(true);
-		if (!repositoryDetailData) return 'No repository data available.';
+		if (!repositoryDetailData) return "No repository data available.";
 
 		const { judul, nama_sampul, nama_file, ...reposData } =
 			values as RepositoryRequest;
@@ -129,13 +129,13 @@ const EditKoleksiPage = () => {
 						autoClose: 700,
 						onClose: () => {
 							navigate(
-								AppRoutes.AdminKoleksi.path.replace(':koleksi', koleksi || '')
+								AppRoutes.AdminKoleksi.path.replace(":koleksi", koleksi || "")
 							);
 						},
 					});
 				} else {
 					toast.error(data.message, {
-						theme: 'colored',
+						theme: "colored",
 						autoClose: 700,
 						onClose: () => {
 							setIsLoadingUpdate(false);
@@ -145,7 +145,7 @@ const EditKoleksiPage = () => {
 			},
 			onError: (error) => {
 				toast.error(error.error, {
-					theme: 'colored',
+					theme: "colored",
 					autoClose: 700,
 					onClose: () => {
 						setIsLoadingUpdate(false);
@@ -169,7 +169,7 @@ const EditKoleksiPage = () => {
 							...(data[repositoryTypeMap[data.type]] as unknown as z.infer<
 								typeof formZodSchema
 							>),
-							judul: data.judul || '',
+							judul: data.judul || "",
 							nama_sampul: null,
 							nama_file: null,
 						});
@@ -177,7 +177,7 @@ const EditKoleksiPage = () => {
 				},
 				onError: (error) => {
 					toast.error(error.error, {
-						theme: 'colored',
+						theme: "colored",
 						autoClose: 700,
 					});
 					setIsLoadingUpdate(false);
@@ -203,7 +203,7 @@ const EditKoleksiPage = () => {
 									<FormItem>
 										<FormLabel>{ff.label}</FormLabel>
 										<FormControl>
-											{ff.type === 'select' ? (
+											{ff.type === "select" ? (
 												<>
 													<Select
 														onValueChange={(value) => {
@@ -214,7 +214,7 @@ const EditKoleksiPage = () => {
 															field.onChange(selectedOptions || null);
 														}}
 														value={
-															field.value && typeof field.value === 'object'
+															field.value && typeof field.value === "object"
 																? String((field.value as { id: number }).id)
 																: undefined
 														}>
@@ -234,14 +234,14 @@ const EditKoleksiPage = () => {
 														</SelectContent>
 													</Select>
 												</>
-											) : ff.type === 'textarea' ? (
+											) : ff.type === "textarea" ? (
 												<Textarea
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													rows={5}
-													value={(field.value as typeof field.value) ?? ''}
+													value={(field.value as typeof field.value) ?? ""}
 												/>
-											) : ff.type === 'number' ? (
+											) : ff.type === "number" ? (
 												<Input
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
@@ -249,16 +249,16 @@ const EditKoleksiPage = () => {
 													min={0}
 													onChange={(e) => {
 														const value = e.target.value;
-														if (value === '') {
+														if (value === "") {
 															field.onChange(null);
 														} else {
 															field.onChange(Number(value));
 														}
 													}}
 												/>
-											) : ff.type === 'file' ? (
+											) : ff.type === "file" ? (
 												<div className="flex flex-col gap-2">
-													{ff.name === 'nama_sampul' &&
+													{ff.name === "nama_sampul" &&
 														repositoryDetailData.nama_sampul && (
 															<div className="flex flex-col items-center">
 																<Image
@@ -288,7 +288,7 @@ const EditKoleksiPage = () => {
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													type={ff.type}
-													value={(field.value as typeof field.value) ?? ''}
+													value={(field.value as typeof field.value) ?? ""}
 												/>
 											)}
 										</FormControl>

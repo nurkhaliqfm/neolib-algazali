@@ -290,7 +290,9 @@ const DetailKoleksiPage = () => {
 							<Image
 								alt="Cover Repository"
 								className="object-cover rounded-xl"
-								src={`${VITE_SERVER_BASE_URL}/public/${koleksi}/sampul/${repositoryDetailData.nama_sampul}`}
+								src={`${VITE_SERVER_BASE_URL}/public/${koleksi}/sampul/${
+									repositoryDetailData.nama_sampul || "-"
+								}`}
 								width={320}
 							/>
 						</CardBody>
