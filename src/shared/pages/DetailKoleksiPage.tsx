@@ -150,7 +150,7 @@ const DetailKoleksiPage = () => {
 								repositoryDetailData.nama_file !== "" && (
 									<div>
 										<ModalHeader className="flex flex-col gap-1">
-											<p className="leading-3 mt-2">
+											<p className="leading-4 mt-2 line-clamp-1">
 												{repositoryDetailData.judul}
 											</p>
 											<span className="text-xs italic font-thin">
