@@ -62,7 +62,7 @@ export function KoleksiCardPagination({
 
 	return (
 		<section className="my-4">
-			<div className="flex flex-col gap-4 px-4">
+			<div className="flex flex-col gap-4">
 				<div className="flex justify-between gap-3 items-end">
 					<Input
 						isClearable
@@ -102,7 +102,7 @@ export function KoleksiCardPagination({
 			) : (
 				<>
 					{data.repository.length > 0 ? (
-						<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mt-6 px-6">
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mt-6">
 							{data.repository.map((repository) => {
 								const detailKey = repositoryTypeMap[repository.type];
 								const selectedReposByType = repository[detailKey];
