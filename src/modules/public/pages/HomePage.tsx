@@ -93,7 +93,7 @@ function HomePage() {
 
 				<section className="flex gap-x-4 my-6">
 					<Swiper
-						onSwiper={(swiper: SwiperType) => console.log(swiper)}
+						onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
 						breakpoints={{
 							320: { slidesPerView: 1, spaceBetween: 10 },
 							480: { slidesPerView: 2, spaceBetween: 10 },

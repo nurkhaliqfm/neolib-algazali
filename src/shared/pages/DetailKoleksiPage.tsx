@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { RepositoryItemKey } from '@/types/repository';
-import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { RepositoryItemKey } from "@/types/repository";
+import { useTypedSelector } from "@/hooks/useTypedSelector";
 import {
 	Button,
 	Card,
@@ -17,38 +17,38 @@ import {
 	Select,
 	SelectItem,
 	useDisclosure,
-} from '@heroui/react';
+} from "@heroui/react";
 
 import {
 	HiMagnifyingGlassMinus,
 	HiMagnifyingGlassPlus,
 	HiOutlineEye,
-} from 'react-icons/hi2';
+} from "react-icons/hi2";
 
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import {
 	repositoryFieldConfig,
 	repositoryTypeMap,
 	typeColorMap,
-} from '@/constants/repository';
-import { RepositoryDetailResponse } from '@/modules/admin/koleksi/types/koleksi.type';
-import { getDetailRepository } from '@/modules/admin/koleksi/services/koleksiService';
-import { KoleksiDetailItem } from '../components/KoleksiDetail';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/TextLayer.css';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
-import { cn } from '@/lib/utils';
+} from "@/constants/repository";
+import { RepositoryDetailResponse } from "@/modules/admin/koleksi/types/koleksi.type";
+import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
+import { KoleksiDetailItem } from "../components/KoleksiDetail";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { cn } from "@/lib/utils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 const pageViewOptions = [
 	{
-		key: 'single-page',
-		label: 'Single Page',
+		key: "single-page",
+		label: "Single Page",
 	},
-	{ key: 'single-page-continuous', label: 'Single Page Continuous' },
+	{ key: "single-page-continuous", label: "Single Page Continuous" },
 ];
 
 const DetailKoleksiPage = () => {
@@ -58,7 +58,7 @@ const DetailKoleksiPage = () => {
 	const { search } = useLocation();
 
 	const params = new URLSearchParams(search);
-	const repos = params.get('repos');
+	const repos = params.get("repos");
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [repositoryDetailData, setrepositoryDetailData] =
@@ -68,25 +68,25 @@ const DetailKoleksiPage = () => {
 	const [pageNumber, setPageNumber] = useState<number>(1);
 	const [pageScale, setPageScale] = useState<number>(1);
 	const [pageView, setPageView] = useState<Set<string>>(
-		new Set(['single-page'])
+		new Set(["single-page"])
 	);
 
 	useEffect(() => {
-		if (pageView.has('single-page-continuous')) {
+		if (pageView.has("single-page-continuous")) {
 			const handleIntersect = (entries: IntersectionObserverEntry[]) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						setPageNumber(Number(entry.target.id.replace('page-', '')));
+						setPageNumber(Number(entry.target.id.replace("page-", "")));
 					}
 				});
 			};
 
 			observer.current = new IntersectionObserver(handleIntersect, {
-				rootMargin: '0px 0px 0px 0px',
+				rootMargin: "0px 0px 0px 0px",
 				threshold: 0.1,
 			});
 
-			const targets = document.querySelectorAll('.document-observer-section');
+			const targets = document.querySelectorAll(".document-observer-section");
 			targets.forEach((el) => observer.current?.observe(el));
 
 			return () => {
@@ -99,12 +99,12 @@ const DetailKoleksiPage = () => {
 		setPageNumber(page);
 		document
 			.getElementById(`page-${page}`)
-			?.scrollIntoView({ behavior: 'smooth' });
+			?.scrollIntoView({ behavior: "smooth" });
 	};
 
 	useEffect(() => {
 		if (koleksi && repos) {
-			const isAuthenticated = !!localStorage.getItem('oauthData');
+			const isAuthenticated = !!localStorage.getItem("oauthData");
 			const isTokenExpired = user ? Date.now() >= user.expires_in : true;
 
 			getDetailRepository({
@@ -120,7 +120,7 @@ const DetailKoleksiPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [koleksi, repos]);
 
-	if (!repositoryDetailData) return <p>No data found.</p>;
+	if (!repositoryDetailData) return <p></p>;
 
 	const detailKey = repositoryTypeMap[repositoryDetailData.type];
 	const formFields = detailKey
@@ -147,7 +147,7 @@ const DetailKoleksiPage = () => {
 						<>
 							{detailData &&
 								repositoryDetailData.nama_file &&
-								repositoryDetailData.nama_file !== '' && (
+								repositoryDetailData.nama_file !== "" && (
 									<div>
 										<ModalHeader className="flex flex-col gap-1">
 											<p className="leading-3 mt-2">
@@ -204,7 +204,7 @@ const DetailKoleksiPage = () => {
 													file={`${VITE_SERVER_BASE_URL}/public/${koleksi}/file/${repositoryDetailData.nama_file}`}
 													onLoadSuccess={onDocumentLoadSuccess}>
 													<div className="flex flex-col justify-center overflow-x-scroll bg-gray-200 gap-4 px-8 py-14">
-														{pageView.has('single-page-continuous') ? (
+														{pageView.has("single-page-continuous") ? (
 															Array.from(
 																{ length: numPages },
 																(_, index) => index + 1
@@ -213,14 +213,14 @@ const DetailKoleksiPage = () => {
 																	key={pageNumber}
 																	id={`page-${pageNumber}`}
 																	className={cn(
-																		'document-observer-section transition-transform duration-300 flex justify-center items-center w-fit mx-auto',
+																		"document-observer-section transition-transform duration-300 flex justify-center items-center w-fit mx-auto",
 																		pageNumber === pageNumber
-																			? 'scroll-mt-0'
-																			: ''
+																			? "scroll-mt-0"
+																			: ""
 																	)}>
 																	<Page
 																		className={
-																			'flex justify-center items-center w-fit mx-auto'
+																			"flex justify-center items-center w-fit mx-auto"
 																		}
 																		renderTextLayer={false}
 																		scale={pageScale}
@@ -231,7 +231,7 @@ const DetailKoleksiPage = () => {
 														) : (
 															<Page
 																className={
-																	'flex justify-center items-center w-fit mx-auto'
+																	"flex justify-center items-center w-fit mx-auto"
 																}
 																renderTextLayer={false}
 																scale={pageScale}
@@ -245,12 +245,12 @@ const DetailKoleksiPage = () => {
 											<div className="absolute rounded-2xl w-60 flex right-1/2 translate-x-1/2 justify-between items-center bottom-0 mb-8 p-1 bg-white/70 border-2 border-primary z-10 gap-2">
 												<button
 													className={cn(
-														'text-primary p-2',
-														pageNumber <= 1 ? 'text-primary/40' : ''
+														"text-primary p-2",
+														pageNumber <= 1 ? "text-primary/40" : ""
 													)}
 													disabled={pageNumber <= 1}
 													onClick={() =>
-														pageView.has('single-page')
+														pageView.has("single-page")
 															? setPageNumber((page) => page - 1)
 															: handlePageJumpTo(pageNumber - 1)
 													}>
@@ -261,12 +261,12 @@ const DetailKoleksiPage = () => {
 												</div>
 												<button
 													className={cn(
-														'text-primary p-2',
-														pageNumber >= numPages ? 'text-primary/40' : ''
+														"text-primary p-2",
+														pageNumber >= numPages ? "text-primary/40" : ""
 													)}
 													disabled={pageNumber >= numPages}
 													onClick={() =>
-														pageView.has('single-page')
+														pageView.has("single-page")
 															? setPageNumber((page) => page + 1)
 															: handlePageJumpTo(pageNumber + 1)
 													}>
@@ -306,7 +306,7 @@ const DetailKoleksiPage = () => {
 								{repositoryDetailData.type}
 							</Chip>
 							{repositoryDetailData.nama_file &&
-								repositoryDetailData.nama_file !== '' && (
+								repositoryDetailData.nama_file !== "" && (
 									<Button
 										className="my-2"
 										startContent={<HiOutlineEye />}
@@ -330,15 +330,15 @@ const DetailKoleksiPage = () => {
 										slug={field.name}
 										title={field.label}
 										value={
-											field.name === 'lokasi'
-												? ('lokasi' in detailData && detailData.lokasi?.nama) ||
-												  ''
-												: field.name === 'prodi'
-												? ('prodi' in detailData && detailData.prodi?.nama) ||
-												  ''
+											field.name === "lokasi"
+												? ("lokasi" in detailData && detailData.lokasi?.nama) ||
+												  ""
+												: field.name === "prodi"
+												? ("prodi" in detailData && detailData.prodi?.nama) ||
+												  ""
 												: String(
 														detailData[field.name as keyof typeof detailData] ??
-															''
+															""
 												  )
 										}
 									/>
