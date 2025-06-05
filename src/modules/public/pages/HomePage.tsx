@@ -188,7 +188,7 @@ function HomePage() {
 						})}
 				</section>
 
-				{listRepository && (
+				{listRepository && listRepository.length > 0 && (
 					<div className="flex justify-center">
 						<Button
 							variant="shadow"
