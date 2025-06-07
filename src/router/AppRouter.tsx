@@ -78,7 +78,7 @@ function AppRouter() {
 						element={
 							<AuthorizedRoute
 								allowedRoles={["Admin"]}
-								page={<Admin.TransaksiPage />}
+								page={<Admin.TransaksiPage.ListTransaksiPage />}
 							/>
 						}
 					/>

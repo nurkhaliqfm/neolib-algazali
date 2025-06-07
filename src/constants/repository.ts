@@ -42,7 +42,7 @@ export const typeColorMapCustom: Record<
 	},
 };
 
-export const typeColorMap: Record<
+export const typeRepositoryColorMap: Record<
 	string,
 	"success" | "danger" | "default" | "warning" | "primary" | undefined
 > = {

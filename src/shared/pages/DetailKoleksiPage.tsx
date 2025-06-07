@@ -29,7 +29,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import {
 	repositoryFieldConfig,
 	repositoryTypeMap,
-	typeColorMap,
+	typeRepositoryColorMap,
 } from "@/constants/repository";
 import { RepositoryDetailResponse } from "@/modules/admin/koleksi/types/koleksi.type";
 import { getDetailRepository } from "@/modules/admin/koleksi/services/koleksiService";
@@ -158,7 +158,9 @@ const DetailKoleksiPage = () => {
 											</span>
 											<Chip
 												className="capitalize my-2"
-												color={typeColorMap[repositoryDetailData.type]}
+												color={
+													typeRepositoryColorMap[repositoryDetailData.type]
+												}
 												size="sm"
 												variant="flat">
 												{repositoryDetailData.type}
@@ -302,7 +304,7 @@ const DetailKoleksiPage = () => {
 							</p>
 							<Chip
 								className="capitalize my-2"
-								color={typeColorMap[repositoryDetailData.type]}
+								color={typeRepositoryColorMap[repositoryDetailData.type]}
 								size="sm"
 								variant="flat">
 								{repositoryDetailData.type}

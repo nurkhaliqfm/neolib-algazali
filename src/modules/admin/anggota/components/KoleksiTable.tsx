@@ -34,7 +34,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteRepository } from "../services/koleksiService";
+import { deleteRepository } from "../services/anggotaService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { toast } from "react-toastify";
 
