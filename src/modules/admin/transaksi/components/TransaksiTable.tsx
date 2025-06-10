@@ -41,10 +41,12 @@ import {
 // import { toast } from "react-toastify";
 import { typeTransaksiColorMap } from "@/constants/transaksi";
 import dayjs from "dayjs";
+import { userRoleMap } from "@/constants/user";
 
 const TransaksiHeaderTable: TableHeaderComponent[] = [
 	{ name: "JUDUL", slug: "judul" },
 	{ name: "PEMINJAM", slug: "peminjam" },
+	{ name: "ANGGOTA", slug: "anggota" },
 	{ name: "STATUS", slug: "status" },
 	{ name: "TANGGAL PINJAM", slug: "borrowedAt" },
 	{ name: "TANGGAL KEMBALI", slug: "returnedAt" },
@@ -149,6 +151,10 @@ export function TransaksiTable({
 					return <>{data.repository.judul}</>;
 				case "peminjam":
 					return <>{data.user.fullname}</>;
+				case "anggota":
+					return (
+						<>{userRoleMap[data.user.id_role as keyof typeof userRoleMap]}</>
+					);
 				case "status":
 					return (
 						<Chip
