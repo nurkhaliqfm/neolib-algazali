@@ -6,6 +6,8 @@ export interface TransaksiResponse {
 
 export interface TransaksiDetailResponse {
 	id: number;
+	denda: number;
+	overdue_days: number;
 	user: {
 		id: number;
 		fullname: string;

@@ -42,6 +42,7 @@ import {
 import { typeTransaksiColorMap } from "@/constants/transaksi";
 import dayjs from "dayjs";
 import { userRoleMap } from "@/constants/user";
+import { moneyConverter } from "@/utils/moneyFormatter";
 
 const TransaksiHeaderTable: TableHeaderComponent[] = [
 	{ name: "JUDUL", slug: "judul" },
@@ -50,6 +51,8 @@ const TransaksiHeaderTable: TableHeaderComponent[] = [
 	{ name: "STATUS", slug: "status" },
 	{ name: "TANGGAL PINJAM", slug: "borrowedAt" },
 	{ name: "TANGGAL KEMBALI", slug: "returnedAt" },
+	{ name: "DENDA", slug: "denda" },
+	{ name: "TERLAMBAT", slug: "overdue" },
 	{ name: "ACTIONS", slug: "actions" },
 ];
 
@@ -155,6 +158,10 @@ export function TransaksiTable({
 					return (
 						<>{userRoleMap[data.user.id_role as keyof typeof userRoleMap]}</>
 					);
+				case "overdue":
+					return <>{data.overdue_days} Hari</>;
+				case "denda":
+					return <>{moneyConverter(String(data.denda))}</>;
 				case "status":
 					return (
 						<Chip
