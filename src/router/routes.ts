@@ -64,7 +64,23 @@ const AppRoutes = {
 		label: "Admin Tambah Transaksi E-Library | ITB Al-Gazali Barru",
 	},
 
-	AdminAnggota: { path: "/admin/anggota", label: "Anggota" },
+	AdminAnggota: {
+		path: "/admin/anggota/:group",
+		label: "Admin List Anggota E-Library | ITB Al-Gazali Barru",
+	},
+	AdminAnggotaMahasiswa: {
+		path: "/admin/anggota/mahasiswa",
+		label: "Admin List Anggota Mahasiswa E-Library | ITB Al-Gazali Barru",
+	},
+	AdminAnggotaDosen: {
+		path: "/admin/anggota/dosen",
+		label: "Admin List Anggota Dosen E-Library | ITB Al-Gazali Barru",
+	},
+	AdminAnggotaUmum: {
+		path: "/admin/anggota/umum",
+		label: "Admin List Anggota Umum E-Library | ITB Al-Gazali Barru",
+	},
+
 	AdminPassword: { path: "/admin/password", label: "Password" },
 
 	// NOTE: Initial Route

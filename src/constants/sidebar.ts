@@ -68,19 +68,19 @@ export const SIDEBAR_LIST = [
 			{
 				key: "mahasiswa",
 				title: "Mahasiswa",
-				url: AppRoutes.AdminAnggota.path,
+				url: AppRoutes.AdminAnggotaMahasiswa.path,
 				icon: HiOutlineUserGroup,
 			},
 			{
 				key: "dosen",
 				title: "Dosen",
-				url: AppRoutes.AdminAnggota.path,
+				url: AppRoutes.AdminAnggotaDosen.path,
 				icon: HiOutlineUserGroup,
 			},
 			{
 				key: "umum",
 				title: "Umum",
-				url: AppRoutes.AdminAnggota.path,
+				url: AppRoutes.AdminAnggotaUmum.path,
 				icon: HiOutlineUserGroup,
 			},
 		],

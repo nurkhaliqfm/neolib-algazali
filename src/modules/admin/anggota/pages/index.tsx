@@ -1,5 +1,5 @@
-import ListTransaksiPage from "./ListPage";
+import ListAnggotaPage from "./ListPage";
 
 export default {
-	ListTransaksiPage,
+	ListAnggotaPage,
 };

@@ -13,7 +13,6 @@ import {
 	Tooltip,
 } from "@heroui/react";
 import { Key, useCallback, useMemo, useState } from "react";
-import { BaseRepository, RepositoryResponse } from "../types/koleksi.type";
 import {
 	HiOutlineEye,
 	HiOutlineMagnifyingGlass,
@@ -23,7 +22,6 @@ import {
 import { TableHeaderComponent } from "@/types/global";
 import { SetURLSearchParams, useNavigate } from "react-router-dom";
 import AppRoutes from "@/router/routes";
-import { typeRepositoryColorMap } from "@/constants/repository";
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -34,27 +32,29 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteRepository } from "../services/anggotaService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import { AnggotaResponse, BaseAnggota } from "../types/anggota.type";
+import { typeAnggotaColorMap } from "@/constants/user";
 
 const RepositoryHeaderTable: TableHeaderComponent[] = [
-	{ name: "JUDUL", slug: "judul" },
-	{ name: "NAMA SAMPUL", slug: "nama_sampul" },
-	{ name: "NAMA FILE", slug: "nama_file" },
-	{ name: "JENIS", slug: "type" },
+	{ name: "NAMA", slug: "nama" },
+	{ name: "ALAMAT", slug: "alamat" },
+	{ name: "KONTAK", slug: "kontak" },
+	{ name: "JENIS KELAMIN", slug: "jenis_kelamin" },
+	{ name: "ANGGOTA", slug: "type" },
 	{ name: "ACTIONS", slug: "actions" },
 ];
 
-export function RepositoryTable({
-	repos,
+export function AnggotaTable({
+	data,
 	page,
 	keyword,
 	limit,
 	slug,
 	setSearchParams,
 }: {
-	repos: RepositoryResponse;
+	data: AnggotaResponse;
 	page: number;
 	keyword: string;
 	limit: string;
@@ -117,7 +117,7 @@ export function RepositoryTable({
 				</div>
 				<div className="flex justify-between items-center">
 					<span className="text-default-400 text-small">
-						Total {repos.total} {slug}
+						Total {data.total} {slug}
 					</span>
 					<label className="flex items-center text-default-400 text-small">
 						Rows per page:
@@ -137,24 +137,26 @@ export function RepositoryTable({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filterValue, onSearchChange]);
 
-	const renderCell = useCallback((data: BaseRepository, columnKey: Key) => {
-		const cellValue = data[columnKey as keyof BaseRepository];
+	const renderCell = useCallback((data: BaseAnggota, columnKey: Key) => {
+		const cellValue = data[columnKey as keyof BaseAnggota];
 
 		switch (columnKey) {
-			case "judul":
-				return <>{data.judul}</>;
-			case "nama_sampul":
-				return <>{data.nama_sampul}</>;
-			case "nama_file":
-				return <>{data.nama_file}</>;
+			case "nama":
+				return <>{data.nama}</>;
+			case "alamat":
+				return <>{data.alamat || "-"}</>;
+			case "kontak":
+				return <>{data.kontak}</>;
+			case "jenis_kelamin":
+				return <>{data.jenis_kelamin === "L" ? "Laki-Laki" : "Perempuan"}</>;
 			case "type":
 				return (
 					<Chip
 						className="capitalize"
-						color={typeRepositoryColorMap[data.type]}
+						color={typeAnggotaColorMap[slug.toUpperCase()]}
 						size="sm"
 						variant="flat">
-						{cellValue}
+						{slug.toUpperCase()}
 					</Chip>
 				);
 			case "actions":
@@ -202,7 +204,7 @@ export function RepositoryTable({
 										Apakah anda yakin ingin menghapus repository ini?
 									</AlertDialogTitle>
 									<AlertDialogDescription>
-										Repository <b>{data.judul}</b> Tindakan ini tidak dapat
+										Repository <b>{data.nama}</b> Tindakan ini tidak dapat
 										dibatalkan. Ini akan secara permanen menghapus repository
 										Anda dan menghapus data Anda dari server kami.
 									</AlertDialogDescription>
@@ -237,43 +239,43 @@ export function RepositoryTable({
 										variant="solid"
 										onPress={() => {
 											setIsLoadingDelete(true);
-											deleteRepository({
-												token: user?.access_token,
-												repos: data.id,
-												type: slug,
-												onDone: (data) => {
-													if (data.status === 200) {
-														toast.success(data.message, {
-															autoClose: 700,
-															onClose: () => {
-																navigate(
-																	AppRoutes.AdminKoleksi.path.replace(
-																		":koleksi",
-																		slug
-																	)
-																);
-															},
-														});
-													} else {
-														toast.error(data.message, {
-															theme: "colored",
-															autoClose: 700,
-															onClose: () => {
-																setIsLoadingDelete(false);
-															},
-														});
-													}
-												},
-												onError: (error) => {
-													toast.error(error.error, {
-														theme: "colored",
-														autoClose: 700,
-														onClose: () => {
-															setIsLoadingDelete(false);
-														},
-													});
-												},
-											});
+											// deleteRepository({
+											// 	token: user?.access_token,
+											// 	repos: data.id,
+											// 	type: slug,
+											// 	onDone: (data) => {
+											// 		if (data.status === 200) {
+											// 			toast.success(data.message, {
+											// 				autoClose: 700,
+											// 				onClose: () => {
+											// 					navigate(
+											// 						AppRoutes.AdminKoleksi.path.replace(
+											// 							":koleksi",
+											// 							slug
+											// 						)
+											// 					);
+											// 				},
+											// 			});
+											// 		} else {
+											// 			toast.error(data.message, {
+											// 				theme: "colored",
+											// 				autoClose: 700,
+											// 				onClose: () => {
+											// 					setIsLoadingDelete(false);
+											// 				},
+											// 			});
+											// 		}
+											// 	},
+											// 	onError: (error) => {
+											// 		toast.error(error.error, {
+											// 			theme: "colored",
+											// 			autoClose: 700,
+											// 			onClose: () => {
+											// 				setIsLoadingDelete(false);
+											// 			},
+											// 		});
+											// 	},
+											// });
 										}}>
 										Hapus
 									</Button>
@@ -305,7 +307,7 @@ export function RepositoryTable({
 						showShadow
 						color="primary"
 						page={page}
-						total={repos.pages.total}
+						total={data.pages.total}
 						onChange={(page) =>
 							setSearchParams({
 								page: page.toString(),
@@ -331,10 +333,10 @@ export function RepositoryTable({
 					</div>
 				}
 				emptyContent={`Koleksi ${slug} tidak ditemukan `}
-				items={repos.repository}
+				items={data.anggota}
 				className="overflow-y-scroll">
 				{(item) => (
-					<TableRow key={`${item.judul}-item-${item.id}`}>
+					<TableRow key={`${item.nama}-item-${item.id}`}>
 						{(columnKey) => (
 							<TableCell>{renderCell(item, columnKey)}</TableCell>
 						)}

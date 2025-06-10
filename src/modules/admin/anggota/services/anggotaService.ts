@@ -1,25 +1,14 @@
-import { ApiError, ApiResponse } from "@/types/global";
+import { ApiError } from "@/types/global";
 import axios, { AxiosError } from "axios";
-import {
-	RepositoryBuku,
-	RepositoryDetailResponse,
-	RepositoryEbook,
-	RepositoryEjurnal,
-	RepositoryJurnal,
-	RepositoryRequest,
-	RepositoryResponse,
-	RepositorySkripsi,
-} from "../types/koleksi.type";
-import { RepositoryItemKey } from "@/types/repository";
+import { AnggotaResponse } from "../types/anggota.type";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
-const getListRepository = async ({
+const getListAnggota = async ({
 	token,
 	type,
 	page,
 	keyword,
-	isPublic,
 	limit,
 	onDone,
 	onError,
@@ -27,26 +16,24 @@ const getListRepository = async ({
 	token: string | null | undefined;
 	type: string;
 	page: string;
-	isPublic: boolean;
 	keyword?: string;
 	limit?: string;
-	onDone?: (data: RepositoryResponse) => void | undefined;
+	onDone?: (data: AnggotaResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
-	const baseUrl = isPublic
-		? `${VITE_SERVER_BASE_URL}/public`
-		: `${VITE_SERVER_BASE_URL}/admin/repository`;
 	try {
 		const response = await axios.get(
-			`${baseUrl}/${type}s?page=${page}${keyword ? `&keyword=${keyword}` : ""}${
-				limit ? `&limit=${limit}` : ""
-			}`,
+			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}s?page=${page}${
+				keyword ? `&keyword=${keyword}` : ""
+			}${limit ? `&limit=${limit}` : ""}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			}
 		);
+
+		console.log("Response Data:", response.data);
 
 		if (onDone) onDone(response.data);
 	} catch (error) {
@@ -66,4 +53,4 @@ const getListRepository = async ({
 	}
 };
 
-export { getListRepository };
+export { getListAnggota };

@@ -1,37 +1,36 @@
-import { RepositoryItemKey } from "@/types/repository";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { getListRepository } from "../services/anggotaService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
-import { RepositoryResponse } from "../types/koleksi.type";
-import { RepositoryTable } from "../components/KoleksiTable";
+import { AnggotaTable } from "../components/AnggotaTable";
 import { Button } from "@heroui/react";
 import { HiOutlinePlus } from "react-icons/hi2";
 import AppRoutes from "@/router/routes";
+import { AnggotaResponse } from "../types/anggota.type";
+import { getListAnggota } from "../services/anggotaService";
+import { AnggotaItemKey } from "@/types/anggota";
 
 const ListAnggotaPage = () => {
 	const navigate = useNavigate();
-	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
+	const { group } = useParams<{ group: AnggotaItemKey }>();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const page = searchParams.get("page") || "1";
 	const keyword = searchParams.get("keyword") || "";
 	const limit = searchParams.get("limit") || "5";
 
 	const user = useTypedSelector((state) => state.oauth.oauthData);
-	const [repositoryData, setRepositoryData] =
-		useState<RepositoryResponse | null>(null);
+	const [anggotaData, setAnggotaData] = useState<AnggotaResponse | null>(null);
 
 	useEffect(() => {
-		if (koleksi) {
-			getListRepository({
+		if (group) {
+			getListAnggota({
 				token: user?.access_token,
 				page: page,
-				type: koleksi,
+				type: group,
 				keyword: keyword,
-				isPublic: false,
 				limit: limit,
 				onDone: (data) => {
-					setRepositoryData(data);
+					console.log("Data Anggota:", data);
+					setAnggotaData(data);
 				},
 			});
 		}
@@ -40,18 +39,18 @@ const ListAnggotaPage = () => {
 
 	return (
 		<>
-			{repositoryData && koleksi ? (
+			{anggotaData && group ? (
 				<>
 					<section className="flex justify-between my-2 px-4 capitalize">
 						<h3 className="capitalize text-xl font-light">
-							Data Koleksi {koleksi}
+							Data Anggota {group}
 						</h3>
 						<Button
 							onPress={() =>
 								navigate(
 									`${AppRoutes.AdminCreateKoleksi.path.replace(
 										":koleksi",
-										koleksi
+										group
 									)}`
 								)
 							}
@@ -59,20 +58,20 @@ const ListAnggotaPage = () => {
 							size="sm"
 							color="primary"
 							variant="solid"
-							className="capitalize">{`${koleksi} Baru`}</Button>
+							className="capitalize">{`${group} Baru`}</Button>
 					</section>
-					<RepositoryTable
-						repos={repositoryData}
+					<AnggotaTable
+						data={anggotaData}
 						page={Number(page)}
 						keyword={keyword}
-						slug={koleksi}
+						slug={group}
 						limit={limit}
 						setSearchParams={setSearchParams}
 					/>
 				</>
 			) : (
 				<div className="border-1 border-slate-100 p-2 rounded-lg text-center shadow-md">
-					Data koleksi tidak ditemukan
+					Data anggota tidak ditemukan
 				</div>
 			)}
 		</>
