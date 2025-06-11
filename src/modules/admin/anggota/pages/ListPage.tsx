@@ -29,7 +29,6 @@ const ListAnggotaPage = () => {
 				keyword: keyword,
 				limit: limit,
 				onDone: (data) => {
-					console.log("Data Anggota:", data);
 					setAnggotaData(data);
 				},
 			});
