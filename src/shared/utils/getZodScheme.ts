@@ -18,7 +18,11 @@ export const generateZodSchema = (
 					fieldSchema = z.string();
 					break;
 				case "number":
-					fieldSchema = z.number();
+					fieldSchema = z
+						.number()
+						// .nullable()
+						.optional();
+
 					break;
 				case "file":
 					fieldSchema = z
@@ -55,6 +59,11 @@ export const generateZodSchema = (
 			if (field.required) {
 				if (fieldSchema instanceof z.ZodString) {
 					fieldSchema = fieldSchema.min(1, `Field ${field.label} is required`);
+				} else {
+					fieldSchema = fieldSchema.refine(
+						(val) => typeof val !== "undefined",
+						`Field ${field.label} is required`
+					);
 				}
 			}
 			return { ...schema, [field.name]: fieldSchema };

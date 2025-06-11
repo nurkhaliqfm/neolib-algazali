@@ -32,7 +32,7 @@ const AppRoutes = {
 
 	AdminDetailKoleksi: {
 		path: "/admin/koleksi/:koleksi/detail",
-		label: "Admin Detial Koleksi E-Library | ITB Al-Gazali Barru",
+		label: "Admin Detail Koleksi E-Library | ITB Al-Gazali Barru",
 	},
 
 	AdminEditKoleksi: {
@@ -51,7 +51,7 @@ const AppRoutes = {
 	},
 	AdminDetailTransaksi: {
 		path: "/admin/transaksi/detail",
-		label: "Admin Detial Transaksi E-Library | ITB Al-Gazali Barru",
+		label: "Admin Detail Transaksi E-Library | ITB Al-Gazali Barru",
 	},
 
 	AdminEditTransaksi: {
@@ -79,6 +79,20 @@ const AppRoutes = {
 	AdminAnggotaUmum: {
 		path: "/admin/anggota/umum",
 		label: "Admin List Anggota Umum E-Library | ITB Al-Gazali Barru",
+	},
+	AdminDetailAnggota: {
+		path: "/admin/anggota/:group/detail",
+		label: "Admin Detail Anggota E-Library | ITB Al-Gazali Barru",
+	},
+
+	AdminEditAnggota: {
+		path: "/admin/anggota/:group/edit",
+		label: "Admin Edit Anggota E-Library | ITB Al-Gazali Barru",
+	},
+
+	AdminCreateAnggota: {
+		path: "/admin/anggota/:group/create",
+		label: "Admin Tambah Anggota E-Library | ITB Al-Gazali Barru",
 	},
 
 	AdminPassword: { path: "/admin/password", label: "Password" },

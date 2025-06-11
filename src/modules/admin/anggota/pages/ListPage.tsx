@@ -48,8 +48,8 @@ const ListAnggotaPage = () => {
 						<Button
 							onPress={() =>
 								navigate(
-									`${AppRoutes.AdminCreateKoleksi.path.replace(
-										":koleksi",
+									`${AppRoutes.AdminCreateAnggota.path.replace(
+										":group",
 										group
 									)}`
 								)
@@ -58,7 +58,7 @@ const ListAnggotaPage = () => {
 							size="sm"
 							color="primary"
 							variant="solid"
-							className="capitalize">{`${group} Baru`}</Button>
+							className="capitalize">{`Anggota ${group} Baru`}</Button>
 					</section>
 					<AnggotaTable
 						data={anggotaData}

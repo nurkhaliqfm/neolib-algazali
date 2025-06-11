@@ -250,7 +250,7 @@ const EditKoleksiPage = () => {
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
-															field.onChange(null);
+															field.onChange(0);
 														} else {
 															field.onChange(Number(value));
 														}
@@ -288,7 +288,7 @@ const EditKoleksiPage = () => {
 													placeholder={`Masukkan ${ff.label}`}
 													{...field}
 													type={ff.type}
-													value={(field.value as typeof field.value) ?? ""}
+													value={(field.value as typeof field.value) || ""}
 												/>
 											)}
 										</FormControl>

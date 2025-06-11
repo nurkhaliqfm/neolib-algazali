@@ -142,7 +142,7 @@ const CreateKoleksiPage = () => {
 						...acc,
 						[field.name]:
 							field.type === "number"
-								? null
+								? undefined
 								: field.type === "textarea"
 								? ""
 								: field.type === "select"
@@ -224,10 +224,11 @@ const CreateKoleksiPage = () => {
 													{...field}
 													type="number"
 													min={0}
+													value={undefined}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
-															field.onChange(null);
+															field.onChange(0);
 														} else {
 															field.onChange(Number(value));
 														}

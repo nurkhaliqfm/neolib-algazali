@@ -92,6 +92,24 @@ function AppRouter() {
 						}
 					/>
 					<Route
+						path={AppRoutes.AdminCreateAnggota.path}
+						element={
+							<AuthorizedRoute
+								allowedRoles={["Admin"]}
+								page={<Admin.AnggotaPage.CreateAnggotaPage />}
+							/>
+						}
+					/>
+					<Route
+						path={AppRoutes.AdminEditAnggota.path}
+						element={
+							<AuthorizedRoute
+								allowedRoles={["Admin"]}
+								page={<Admin.AnggotaPage.EditAnggotaPage />}
+							/>
+						}
+					/>
+					<Route
 						path={AppRoutes.AdminPassword.path}
 						element={
 							<AuthorizedRoute

@@ -162,28 +162,28 @@ export function AnggotaTable({
 			case "actions":
 				return (
 					<div className="relative flex items-center gap-2">
-						<Tooltip color="warning" content="Detail Repository">
+						<Tooltip color="warning" content="Detail Anggota">
 							<button
 								onClick={() =>
 									navigate(
-										`${AppRoutes.AdminDetailKoleksi.path.replace(
-											":koleksi",
+										`${AppRoutes.AdminDetailAnggota.path.replace(
+											":group",
 											slug
-										)}?repos=${data.id}`
+										)}?anggota=${data.id}`
 									)
 								}
 								className="text-lg text-warning cursor-pointer active:opacity-50">
 								<HiOutlineEye />
 							</button>
 						</Tooltip>
-						<Tooltip color="success" content="Edit Repository">
+						<Tooltip color="success" content="Edit Anggota">
 							<button
 								onClick={() =>
 									navigate(
-										`${AppRoutes.AdminEditKoleksi.path.replace(
-											":koleksi",
+										`${AppRoutes.AdminEditAnggota.path.replace(
+											":group",
 											slug
-										)}?repos=${data.id}`
+										)}?anggota=${data.id}`
 									)
 								}
 								className="text-lg text-success cursor-pointer active:opacity-50">

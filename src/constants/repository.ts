@@ -5,6 +5,7 @@ import {
 	HiOutlineDocumentText,
 } from "react-icons/hi2";
 import { IconType } from "react-icons/lib";
+import { prodiOptions } from "./user";
 
 export const typeColorMapCustom: Record<
 	string,
@@ -99,12 +100,6 @@ const lokasiOptions = [
 	{ id: 4, nama: "Rak 4" },
 ];
 
-const prodiOptions = [
-	{ id: 1, nama: "S1 - Administrasi Publik" },
-	{ id: 2, nama: "S1 - Sistem Informasi" },
-	{ id: 3, nama: "S1 - Bisnis Digital" },
-];
-
 export const repositoryFormSelectOptios = {
 	prodi: prodiOptions,
 	lokasi: lokasiOptions,
@@ -182,7 +177,7 @@ export const repositoryFieldConfig = {
 		{ name: "sinopsis", label: "Sinopsis", type: "textarea", required: false },
 		{ name: "cetakan", label: "Cetakan", type: "text", required: false },
 		{ name: "penerbit", label: "Penerbit", type: "text", required: true },
-		{ name: "tanggal", label: "Tanggal", type: "text", required: false },
+		// { name: "tanggal", label: "Tanggal", type: "text", required: false },
 		{
 			name: "no_regist",
 			label: "Nomor Registrasi",
@@ -205,7 +200,7 @@ export const repositoryFieldConfig = {
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
 			type: "number",
-			required: true,
+			required: false,
 		},
 		{ name: "asal_buku", label: "Asal Buku", type: "text", required: false },
 		{ name: "isbn", label: "ISBN", type: "text", required: false },
