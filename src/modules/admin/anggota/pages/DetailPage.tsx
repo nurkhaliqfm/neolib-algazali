@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { useLocation, useParams } from "react-router-dom";
 import { AnggotaDetailTransaksiResponse } from "../types/anggota.type";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
@@ -7,6 +7,8 @@ import { AnggotaItemKey } from "@/types/anggota";
 import { anggotaBaseFieldConfig, anggotaFieldConfig } from "@/constants/user";
 import { getAnggotaTransaksiDetail } from "../services/anggotaService";
 import { AnggotaDetailItem } from "../components/AnggotaDetail";
+import { HiOutlineArchiveBoxArrowDown } from "react-icons/hi2";
+import AnggotaTransaksiTable from "../components/TransaksiAnggotaTable";
 
 const DetailAnggotaPage = () => {
 	const { group } = useParams<{ group: AnggotaItemKey }>();
@@ -26,7 +28,6 @@ const DetailAnggotaPage = () => {
 				type: group,
 				anggota: anggota,
 				onDone: (data) => {
-					console.log(data);
 					setAnggotaTransaksiDetailData(data);
 				},
 			});
@@ -51,7 +52,7 @@ const DetailAnggotaPage = () => {
 	return (
 		<>
 			{detailData && (
-				<section className="flex gap-4 p-4 flex-col lg:flex-row">
+				<section className="flex gap-4 p-4 flex-col">
 					<Card className="py-4 flex-1 border rounded-2xl h-fit" shadow="none">
 						<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
 							<p className="text-tiny uppercase font-bold">Detail Anggota</p>
@@ -81,6 +82,30 @@ const DetailAnggotaPage = () => {
 									/>
 								);
 							})}
+						</CardBody>
+						{group === "mahasiswa" && (
+							<CardFooter>
+								<Button
+									size="sm"
+									variant="shadow"
+									color="primary"
+									className="mb-2"
+									startContent={<HiOutlineArchiveBoxArrowDown />}>
+									Cetak Bebas Pustaka
+								</Button>
+							</CardFooter>
+						)}
+					</Card>
+					<Card className="py-4 flex-1 border rounded-2xl h-fit" shadow="none">
+						<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+							<p className="text-tiny uppercase font-bold">
+								Daftar Pinjaman Anggota
+							</p>
+						</CardHeader>
+						<CardBody className="overflow-visible py-2 px-4">
+							<AnggotaTransaksiTable
+								transaksi={anggotaTransaksiDetailData.transaksi}
+							/>
 						</CardBody>
 					</Card>
 				</section>

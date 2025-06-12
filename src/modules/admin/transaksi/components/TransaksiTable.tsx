@@ -23,7 +23,6 @@ import {
 	HiOutlinePencil,
 	HiOutlineTrash,
 } from "react-icons/hi2";
-import { TableHeaderComponent } from "@/types/global";
 import { SetURLSearchParams, useNavigate } from "react-router-dom";
 import AppRoutes from "@/router/routes";
 import {
@@ -39,22 +38,13 @@ import {
 // import { deleteRepository } from "../services/transaksiService";
 // import { useTypedSelector } from "@/hooks/useTypedSelector";
 // import { toast } from "react-toastify";
-import { typeTransaksiColorMap } from "@/constants/transaksi";
+import {
+	TransaksiHeaderTable,
+	typeTransaksiColorMap,
+} from "@/constants/transaksi";
 import dayjs from "dayjs";
 import { userRoleMap } from "@/constants/user";
 import { moneyConverter } from "@/utils/moneyFormatter";
-
-const TransaksiHeaderTable: TableHeaderComponent[] = [
-	{ name: "JUDUL", slug: "judul" },
-	{ name: "PEMINJAM", slug: "peminjam" },
-	{ name: "ANGGOTA", slug: "anggota" },
-	{ name: "STATUS", slug: "status" },
-	{ name: "TANGGAL PINJAM", slug: "borrowedAt" },
-	{ name: "TANGGAL KEMBALI", slug: "returnedAt" },
-	{ name: "DENDA", slug: "denda" },
-	{ name: "TERLAMBAT", slug: "overdue" },
-	{ name: "ACTIONS", slug: "actions" },
-];
 
 export function TransaksiTable({
 	data,
