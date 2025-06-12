@@ -73,6 +73,7 @@ function AppRouter() {
 							/>
 						}
 					/>
+
 					<Route
 						path={AppRoutes.AdminTransaksi.path}
 						element={
@@ -82,6 +83,7 @@ function AppRouter() {
 							/>
 						}
 					/>
+
 					<Route
 						path={AppRoutes.AdminAnggota.path}
 						element={
@@ -109,6 +111,16 @@ function AppRouter() {
 							/>
 						}
 					/>
+					<Route
+						path={AppRoutes.AdminDetailAnggota.path}
+						element={
+							<AuthorizedRoute
+								allowedRoles={["Admin"]}
+								page={<Admin.AnggotaPage.DetailAnggotaPage />}
+							/>
+						}
+					/>
+
 					<Route
 						path={AppRoutes.AdminPassword.path}
 						element={

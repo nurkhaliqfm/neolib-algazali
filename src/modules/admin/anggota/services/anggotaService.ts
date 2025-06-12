@@ -2,6 +2,7 @@ import { ApiError, ApiResponse } from "@/types/global";
 import axios, { AxiosError } from "axios";
 import {
 	AnggotaDetailResponse,
+	AnggotaDetailTransaksiResponse,
 	AnggotaDosenRequest,
 	AnggotaMahasiswaRequest,
 	AnggotaRequest,
@@ -291,6 +292,47 @@ const getAnggotaDetail = async ({
 	}
 };
 
+const getAnggotaTransaksiDetail = async ({
+	token,
+	type,
+	anggota,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	type: string;
+	anggota: string;
+	onDone?: (data: AnggotaDetailTransaksiResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	try {
+		const response = await axios.get(
+			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/transaksi?anggota=${anggota}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		if (onDone) onDone(response.data);
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
+
 const deleteAnggota = async ({
 	token,
 	type,
@@ -338,8 +380,9 @@ const deleteAnggota = async ({
 
 export {
 	getListAnggota,
+	getAnggotaDetail,
+	getAnggotaTransaksiDetail,
 	createtAnggota,
 	updateAnggota,
-	getAnggotaDetail,
 	deleteAnggota,
 };
