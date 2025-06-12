@@ -1,6 +1,7 @@
 import { ApiError, ApiResponse } from "@/types/global";
 import axios, { AxiosError } from "axios";
 import {
+	AnggotaDetailResponse,
 	AnggotaDosenRequest,
 	AnggotaMahasiswaRequest,
 	AnggotaRequest,
@@ -73,7 +74,7 @@ const createtAnggota = async ({
 	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
-	const repositoryBodyRequest: Record<
+	const anggotaBodyRequest: Record<
 		string,
 		| string
 		| null
@@ -93,27 +94,27 @@ const createtAnggota = async ({
 		Object.keys(data).forEach((key) => {
 			if (key === "prodi") {
 				if ("prodi" in data) {
-					repositoryBodyRequest.data = {
-						...(typeof repositoryBodyRequest[`data`] === "object" &&
-						repositoryBodyRequest[`data`] !== null
-							? repositoryBodyRequest[`data`]
+					anggotaBodyRequest.data = {
+						...(typeof anggotaBodyRequest[`data`] === "object" &&
+						anggotaBodyRequest[`data`] !== null
+							? anggotaBodyRequest[`data`]
 							: {}),
 						id_prodi: data?.prodi?.id,
 					};
 				}
 			} else if (key === "jenis_kelamin") {
-				repositoryBodyRequest.data = {
-					...(typeof repositoryBodyRequest[`data`] === "object" &&
-					repositoryBodyRequest[`data`] !== null
-						? repositoryBodyRequest[`data`]
+				anggotaBodyRequest.data = {
+					...(typeof anggotaBodyRequest[`data`] === "object" &&
+					anggotaBodyRequest[`data`] !== null
+						? anggotaBodyRequest[`data`]
 						: {}),
 					jenis_kelamin: data.jenis_kelamin.id === 1 ? "L" : "P",
 				};
 			} else {
-				repositoryBodyRequest.data = {
-					...(typeof repositoryBodyRequest[`data`] === "object" &&
-					repositoryBodyRequest[`data`] !== null
-						? repositoryBodyRequest[`data`]
+				anggotaBodyRequest.data = {
+					...(typeof anggotaBodyRequest[`data`] === "object" &&
+					anggotaBodyRequest[`data`] !== null
+						? anggotaBodyRequest[`data`]
 						: {}),
 					[key]: data[key as keyof typeof data],
 				};
@@ -124,7 +125,7 @@ const createtAnggota = async ({
 	try {
 		const response = await axios.post(
 			`${VITE_SERVER_BASE_URL}/admin/anggota/${atr.slug}/create`,
-			repositoryBodyRequest,
+			anggotaBodyRequest,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -155,34 +156,122 @@ const createtAnggota = async ({
 
 const updateAnggota = async ({
 	token,
-	type,
-	page,
-	keyword,
-	limit,
+	atr,
+	anggota,
 	onDone,
 	onError,
 }: {
 	token: string | null | undefined;
-	type: string;
-	page: string;
-	keyword?: string;
-	limit?: string;
-	onDone?: (data: AnggotaResponse) => void | undefined;
+	atr: {
+		id: string | null;
+		slug: AnggotaItemKey | undefined;
+	};
+	anggota: AnggotaRequest;
+	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
+	const anggotaBodyRequest: Record<
+		string,
+		| string
+		| null
+		| Record<string, string | number | { id: number; nama: string } | null>
+	> = {
+		fullname: anggota.fullname,
+		email: null,
+		data: {},
+	};
+
+	if (atr.slug) {
+		const data = anggota[atr.slug as keyof AnggotaRequest] as
+			| AnggotaMahasiswaRequest
+			| AnggotaDosenRequest
+			| AnggotaUmumRequest;
+
+		Object.keys(data).forEach((key) => {
+			if (key === "prodi") {
+				if ("prodi" in data) {
+					anggotaBodyRequest.data = {
+						...(typeof anggotaBodyRequest[`data`] === "object" &&
+						anggotaBodyRequest[`data`] !== null
+							? anggotaBodyRequest[`data`]
+							: {}),
+						id_prodi: data?.prodi?.id,
+					};
+				}
+			} else if (key === "jenis_kelamin") {
+				anggotaBodyRequest.data = {
+					...(typeof anggotaBodyRequest[`data`] === "object" &&
+					anggotaBodyRequest[`data`] !== null
+						? anggotaBodyRequest[`data`]
+						: {}),
+					jenis_kelamin: data.jenis_kelamin.id === 1 ? "L" : "P",
+				};
+			} else {
+				anggotaBodyRequest.data = {
+					...(typeof anggotaBodyRequest[`data`] === "object" &&
+					anggotaBodyRequest[`data`] !== null
+						? anggotaBodyRequest[`data`]
+						: {}),
+					[key]: data[key as keyof typeof data],
+				};
+			}
+		});
+	}
+
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}s?page=${page}${
-				keyword ? `&keyword=${keyword}` : ""
-			}${limit ? `&limit=${limit}` : ""}`,
+		const response = await axios.patch(
+			`${VITE_SERVER_BASE_URL}/admin/anggota/${atr.slug}?anggota=${atr.id}`,
+			anggotaBodyRequest,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			}
 		);
+		if (onDone)
+			onDone({
+				status: response.status,
+				message: response.data.message || "Anggota update successfully",
+			});
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
 
-		console.log("Response Data:", response.data);
+const getAnggotaDetail = async ({
+	token,
+	type,
+	anggota,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	type: string;
+	anggota: string;
+	onDone?: (data: AnggotaDetailResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	try {
+		const response = await axios.get(
+			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/detail?anggota=${anggota}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 
 		if (onDone) onDone(response.data);
 	} catch (error) {
@@ -202,4 +291,55 @@ const updateAnggota = async ({
 	}
 };
 
-export { getListAnggota, createtAnggota, updateAnggota };
+const deleteAnggota = async ({
+	token,
+	type,
+	anggota,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	type: string;
+	anggota: number;
+	onDone?: (data: ApiResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	try {
+		const response = await axios.get(
+			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/delete?anggota=${anggota}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		if (onDone)
+			onDone({
+				status: response.status,
+				message: response.data.message || "Anggota deleted successfully",
+			});
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
+
+export {
+	getListAnggota,
+	createtAnggota,
+	updateAnggota,
+	getAnggotaDetail,
+	deleteAnggota,
+};

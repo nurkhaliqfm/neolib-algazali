@@ -1,7 +1,12 @@
 import { TransaksiDetailResponse } from "../../transaksi/types/transaksi.type";
 
-export interface BaseAnggota {
+export interface BaseUser {
 	id: number;
+	fullname: string;
+	email: string;
+}
+
+export interface BaseAnggota {
 	nama: string;
 	kontak: string | null;
 	alamat: string | null;
@@ -27,7 +32,7 @@ export interface AnggotaUmum extends BaseAnggota {
 	nik: true;
 }
 
-export interface AnggotaDetailResponse {
+export interface AnggotaDetailResponse extends BaseUser {
 	mahasiswa?: AnggotaMahasiswa;
 	dosen?: AnggotaDosen;
 	umum?: AnggotaUmum;

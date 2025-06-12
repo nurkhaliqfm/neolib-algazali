@@ -76,7 +76,6 @@ const CreateAnggotaPage = () => {
 
 	function onSubmit(values: z.infer<typeof formZodSchema>) {
 		setIsLoadingCreate(true);
-		console.log(values);
 
 		const { fullname, ...anggotaData } = values as AnggotaRequest;
 
@@ -221,16 +220,6 @@ const CreateAnggotaPage = () => {
 														} else {
 															field.onChange(Number(value));
 														}
-													}}
-												/>
-											) : ff.type === "file" ? (
-												<Input
-													{...field}
-													type="file"
-													value={undefined}
-													onChange={(e) => {
-														const file = e.target.files as FileList;
-														field.onChange(file);
 													}}
 												/>
 											) : (

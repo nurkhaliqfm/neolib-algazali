@@ -33,9 +33,11 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
-// import { toast } from "react-toastify";
-import { AnggotaResponse, BaseAnggota } from "../types/anggota.type";
+import { toast } from "react-toastify";
+import { AnggotaDetailResponse, AnggotaResponse } from "../types/anggota.type";
 import { typeAnggotaColorMap } from "@/constants/user";
+import { AnggotaItemKey } from "@/types/anggota";
+import { deleteAnggota } from "../services/anggotaService";
 
 const RepositoryHeaderTable: TableHeaderComponent[] = [
 	{ name: "NAMA", slug: "nama" },
@@ -137,158 +139,158 @@ export function AnggotaTable({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filterValue, onSearchChange]);
 
-	const renderCell = useCallback((data: BaseAnggota, columnKey: Key) => {
-		const cellValue = data[columnKey as keyof BaseAnggota];
+	const renderCell = useCallback(
+		(data: AnggotaDetailResponse, columnKey: Key) => {
+			const cellValue = data[slug as AnggotaItemKey];
 
-		switch (columnKey) {
-			case "nama":
-				return <>{data.nama}</>;
-			case "alamat":
-				return <>{data.alamat || "-"}</>;
-			case "kontak":
-				return <>{data.kontak}</>;
-			case "jenis_kelamin":
-				return <>{data.jenis_kelamin === "L" ? "Laki-Laki" : "Perempuan"}</>;
-			case "type":
-				return (
-					<Chip
-						className="capitalize"
-						color={typeAnggotaColorMap[slug.toUpperCase()]}
-						size="sm"
-						variant="flat">
-						{slug.toUpperCase()}
-					</Chip>
-				);
-			case "actions":
-				return (
-					<div className="relative flex items-center gap-2">
-						<Tooltip color="warning" content="Detail Anggota">
-							<button
-								onClick={() =>
-									navigate(
-										`${AppRoutes.AdminDetailAnggota.path.replace(
-											":group",
-											slug
-										)}?anggota=${data.id}`
-									)
-								}
-								className="text-lg text-warning cursor-pointer active:opacity-50">
-								<HiOutlineEye />
-							</button>
-						</Tooltip>
-						<Tooltip color="success" content="Edit Anggota">
-							<button
-								onClick={() =>
-									navigate(
-										`${AppRoutes.AdminEditAnggota.path.replace(
-											":group",
-											slug
-										)}?anggota=${data.id}`
-									)
-								}
-								className="text-lg text-success cursor-pointer active:opacity-50">
-								<HiOutlinePencil />
-							</button>
-						</Tooltip>
-						<AlertDialog>
-							<Tooltip color="danger" content="Delete Repository">
-								<AlertDialogTrigger asChild>
-									<button className="text-lg text-danger cursor-pointer active:opacity-50">
-										<HiOutlineTrash />
-									</button>
-								</AlertDialogTrigger>
+			switch (columnKey) {
+				case "nama":
+					return <>{cellValue?.nama}</>;
+				case "alamat":
+					return <>{cellValue?.alamat || "-"}</>;
+				case "kontak":
+					return <>{cellValue?.kontak}</>;
+				case "jenis_kelamin":
+					return (
+						<>{cellValue?.jenis_kelamin === "L" ? "Laki-Laki" : "Perempuan"}</>
+					);
+				case "type":
+					return (
+						<Chip
+							className="capitalize"
+							color={typeAnggotaColorMap[slug.toUpperCase()]}
+							size="sm"
+							variant="flat">
+							{slug.toUpperCase()}
+						</Chip>
+					);
+				case "actions":
+					return (
+						<div className="relative flex items-center gap-2">
+							<Tooltip color="warning" content="Detail Anggota">
+								<button
+									onClick={() =>
+										navigate(
+											`${AppRoutes.AdminDetailAnggota.path.replace(
+												":group",
+												slug
+											)}?anggota=${data.id}`
+										)
+									}
+									className="text-lg text-warning cursor-pointer active:opacity-50">
+									<HiOutlineEye />
+								</button>
 							</Tooltip>
-							<AlertDialogContent>
-								<AlertDialogHeader>
-									<AlertDialogTitle>
-										Apakah anda yakin ingin menghapus repository ini?
-									</AlertDialogTitle>
-									<AlertDialogDescription>
-										Repository <b>{data.nama}</b> Tindakan ini tidak dapat
-										dibatalkan. Ini akan secara permanen menghapus repository
-										Anda dan menghapus data Anda dari server kami.
-									</AlertDialogDescription>
-								</AlertDialogHeader>
-								<AlertDialogFooter>
-									<AlertDialogCancel>Batal</AlertDialogCancel>
-									<Button
-										size="md"
-										isLoading={isLoadingDelete}
-										spinner={
-											<svg
-												className="animate-spin h-5 w-5 text-current"
-												fill="none"
-												viewBox="0 0 24 24"
-												xmlns="http://www.w3.org/2000/svg">
-												<circle
-													className="opacity-25"
-													cx="12"
-													cy="12"
-													r="10"
-													stroke="currentColor"
-													strokeWidth="4"
-												/>
-												<path
-													className="opacity-75"
-													d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-													fill="currentColor"
-												/>
-											</svg>
-										}
-										color="danger"
-										variant="solid"
-										onPress={() => {
-											setIsLoadingDelete(true);
-											// deleteRepository({
-											// 	token: user?.access_token,
-											// 	repos: data.id,
-											// 	type: slug,
-											// 	onDone: (data) => {
-											// 		if (data.status === 200) {
-											// 			toast.success(data.message, {
-											// 				autoClose: 700,
-											// 				onClose: () => {
-											// 					navigate(
-											// 						AppRoutes.AdminKoleksi.path.replace(
-											// 							":koleksi",
-											// 							slug
-											// 						)
-											// 					);
-											// 				},
-											// 			});
-											// 		} else {
-											// 			toast.error(data.message, {
-											// 				theme: "colored",
-											// 				autoClose: 700,
-											// 				onClose: () => {
-											// 					setIsLoadingDelete(false);
-											// 				},
-											// 			});
-											// 		}
-											// 	},
-											// 	onError: (error) => {
-											// 		toast.error(error.error, {
-											// 			theme: "colored",
-											// 			autoClose: 700,
-											// 			onClose: () => {
-											// 				setIsLoadingDelete(false);
-											// 			},
-											// 		});
-											// 	},
-											// });
-										}}>
-										Hapus
-									</Button>
-								</AlertDialogFooter>
-							</AlertDialogContent>
-						</AlertDialog>
-					</div>
-				);
-			default:
-				return cellValue;
-		}
+							<Tooltip color="success" content="Edit Anggota">
+								<button
+									onClick={() =>
+										navigate(
+											`${AppRoutes.AdminEditAnggota.path.replace(
+												":group",
+												slug
+											)}?anggota=${data.id}`
+										)
+									}
+									className="text-lg text-success cursor-pointer active:opacity-50">
+									<HiOutlinePencil />
+								</button>
+							</Tooltip>
+							<AlertDialog>
+								<Tooltip color="danger" content="Delete Repository">
+									<AlertDialogTrigger asChild>
+										<button className="text-lg text-danger cursor-pointer active:opacity-50">
+											<HiOutlineTrash />
+										</button>
+									</AlertDialogTrigger>
+								</Tooltip>
+								<AlertDialogContent>
+									<AlertDialogHeader>
+										<AlertDialogTitle>
+											Apakah anda yakin ingin menghapus anggota ini?
+										</AlertDialogTitle>
+										<AlertDialogDescription>
+											Data anggota <b>{cellValue?.nama}</b> akan dihapus.
+											Tindakan ini tidak dapat dibatalkan. Ini akan secara
+											permanen menghapus data Anda dari server kami.
+										</AlertDialogDescription>
+									</AlertDialogHeader>
+									<AlertDialogFooter>
+										<AlertDialogCancel>Batal</AlertDialogCancel>
+										<Button
+											size="md"
+											isLoading={isLoadingDelete}
+											spinner={
+												<svg
+													className="animate-spin h-5 w-5 text-current"
+													fill="none"
+													viewBox="0 0 24 24"
+													xmlns="http://www.w3.org/2000/svg">
+													<circle
+														className="opacity-25"
+														cx="12"
+														cy="12"
+														r="10"
+														stroke="currentColor"
+														strokeWidth="4"
+													/>
+													<path
+														className="opacity-75"
+														d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+														fill="currentColor"
+													/>
+												</svg>
+											}
+											color="danger"
+											variant="solid"
+											onPress={() => {
+												setIsLoadingDelete(true);
+												deleteAnggota({
+													token: user?.access_token,
+													anggota: data.id,
+													type: slug,
+													onDone: (data) => {
+														if (data.status === 200) {
+															toast.success(data.message, {
+																autoClose: 700,
+																onClose: () => {
+																	setIsLoadingDelete(false);
+																},
+															});
+														} else {
+															toast.error(data.message, {
+																theme: "colored",
+																autoClose: 700,
+																onClose: () => {
+																	setIsLoadingDelete(false);
+																},
+															});
+														}
+													},
+													onError: (error) => {
+														toast.error(error.error, {
+															theme: "colored",
+															autoClose: 700,
+															onClose: () => {
+																setIsLoadingDelete(false);
+															},
+														});
+													},
+												});
+											}}>
+											Hapus
+										</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
+						</div>
+					);
+				default:
+					return <span>{String(cellValue)}</span>;
+			}
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+		[]
+	);
 
 	return (
 		<Table
@@ -336,7 +338,7 @@ export function AnggotaTable({
 				items={data.anggota}
 				className="overflow-y-scroll">
 				{(item) => (
-					<TableRow key={`${item.nama}-item-${item.id}`}>
+					<TableRow key={`anggota-item-${item.id}`}>
 						{(columnKey) => (
 							<TableCell>{renderCell(item, columnKey)}</TableCell>
 						)}
