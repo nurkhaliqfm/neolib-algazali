@@ -246,12 +246,7 @@ export function RepositoryTable({
 														toast.success(data.message, {
 															autoClose: 700,
 															onClose: () => {
-																navigate(
-																	AppRoutes.AdminKoleksi.path.replace(
-																		":koleksi",
-																		slug
-																	)
-																);
+																setIsLoadingDelete(false);
 															},
 														});
 													} else {
