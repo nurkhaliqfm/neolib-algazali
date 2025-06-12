@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { TrendingDown, TrendingUp } from 'lucide-react';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+import { TrendingUp } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
 	Card,
@@ -9,7 +9,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
 	ChartConfig,
 	ChartContainer,
@@ -17,31 +17,23 @@ import {
 	ChartLegendContent,
 	ChartTooltip,
 	ChartTooltipContent,
-} from '@/components/ui/chart';
-
-const chartData = [
-	{ month: 'Januari', peminjaman: 186, pengembalian: 80 },
-	{ month: 'Februari', peminjaman: 305, pengembalian: 200 },
-	{ month: 'Maret', peminjaman: 237, pengembalian: 120 },
-	{ month: 'April', peminjaman: 73, pengembalian: 190 },
-	{ month: 'Mei', peminjaman: 209, pengembalian: 130 },
-	{ month: 'Juni', peminjaman: 214, pengembalian: 140 },
-];
+} from "@/components/ui/chart";
+import { StatistikTransaksiResponse } from "@/types/statistik";
 
 const chartConfig = {
 	peminjaman: {
-		label: 'Peminjaman',
-		color: 'hsl(var(--chart-1))',
+		label: "Peminjaman",
+		color: "hsl(var(--chart-1))",
 		icon: TrendingUp,
-	},
-	pengembalian: {
-		label: 'Pengembalian',
-		color: 'hsl(var(--chart-2))',
-		icon: TrendingDown,
 	},
 } satisfies ChartConfig;
 
-export function DashboardChart() {
+export function DashboardChart({
+	data,
+}: {
+	data: StatistikTransaksiResponse[];
+}) {
+	console.log(data);
 	return (
 		<Card className="md:col-span-2 col-span-1 h-fit">
 			<CardHeader>
@@ -52,43 +44,29 @@ export function DashboardChart() {
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>
-					<AreaChart
-						accessibilityLayer
-						data={chartData}
-						margin={{
-							left: 12,
-							right: 12,
-						}}>
+					<BarChart accessibilityLayer data={data}>
 						<CartesianGrid vertical={false} />
 						<XAxis
 							dataKey="month"
 							tickLine={false}
+							tickMargin={10}
 							axisLine={false}
-							tickMargin={8}
 							tickFormatter={(value) => value.slice(0, 3)}
 						/>
 						<ChartTooltip
 							cursor={false}
-							content={<ChartTooltipContent indicator="line" />}
+							content={<ChartTooltipContent hideLabel />}
 						/>
-						<Area
+						<Bar
 							dataKey="peminjaman"
-							type="natural"
 							fill="blue"
+							type="natural"
 							fillOpacity={0.4}
 							stroke="blue"
-							stackId="a"
-						/>
-						<Area
-							dataKey="pengembalian"
-							type="natural"
-							fill="var(--color-pengembalian)"
-							fillOpacity={0.4}
-							stroke="var(--color-pengembalian)"
-							stackId="a"
+							radius={8}
 						/>
 						<ChartLegend content={<ChartLegendContent />} />
-					</AreaChart>
+					</BarChart>
 				</ChartContainer>
 			</CardContent>
 		</Card>

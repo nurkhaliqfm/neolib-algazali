@@ -8,3 +8,8 @@ export type StatistikResponse = {
 	anggota: StatistikResponseItem;
 	pinjaman: StatistikResponseItem;
 };
+
+export type StatistikTransaksiResponse = {
+	month: string;
+	peminjaman: number;
+};
