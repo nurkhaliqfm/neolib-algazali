@@ -175,7 +175,15 @@ const AnggotaTransaksiTable = ({
 	return (
 		<Table
 			isHeaderSticky
-			aria-label="Example table with client side sorting"
+			aria-label="Table list transaksi anggota"
+			shadow="none"
+			border={0}
+			topContent={
+				<span className="text-default-400 text-small">
+					Total Pinjaman {transaksi.length}
+				</span>
+			}
+			topContentPlacement="outside"
 			bottomContent={
 				hasMore && !isLoading ? (
 					<div className="flex w-full justify-center">
