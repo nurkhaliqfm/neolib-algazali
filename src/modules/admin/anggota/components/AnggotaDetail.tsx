@@ -1,4 +1,3 @@
-import { moneyConverter } from "@/utils/moneyFormatter";
 import { useCallback } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
@@ -31,10 +30,6 @@ export const AnggotaDetailItem = ({
 }) => {
 	const renderItem = useCallback((value: string, slug: string) => {
 		switch (slug) {
-			case "harga":
-				return moneyConverter(value);
-			case "tanggal":
-				return dayjs(new Date(value)).format("DD MMMM YYYY");
 			default:
 				return value;
 		}
