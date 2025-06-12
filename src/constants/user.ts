@@ -48,7 +48,10 @@ export const anggotaFieldConfig = {
 		{ name: "jabatan", label: "Jabatan", type: "text", required: true },
 		{ name: "kampus", label: "Kampus", type: "text", required: true },
 	],
-	umum: [{ name: "nik", label: "NIK", type: "text", required: true }],
+	umum: [
+		{ name: "instansi", label: "Instansi", type: "text", required: true },
+		{ name: "nik", label: "NIK", type: "text", required: true },
+	],
 };
 
 const jenisKelaminOptions = [

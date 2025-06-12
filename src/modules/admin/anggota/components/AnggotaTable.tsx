@@ -253,6 +253,7 @@ export function AnggotaTable({
 															toast.success(data.message, {
 																autoClose: 700,
 																onClose: () => {
+																	window.location.reload();
 																	setIsLoadingDelete(false);
 																},
 															});

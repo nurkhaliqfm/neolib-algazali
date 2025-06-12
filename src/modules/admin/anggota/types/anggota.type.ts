@@ -24,11 +24,13 @@ export interface AnggotaMahasiswa extends BaseAnggota {
 }
 
 export interface AnggotaDosen extends BaseAnggota {
+	no_identitas: true;
 	jabatan: true;
 	kampus: true;
 }
 
 export interface AnggotaUmum extends BaseAnggota {
+	instansi: true;
 	nik: true;
 }
 
@@ -69,11 +71,13 @@ export interface AnggotaMahasiswaRequest extends BaseAnggotaRequest {
 }
 
 export interface AnggotaDosenRequest extends BaseAnggotaRequest {
+	no_identitas: true;
 	jabatan: true;
 	kampus: true;
 }
 
 export interface AnggotaUmumRequest extends BaseAnggotaRequest {
+	instansi: true;
 	nik: true;
 }
 
