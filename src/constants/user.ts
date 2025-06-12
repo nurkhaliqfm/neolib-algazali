@@ -39,6 +39,12 @@ export const anggotaFieldConfig = {
 		{ name: "fakultas", label: "Fakultas", type: "text", required: false },
 	],
 	dosen: [
+		{
+			name: "no_identitas",
+			label: "Nomor Identitas (NIK/NIP/NIDN/LAINNYA)",
+			type: "text",
+			required: true,
+		},
 		{ name: "jabatan", label: "Jabatan", type: "text", required: true },
 		{ name: "kampus", label: "Kampus", type: "text", required: true },
 	],
