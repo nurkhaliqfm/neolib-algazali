@@ -154,7 +154,7 @@ const DetailKoleksiPage = () => {
 												{repositoryDetailData.judul}
 											</p>
 											<span className="text-xs italic font-thin">
-												{detailData.pengarang}
+												{repositoryDetailData.pengarang}
 											</span>
 											<Chip
 												className="capitalize my-2"
@@ -299,9 +299,12 @@ const DetailKoleksiPage = () => {
 							/>
 						</CardBody>
 						<CardFooter className="pb-0 pt-2 px-4 flex-col items-start">
-							<p className="text-tiny uppercase font-bold">
+							<p className="text-sm uppercase font-bold">
 								{repositoryDetailData.judul}
 							</p>
+							<span className="text-tiny uppercase font-light">
+								{repositoryDetailData.pengarang}
+							</span>
 							<Chip
 								className="capitalize my-2"
 								color={typeRepositoryColorMap[repositoryDetailData.type]}

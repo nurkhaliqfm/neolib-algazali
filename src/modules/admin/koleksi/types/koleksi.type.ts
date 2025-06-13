@@ -2,7 +2,7 @@ import { repositoryTypeMap } from "@/constants/repository";
 
 export type RepositoryJurnal = {
 	abstrak: string | null;
-	pengarang: string;
+	// pengarang: string;
 	penerbit: string | null;
 	jurnal: string | null;
 	tahun_terbit: number;
@@ -15,7 +15,7 @@ export type RepositoryJurnal = {
 
 export type RepositoryEjurnal = {
 	abstrak: string | null;
-	pengarang: string;
+	// pengarang: string;
 	penerbit: string | null;
 	jurnal: string | null;
 	tahun_terbit: number;
@@ -23,7 +23,7 @@ export type RepositoryEjurnal = {
 };
 
 export type RepositoryEbook = {
-	pengarang: string;
+	// pengarang: string;
 	sinopsis: string | null;
 	cetakan: string | null;
 	penerbit: string;
@@ -33,7 +33,7 @@ export type RepositoryEbook = {
 };
 
 export type RepositoryBuku = {
-	pengarang: string;
+	// pengarang: string;
 	sinopsis: string | null;
 	cetakan: string | null;
 	penerbit: string;
@@ -55,7 +55,7 @@ export type RepositoryBuku = {
 
 export type RepositorySkripsi = {
 	abstrak: string | null;
-	pengarang: string | null;
+	// pengarang: string | null;
 	fakultas: string | null;
 	tahun_terbit: number;
 	lokasi: {
@@ -71,6 +71,7 @@ export type RepositorySkripsi = {
 export interface BaseRepository {
 	id: string;
 	judul: string;
+	pengarang: string;
 	nama_sampul: string | null;
 	nama_file: string | null;
 	type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
@@ -78,6 +79,7 @@ export interface BaseRepository {
 
 export interface BaseRepositoryRequest {
 	judul: string;
+	pengarang: string;
 	old_sampul?: string | null;
 	old_file?: string | null;
 	nama_sampul: FileList | null;
