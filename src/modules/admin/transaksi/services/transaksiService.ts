@@ -38,7 +38,7 @@ const getListTransaksi = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");

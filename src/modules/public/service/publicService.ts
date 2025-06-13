@@ -1,6 +1,6 @@
-import { RepositoryDetailResponse } from '@/modules/admin/koleksi/types/koleksi.type';
-import { ApiError } from '@/types/global';
-import axios, { AxiosError } from 'axios';
+import { RepositoryDetailResponse } from "@/modules/admin/koleksi/types/koleksi.type";
+import { ApiError } from "@/types/global";
+import axios, { AxiosError } from "axios";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -18,8 +18,8 @@ const getListRekomendasiRepository = async ({
 	try {
 		const response = await axios.get(
 			`${VITE_SERVER_BASE_URL}/public/repository/rekomendasi?${
-				limit ? `limit=${limit}` : ''
-			}${limit && repos ? '&' : ''}${repos ? `repos=${repos}` : ''}`
+				limit ? `limit=${limit}` : ""
+			}${limit && repos ? "&" : ""}${repos ? `repos=${repos}` : ""}`
 		);
 
 		if (onDone) onDone(response.data.repository);
@@ -29,10 +29,10 @@ const getListRekomendasiRepository = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
-				localStorage.removeItem('authData');
+				localStorage.removeItem("authData");
 				window.location.reload();
 			}
 		}

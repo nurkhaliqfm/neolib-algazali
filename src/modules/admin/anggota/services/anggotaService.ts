@@ -49,7 +49,7 @@ const getListAnggota = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -240,7 +240,7 @@ const updateAnggota = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -281,7 +281,7 @@ const getAnggotaDetail = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -322,7 +322,7 @@ const getAnggotaTransaksiDetail = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -365,10 +365,11 @@ const getAnggotaDocument = async ({
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			const axiosError = error as AxiosError<ApiError>;
+			console.log(axiosError);
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -413,7 +414,7 @@ const deleteAnggota = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");

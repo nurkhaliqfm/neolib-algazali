@@ -55,7 +55,7 @@ const getListRepository = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -101,7 +101,7 @@ const getDetailRepository = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -202,7 +202,7 @@ const updateRepository = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -296,7 +296,7 @@ const createRepository = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -341,7 +341,7 @@ const deleteRepository = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
