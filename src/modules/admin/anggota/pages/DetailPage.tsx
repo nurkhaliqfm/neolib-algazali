@@ -74,7 +74,7 @@ const DetailAnggotaPage = () => {
 										new Date()
 									).format("DD-MM-YYYY")}.pdf`,
 								});
-								// window.location.reload();
+								window.location.reload();
 								setIsLoadingDownload(false);
 							},
 						});
