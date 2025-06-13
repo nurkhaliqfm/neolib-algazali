@@ -6,6 +6,7 @@ export interface ApiError {
 export interface ApiResponse {
 	status: number;
 	message: string;
+	data?: unknown;
 }
 
 export interface TableHeaderComponent {

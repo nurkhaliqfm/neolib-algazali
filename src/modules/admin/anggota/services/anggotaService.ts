@@ -350,6 +350,7 @@ const getAnggotaDocument = async ({
 		const response = await axios.get(
 			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/bebas-pustaka?anggota=${anggota}`,
 			{
+				responseType: "blob",
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
@@ -361,6 +362,7 @@ const getAnggotaDocument = async ({
 				status: response.status,
 				message:
 					response.data.message || "Success create bebas pustaka document",
+				data: response.data,
 			});
 	} catch (error) {
 		if (axios.isAxiosError(error)) {

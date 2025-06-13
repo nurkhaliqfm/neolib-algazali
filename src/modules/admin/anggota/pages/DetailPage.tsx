@@ -13,6 +13,8 @@ import { AnggotaDetailItem } from "../components/AnggotaDetail";
 import { HiOutlineArchiveBoxArrowDown } from "react-icons/hi2";
 import AnggotaTransaksiTable from "../components/TransaksiAnggotaTable";
 import { toast } from "react-toastify";
+import { downloadBebasPustaka } from "@/shared/utils/downloadBebasPustaka";
+import dayjs from "dayjs";
 
 const DetailAnggotaPage = () => {
 	const { group } = useParams<{ group: AnggotaItemKey }>();
@@ -56,22 +58,29 @@ const DetailAnggotaPage = () => {
 
 	const handleDocumentDownload = (id_user: number) => {
 		setIsLoadingDownload(true);
-		if (group) {
+		if (group && detailData) {
 			getAnggotaDocument({
 				token: user?.access_token,
 				type: group,
 				anggota: String(id_user),
-				onDone: (data) => {
-					if (data.status === 200) {
-						toast.success(data.message, {
+				onDone: (response) => {
+					console.log(response.data);
+					if (response.status === 200) {
+						toast.success(response.message, {
 							autoClose: 700,
 							onClose: () => {
-								window.location.reload();
+								downloadBebasPustaka({
+									file: response.data as string,
+									name: `Kartu Bebas Pustaka (${detailData.nama}) - ${dayjs(
+										new Date()
+									).format("DD-MM-YYYY")}.pdf`,
+								});
+								// window.location.reload();
 								setIsLoadingDownload(false);
 							},
 						});
 					} else {
-						toast.error(data.message, {
+						toast.error(response.message, {
 							theme: "colored",
 							autoClose: 700,
 							onClose: () => {
