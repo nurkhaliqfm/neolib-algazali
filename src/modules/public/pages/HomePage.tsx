@@ -117,10 +117,7 @@ function HomePage() {
 											title={repos.judul}
 											type={repos.type}
 											repos={repos.id}
-											pengarang={
-												repos[repositoryTypeMap[repos.type]]
-													?.pengarang as string
-											}
+											pengarang={repos.pengarang}
 										/>
 									</SwiperSlide>
 								);
@@ -168,7 +165,7 @@ function HomePage() {
 										title={repos.judul}
 										type={repos.type}
 										repos={repos.id}
-										pengarang={selectedReposByType?.pengarang as string}
+										pengarang={repos.pengarang}
 										tahun_terbit={
 											selectedReposByType?.tahun_terbit.toString() as string
 										}

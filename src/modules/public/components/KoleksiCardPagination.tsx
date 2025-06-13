@@ -116,7 +116,7 @@ export function KoleksiCardPagination({
 										title={repository.judul}
 										type={repository.type}
 										repos={repository.id}
-										pengarang={selectedReposByType?.pengarang as string}
+										pengarang={repository.pengarang}
 										tahun_terbit={
 											selectedReposByType?.tahun_terbit.toString() as string
 										}
