@@ -106,7 +106,7 @@ const EditKoleksiPage = () => {
 		setIsLoadingUpdate(true);
 		if (!repositoryDetailData) return "No repository data available.";
 
-		const { judul, nama_sampul, nama_file, ...reposData } =
+		const { judul, nama_sampul, nama_file, pengarang, ...reposData } =
 			values as RepositoryRequest;
 
 		updateRepository({
@@ -114,6 +114,7 @@ const EditKoleksiPage = () => {
 			atr: { id: repos, slug: koleksi },
 			repos: {
 				judul,
+				pengarang: pengarang,
 				nama_sampul: nama_sampul,
 				nama_file: nama_file,
 				old_file: repositoryDetailData?.nama_file,
@@ -170,6 +171,7 @@ const EditKoleksiPage = () => {
 								typeof formZodSchema
 							>),
 							judul: data.judul || "",
+							pengarang: data.pengarang || "",
 							nama_sampul: null,
 							nama_file: null,
 						});

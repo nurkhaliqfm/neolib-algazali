@@ -81,7 +81,7 @@ const CreateKoleksiPage = () => {
 	function onSubmit(values: z.infer<typeof formZodSchema>) {
 		setIsLoadingCreate(true);
 
-		const { judul, nama_sampul, nama_file, ...reposData } =
+		const { judul, nama_sampul, nama_file, pengarang, ...reposData } =
 			values as RepositoryRequest;
 
 		createRepository({
@@ -91,6 +91,7 @@ const CreateKoleksiPage = () => {
 				judul,
 				nama_sampul: nama_sampul,
 				nama_file: nama_file,
+				pengarang: pengarang,
 				type: koleksi?.toUpperCase() as
 					| "EJURNAL"
 					| "JURNAL"
@@ -152,6 +153,7 @@ const CreateKoleksiPage = () => {
 					{}
 				) as z.infer<typeof formZodSchema>),
 				judul: "",
+				pengarang: "",
 				nama_sampul: null,
 				nama_file: null,
 			});
