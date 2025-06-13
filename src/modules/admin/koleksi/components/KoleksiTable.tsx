@@ -40,6 +40,7 @@ import { toast } from "react-toastify";
 
 const RepositoryHeaderTable: TableHeaderComponent[] = [
 	{ name: "JUDUL", slug: "judul" },
+	{ name: "PENGARANG", slug: "pengarang" },
 	{ name: "NAMA SAMPUL", slug: "nama_sampul" },
 	{ name: "NAMA FILE", slug: "nama_file" },
 	{ name: "JENIS", slug: "type" },
