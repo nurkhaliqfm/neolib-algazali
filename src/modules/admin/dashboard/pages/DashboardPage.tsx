@@ -7,64 +7,14 @@ import {
 	StatistikResponse,
 	StatistikTransaksiResponse,
 } from "@/types/statistik";
-import { BorrowHistoryReponse } from "@/types/borrow";
 import { useEffect, useState } from "react";
 import {
+	getDataLatestTransaksi,
 	getDataStatistik,
 	getDataStatistikTransaksi,
 } from "../services/statistikService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
-
-const dataPeminjaman: BorrowHistoryReponse[] = [
-	{
-		id: 1,
-		name: "Nurkhaliq Futhra",
-		role: "Mahasiswa",
-		peminjaman: "04-25-2025",
-		pengembalian: "04-30-2025",
-		status: "ongoing",
-	},
-	{
-		id: 2,
-		name: "Zoey Lang",
-		role: "Dosen",
-		peminjaman: "04-25-2025",
-		pengembalian: "04-30-2025",
-		status: "expired",
-	},
-	{
-		id: 3,
-		name: "Jane Fisher",
-		role: "Dosen",
-		peminjaman: "04-25-2025",
-		pengembalian: "04-30-2025",
-		status: "ongoing",
-	},
-	{
-		id: 4,
-		name: "William Howard",
-		role: "Eksternal",
-		peminjaman: "04-25-2025",
-		pengembalian: "04-30-2025",
-		status: "expired",
-	},
-	{
-		id: 5,
-		name: "Kristen Copper",
-		role: "Mahasiswa",
-		peminjaman: "04-20-2025",
-		pengembalian: "04-31-2025",
-		status: "ongoing",
-	},
-	{
-		id: 6,
-		name: "Kristen Copper",
-		role: "Mahasiswa",
-		peminjaman: "04-25-2025",
-		pengembalian: "04-30-2025",
-		status: "ongoing",
-	},
-];
+import { TransaksiDetailResponse } from "../../transaksi/types/transaksi.type";
 
 function DashboardPage() {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
@@ -75,6 +25,10 @@ function DashboardPage() {
 
 	const [statistikTransaksiData, setStatistikTransaksiData] = useState<
 		StatistikTransaksiResponse[]
+	>([]);
+
+	const [latestTransaksiData, setLatestTransaksiDataData] = useState<
+		TransaksiDetailResponse[]
 	>([]);
 
 	useEffect(() => {
@@ -88,6 +42,12 @@ function DashboardPage() {
 			token: user?.access_token,
 			onDone: (data) => {
 				setStatistikTransaksiData(data);
+			},
+		});
+		getDataLatestTransaksi({
+			token: user?.access_token,
+			onDone: (data) => {
+				setLatestTransaksiDataData(data);
 			},
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,9 +80,9 @@ function DashboardPage() {
 				</section>
 			)}
 
-			<section className="my-4 grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-max">
+			<section className="my-4 grid grid-cols-1 xl:grid-cols-3 gap-y-4 xl:gap-x-4 auto-rows-max">
 				<DashboardChart data={statistikTransaksiData} />
-				<DashboardBorrowTable data={dataPeminjaman} />
+				<DashboardBorrowTable data={latestTransaksiData} />
 			</section>
 		</>
 	);

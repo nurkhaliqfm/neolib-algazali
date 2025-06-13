@@ -7,78 +7,83 @@ import {
 	TableHeader,
 	TableRow,
 	User,
-} from '@heroui/react';
-import dayjs from 'dayjs';
-import { Key, useCallback } from 'react';
-import { HiOutlineCalendarDateRange } from 'react-icons/hi2';
-import { BorrowHistoryReponse } from '@/types/borrow';
-import { TableHeaderComponent } from '@/types/global';
+} from "@heroui/react";
+import { Key, useCallback } from "react";
+import { HiOutlineCalendarDateRange } from "react-icons/hi2";
+import { TableHeaderComponent } from "@/types/global";
+import { TransaksiDetailResponse } from "../../transaksi/types/transaksi.type";
 
 const lastBorrowHeaderTable: TableHeaderComponent[] = [
-	{ name: 'NAME', slug: 'name' },
-	{ name: 'PEMINJAMAN', slug: 'peminjaman' },
-	{ name: 'STATUS', slug: 'status' },
+	{ name: "NAME", slug: "name" },
+	{ name: "TERLAMBAT", slug: "peminjaman" },
+	{ name: "STATUS", slug: "status" },
 ];
 
 const statusColorMap: Record<
 	string,
-	| 'success'
-	| 'danger'
-	| 'default'
-	| 'primary'
-	| 'secondary'
-	| 'warning'
+	| "success"
+	| "danger"
+	| "default"
+	| "primary"
+	| "secondary"
+	| "warning"
 	| undefined
 > = {
-	ongoing: 'success',
-	expired: 'danger',
+	ongoing: "success",
+	expired: "danger",
 };
 
 export function DashboardBorrowTable({
 	data,
 }: {
-	data: BorrowHistoryReponse[];
+	data: TransaksiDetailResponse[];
 }) {
 	const renderCell = useCallback(
-		(data: BorrowHistoryReponse, columnKey: Key) => {
-			const cellValue = data[columnKey as keyof BorrowHistoryReponse];
-			const startTime = dayjs(data.peminjaman);
-			const endTime = dayjs(data.pengembalian);
+		(data: TransaksiDetailResponse, columnKey: Key) => {
+			const cellValue = data[columnKey as keyof TransaksiDetailResponse];
 
 			switch (columnKey) {
-				case 'name':
+				case "name":
 					return (
 						<User
-							avatarProps={{ radius: 'lg' }}
-							description={data.role}
-							name={cellValue}>
-							{data.name}
+							avatarProps={{ radius: "lg" }}
+							description={
+								data.user.id_role === 2
+									? "Mahasiswa"
+									: data.user.id_role === 3
+									? "Umum"
+									: "Dosen"
+							}
+							name={data.user.fullname}>
+							{data.user.fullname}
 						</User>
 					);
-				case 'peminjaman':
+				case "peminjaman":
 					return (
-						<div className="flex flex-col gap-y-2">
+						<div className="flex flex-col gap-y-2 items-center">
 							<Chip
 								color="warning"
 								variant="flat"
-								className="text-bold text-sm capitalize">
-								<HiOutlineCalendarDateRange />{' '}
-								{endTime.diff(startTime, 'd', true)} Hari
+								className="text-bold text-sm capitalize flex items-center gap-x-1">
+								<HiOutlineCalendarDateRange />
+								<span>{data.overdue_days} Hari</span>
 							</Chip>
 						</div>
 					);
-				case 'status':
+				case "status":
 					return (
 						<Chip
 							className="capitalize"
 							color={statusColorMap[data.status]}
 							size="sm"
 							variant="flat">
-							{cellValue}
+							{data.status}
 						</Chip>
 					);
 				default:
-					return cellValue;
+					return typeof cellValue === "object" && cellValue !== null
+						? JSON.stringify(cellValue)
+						: cellValue?.toString() || null;
 			}
 		},
 		[]

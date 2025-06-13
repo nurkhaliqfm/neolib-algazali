@@ -33,7 +33,6 @@ export function DashboardChart({
 }: {
 	data: StatistikTransaksiResponse[];
 }) {
-	console.log(data);
 	return (
 		<Card className="md:col-span-2 col-span-1 h-fit">
 			<CardHeader>
