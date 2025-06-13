@@ -60,14 +60,11 @@ export function DashboardBorrowTable({
 					);
 				case "peminjaman":
 					return (
-						<div className="flex flex-col gap-y-2 items-center">
-							<Chip
-								color="warning"
-								variant="flat"
-								className="text-bold text-sm capitalize flex items-center gap-x-1">
-								<HiOutlineCalendarDateRange />
-								<span>{data.overdue_days} Hari</span>
-							</Chip>
+						<div className="flex items-center justify-center gap-x-1 bg-warning-100 rounded-full py-1 px-2">
+							<HiOutlineCalendarDateRange />
+							<span className="whitespace-nowrap">
+								{data.overdue_days} Hari
+							</span>
 						</div>
 					);
 				case "status":
@@ -90,7 +87,7 @@ export function DashboardBorrowTable({
 	);
 
 	return (
-		<Table aria-label="Data peminjaman perpustakaan">
+		<Table aria-label="Data peminjaman perpustakaan" shadow="none">
 			<TableHeader columns={lastBorrowHeaderTable}>
 				{(column) => (
 					<TableColumn key={column.slug} align="start">

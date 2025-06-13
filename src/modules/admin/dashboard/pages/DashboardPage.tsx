@@ -15,6 +15,7 @@ import {
 } from "../services/statistikService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { TransaksiDetailResponse } from "../../transaksi/types/transaksi.type";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 
 function DashboardPage() {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
@@ -82,7 +83,16 @@ function DashboardPage() {
 
 			<section className="my-4 grid grid-cols-1 xl:grid-cols-3 gap-y-4 xl:gap-x-4 auto-rows-max">
 				<DashboardChart data={statistikTransaksiData} />
-				<DashboardBorrowTable data={latestTransaksiData} />
+				<Card className="py-4 flex-1 border rounded-2xl h-fit" shadow="sm">
+					<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+						<p className="text-tiny uppercase font-bold">
+							Daftar Pinjaman Anggota
+						</p>
+					</CardHeader>
+					<CardBody className="overflow-visible py-2 px-0">
+						<DashboardBorrowTable data={latestTransaksiData} />
+					</CardBody>
+				</Card>
 			</section>
 		</>
 	);
