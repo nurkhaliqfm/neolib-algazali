@@ -60,9 +60,19 @@ const AnggotaTransaksiTable = ({
 						<>{userRoleMap[data.user.id_role as keyof typeof userRoleMap]}</>
 					);
 				case "overdue":
-					return <>{data.overdue_days} Hari</>;
+					return (
+						<p className="text-center">
+							{data.status === "RETURNED" ? "-" : `${data.overdue_days} Hari`}
+						</p>
+					);
 				case "denda":
-					return <>{moneyConverter(String(data.denda))}</>;
+					return (
+						<p className="text-center">
+							{data.status === "RETURNED"
+								? "-"
+								: moneyConverter(String(data.denda))}
+						</p>
+					);
 				case "status":
 					return (
 						<Chip
@@ -74,9 +84,17 @@ const AnggotaTransaksiTable = ({
 						</Chip>
 					);
 				case "borrowedAt":
-					return <>{dayjs(data.borrowedAt).format("DD MMMM YYYY")}</>;
+					return (
+						<p className="text-center">
+							{dayjs(data.borrowedAt).format("DD MMMM YYYY")}
+						</p>
+					);
 				case "returnedAt":
-					return <>{dayjs(data.returnedAt).format("DD MMMM YYYY")}</>;
+					return (
+						<p className="text-center">
+							{dayjs(data.returnedAt).format("DD MMMM YYYY")}
+						</p>
+					);
 				// case "actions":
 				// 	return (
 				// 		<div className="relative flex items-center gap-2">
@@ -199,7 +217,6 @@ const AnggotaTransaksiTable = ({
 			}
 			classNames={{
 				base: "max-h-[520px] overflow-scroll",
-				table: "min-h-[420px]",
 			}}>
 			<TableHeader columns={TransaksiHeaderTable}>
 				{(column) => (
