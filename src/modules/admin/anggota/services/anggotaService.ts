@@ -367,10 +367,14 @@ const getAnggotaDocument = async ({
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			const axiosError = error as AxiosError<ApiError>;
+			const resErrorAsBlob = axiosError.response?.data as unknown as Blob;
+			const resErrorText = await resErrorAsBlob.text();
+			const resError = JSON.parse(resErrorText);
+
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.response?.data.error || axiosError.message,
+					error: resError.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
