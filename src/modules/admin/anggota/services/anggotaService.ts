@@ -367,7 +367,6 @@ const getAnggotaDocument = async ({
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			const axiosError = error as AxiosError<ApiError>;
-			console.log(axiosError);
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,

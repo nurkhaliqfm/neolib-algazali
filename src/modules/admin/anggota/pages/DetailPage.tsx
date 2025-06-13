@@ -64,7 +64,6 @@ const DetailAnggotaPage = () => {
 				type: group,
 				anggota: String(id_user),
 				onDone: (response) => {
-					console.log(response.data);
 					if (response.status === 200) {
 						toast.success(response.message, {
 							autoClose: 700,

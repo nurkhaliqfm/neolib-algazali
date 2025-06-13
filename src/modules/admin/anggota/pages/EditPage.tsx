@@ -183,7 +183,6 @@ const EditAnggotaPage = () => {
 																ff.name as keyof typeof anggotaFormSelectOptios
 															].find((item) => item.id === Number(value));
 
-															console.log(selectedOptions);
 															field.onChange(selectedOptions || null);
 														}}
 														value={
