@@ -9,6 +9,7 @@ import {
 	Spinner,
 	Button,
 	Chip,
+	Tooltip,
 } from "@heroui/react";
 import { TransaksiDetailResponse } from "../../transaksi/types/transaksi.type";
 import { userRoleMap } from "@/constants/user";
@@ -18,14 +19,29 @@ import {
 	typeTransaksiColorMap,
 } from "@/constants/transaksi";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
+import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from "react-icons/hi2";
+import AppRoutes from "@/router/routes";
+import {
+	AlertDialog,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const AnggotaTransaksiTable = ({
 	transaksi,
 }: {
 	transaksi: TransaksiDetailResponse[];
 }) => {
+	const navigate = useNavigate();
 	const [page, setPage] = useState(1);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
 	const itemCountShow = 5;
 	const pageLimit = Math.ceil(transaksi.length / itemCountShow);
@@ -95,88 +111,91 @@ const AnggotaTransaksiTable = ({
 							{dayjs(data.returnedAt).format("DD MMMM YYYY")}
 						</p>
 					);
-				// case "actions":
-				// 	return (
-				// 		<div className="relative flex items-center gap-2">
-				// 			<Tooltip color="warning" content="Detail Repository">
-				// 				<button
-				// 					onClick={() =>
-				// 						navigate(
-				// 							`${AppRoutes.AdminDetailTransaksi}?transaksi=${data.id}`
-				// 						)
-				// 					}
-				// 					className="text-lg text-warning cursor-pointer active:opacity-50">
-				// 					<HiOutlineEye />
-				// 				</button>
-				// 			</Tooltip>
-				// 			<Tooltip color="success" content="Edit Repository">
-				// 				<button
-				// 					onClick={() =>
-				// 						navigate(
-				// 							`${AppRoutes.AdminEditTransaksi}?transaksi=${data.id}`
-				// 						)
-				// 					}
-				// 					className="text-lg text-success cursor-pointer active:opacity-50">
-				// 					<HiOutlinePencil />
-				// 				</button>
-				// 			</Tooltip>
-				// 			<AlertDialog>
-				// 				<Tooltip color="danger" content="Delete Repository">
-				// 					<AlertDialogTrigger asChild>
-				// 						<button className="text-lg text-danger cursor-pointer active:opacity-50">
-				// 							<HiOutlineTrash />
-				// 						</button>
-				// 					</AlertDialogTrigger>
-				// 				</Tooltip>
-				// 				<AlertDialogContent>
-				// 					<AlertDialogHeader>
-				// 						<AlertDialogTitle>
-				// 							Apakah anda yakin ingin menghapus transaksi ini?
-				// 						</AlertDialogTitle>
-				// 						<AlertDialogDescription>
-				// 							Transaksi <b>""</b> Tindakan ini tidak dapat dibatalkan.
-				// 							Ini akan secara permanen menghapus transaksi dari server
-				// 							kami.
-				// 						</AlertDialogDescription>
-				// 					</AlertDialogHeader>
-				// 					<AlertDialogFooter>
-				// 						<AlertDialogCancel>Batal</AlertDialogCancel>
-				// 						<Button
-				// 							size="md"
-				// 							isLoading={isLoadingDelete}
-				// 							spinner={
-				// 								<svg
-				// 									className="animate-spin h-5 w-5 text-current"
-				// 									fill="none"
-				// 									viewBox="0 0 24 24"
-				// 									xmlns="http://www.w3.org/2000/svg">
-				// 									<circle
-				// 										className="opacity-25"
-				// 										cx="12"
-				// 										cy="12"
-				// 										r="10"
-				// 										stroke="currentColor"
-				// 										strokeWidth="4"
-				// 									/>
-				// 									<path
-				// 										className="opacity-75"
-				// 										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-				// 										fill="currentColor"
-				// 									/>
-				// 								</svg>
-				// 							}
-				// 							color="danger"
-				// 							variant="solid"
-				// 							onPress={() => {
-				// 								setIsLoadingDelete(true);
-				// 							}}>
-				// 							Hapus
-				// 						</Button>
-				// 					</AlertDialogFooter>
-				// 				</AlertDialogContent>
-				// 			</AlertDialog>
-				// 		</div>
-				// 	);
+				case "actions":
+					return (
+						<div className="relative flex items-center gap-2">
+							<Tooltip color="warning" content="Detail Pinjaman">
+								<button
+									onClick={() =>
+										navigate(
+											`${AppRoutes.AdminDetailTransaksi}?transaksi=${data.id}`
+										)
+									}
+									className="text-lg text-warning cursor-pointer active:opacity-50">
+									<HiOutlineEye />
+								</button>
+							</Tooltip>
+							{data.status === "BORROWED" && (
+								<Tooltip color="success" content="Edit Pinjaman">
+									<button
+										onClick={() =>
+											navigate(
+												`${AppRoutes.AdminEditTransaksi}?transaksi=${data.id}`
+											)
+										}
+										className="text-lg text-success cursor-pointer active:opacity-50">
+										<HiOutlinePencil />
+									</button>
+								</Tooltip>
+							)}
+
+							<AlertDialog>
+								<Tooltip color="danger" content="Delete Pinjaman">
+									<AlertDialogTrigger asChild>
+										<button className="text-lg text-danger cursor-pointer active:opacity-50">
+											<HiOutlineTrash />
+										</button>
+									</AlertDialogTrigger>
+								</Tooltip>
+								<AlertDialogContent>
+									<AlertDialogHeader>
+										<AlertDialogTitle>
+											Apakah anda yakin ingin menghapus transaksi ini?
+										</AlertDialogTitle>
+										<AlertDialogDescription>
+											Transaksi <b>""</b> Tindakan ini tidak dapat dibatalkan.
+											Ini akan secara permanen menghapus transaksi dari server
+											kami.
+										</AlertDialogDescription>
+									</AlertDialogHeader>
+									<AlertDialogFooter>
+										<AlertDialogCancel>Batal</AlertDialogCancel>
+										<Button
+											size="md"
+											isLoading={isLoadingDelete}
+											spinner={
+												<svg
+													className="animate-spin h-5 w-5 text-current"
+													fill="none"
+													viewBox="0 0 24 24"
+													xmlns="http://www.w3.org/2000/svg">
+													<circle
+														className="opacity-25"
+														cx="12"
+														cy="12"
+														r="10"
+														stroke="currentColor"
+														strokeWidth="4"
+													/>
+													<path
+														className="opacity-75"
+														d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+														fill="currentColor"
+													/>
+												</svg>
+											}
+											color="danger"
+											variant="solid"
+											onPress={() => {
+												setIsLoadingDelete(true);
+											}}>
+											Hapus
+										</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
+						</div>
+					);
 				default:
 					return (
 						<>
@@ -187,6 +206,7 @@ const AnggotaTransaksiTable = ({
 					);
 			}
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
 
