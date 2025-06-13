@@ -109,6 +109,7 @@ export const reposHasFile = ["EJURNAL", "SKRIPSI", "EBOOK"];
 
 export const repositoryBaseFieldConfig = [
 	{ name: "judul", label: "Judul Repository", type: "text", required: true },
+	{ name: "pengarang", label: "Pengarang", type: "text", required: true },
 	{
 		name: "nama_sampul",
 		label: "Nama Sampul",
@@ -128,7 +129,7 @@ export const repositoryBaseFieldConfig = [
 export const repositoryFieldConfig = {
 	jurnal: [
 		{ name: "abstrak", label: "Abstrak", type: "textarea", required: false },
-		{ name: "pengarang", label: "Pengarang", type: "text", required: true },
+		// { name: "pengarang", label: "Pengarang", type: "text", required: true },
 		{ name: "penerbit", label: "Penerbit", type: "text", required: false },
 		{ name: "jurnal", label: "Jurnal", type: "text", required: false },
 		{
@@ -142,7 +143,7 @@ export const repositoryFieldConfig = {
 	],
 	ejurnal: [
 		{ name: "abstrak", label: "Abstrak", type: "textarea", required: false },
-		{ name: "pengarang", label: "Pengarang", type: "text", required: true },
+		// { name: "pengarang", label: "Pengarang", type: "text", required: true },
 		{ name: "penerbit", label: "Penerbit", type: "text", required: false },
 		{ name: "jurnal", label: "Jurnal", type: "text", required: false },
 		{
@@ -154,7 +155,7 @@ export const repositoryFieldConfig = {
 		{ name: "isbn", label: "ISBN", type: "text", required: false },
 	],
 	ebook: [
-		{ name: "pengarang", label: "Pengarang", type: "text", required: true },
+		// { name: "pengarang", label: "Pengarang", type: "text", required: true },
 		{ name: "sinopsis", label: "Sinopsis", type: "textarea", required: false },
 		{ name: "cetakan", label: "Cetakan", type: "text", required: false },
 		{ name: "penerbit", label: "Penerbit", type: "text", required: true },
@@ -173,7 +174,7 @@ export const repositoryFieldConfig = {
 		{ name: "isbn", label: "ISBN", type: "text", required: false },
 	],
 	buku: [
-		{ name: "pengarang", label: "Pengarang", type: "text", required: true },
+		// { name: "pengarang", label: "Pengarang", type: "text", required: true },
 		{ name: "sinopsis", label: "Sinopsis", type: "textarea", required: false },
 		{ name: "cetakan", label: "Cetakan", type: "text", required: false },
 		{ name: "penerbit", label: "Penerbit", type: "text", required: true },
@@ -216,7 +217,7 @@ export const repositoryFieldConfig = {
 	],
 	skripsi: [
 		{ name: "abstrak", label: "Abstrak", type: "textarea", required: false },
-		{ name: "pengarang", label: "Pengarang", type: "text", required: true },
+		// { name: "pengarang", label: "Pengarang", type: "text", required: true },
 		{ name: "fakultas", label: "Fakultas", type: "text", required: false },
 		{ name: "prodi", label: "Program Studi", type: "select", required: true },
 		{
