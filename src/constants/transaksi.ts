@@ -13,6 +13,7 @@ export const typeTransaksiColorMap: Record<
 
 export const TransaksiHeaderTable: TableHeaderComponent[] = [
 	{ name: "JUDUL", slug: "judul" },
+	{ name: "PENGARANG", slug: "pengarang" },
 	{ name: "PEMINJAM", slug: "peminjam" },
 	{ name: "ANGGOTA", slug: "anggota" },
 	{ name: "STATUS", slug: "status" },

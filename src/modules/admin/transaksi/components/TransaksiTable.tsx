@@ -43,7 +43,7 @@ import {
 	typeTransaksiColorMap,
 } from "@/constants/transaksi";
 import dayjs from "dayjs";
-import { userRoleMap } from "@/constants/user";
+import { typeAnggotaColorMap, userRoleMap } from "@/constants/user";
 import { moneyConverter } from "@/utils/moneyFormatter";
 
 export function TransaksiTable({
@@ -142,11 +142,23 @@ export function TransaksiTable({
 			switch (columnKey) {
 				case "judul":
 					return <>{data.repository.judul}</>;
+				case "pengarang":
+					return <>{data.repository.pengarang}</>;
 				case "peminjam":
 					return <>{data.user.fullname}</>;
 				case "anggota":
 					return (
-						<>{userRoleMap[data.user.id_role as keyof typeof userRoleMap]}</>
+						<Chip
+							className="capitalize"
+							color={
+								typeAnggotaColorMap[
+									userRoleMap[data.user.id_role as keyof typeof userRoleMap]
+								]
+							}
+							size="sm"
+							variant="flat">
+							{userRoleMap[data.user.id_role as keyof typeof userRoleMap]}
+						</Chip>
 					);
 				case "overdue":
 					return <>{data.overdue_days} Hari</>;

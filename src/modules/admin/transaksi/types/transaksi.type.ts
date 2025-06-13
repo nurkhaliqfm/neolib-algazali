@@ -16,7 +16,7 @@ export interface TransaksiDetailResponse {
 	repository: {
 		id: number;
 		judul: string;
-		// pengarang: string;
+		pengarang: string;
 		type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
 	};
 	status: "BORROWED" | "RETURNED" | "LOST" | "DAMAGED" | "AVAILABLE";
