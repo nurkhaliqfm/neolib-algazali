@@ -169,7 +169,7 @@ export function TransaksiTable({
 				case "actions":
 					return (
 						<div className="relative flex items-center gap-2">
-							<Tooltip color="warning" content="Detail Repository">
+							<Tooltip color="warning" content="Detail Pinjaman">
 								<button
 									onClick={() =>
 										navigate(
@@ -180,7 +180,7 @@ export function TransaksiTable({
 									<HiOutlineEye />
 								</button>
 							</Tooltip>
-							<Tooltip color="success" content="Edit Repository">
+							<Tooltip color="success" content="Edit Pinjaman">
 								<button
 									onClick={() =>
 										navigate(
@@ -192,7 +192,7 @@ export function TransaksiTable({
 								</button>
 							</Tooltip>
 							<AlertDialog>
-								<Tooltip color="danger" content="Delete Repository">
+								<Tooltip color="danger" content="Delete Pinjaman">
 									<AlertDialogTrigger asChild>
 										<button className="text-lg text-danger cursor-pointer active:opacity-50">
 											<HiOutlineTrash />
@@ -202,12 +202,13 @@ export function TransaksiTable({
 								<AlertDialogContent>
 									<AlertDialogHeader>
 										<AlertDialogTitle>
-											Apakah anda yakin ingin menghapus transaksi ini?
+											Apakah anda yakin ingin menghapus pinjaman ini?
 										</AlertDialogTitle>
 										<AlertDialogDescription>
-											Transaksi <b>""</b> Tindakan ini tidak dapat dibatalkan.
-											Ini akan secara permanen menghapus transaksi dari server
-											kami.
+											Pinjaman <b>{data.user.fullname}</b> untuk{" "}
+											<b>{data.repository.judul}</b> akan dihapus. Tindakan ini
+											tidak dapat dibatalkan. Ini akan secara permanen menghapus
+											transaksi dari server kami.
 										</AlertDialogDescription>
 									</AlertDialogHeader>
 									<AlertDialogFooter>

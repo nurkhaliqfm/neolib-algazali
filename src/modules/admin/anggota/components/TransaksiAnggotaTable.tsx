@@ -150,12 +150,13 @@ const AnggotaTransaksiTable = ({
 								<AlertDialogContent>
 									<AlertDialogHeader>
 										<AlertDialogTitle>
-											Apakah anda yakin ingin menghapus transaksi ini?
+											Apakah anda yakin ingin menghapus pinjaman ini?
 										</AlertDialogTitle>
 										<AlertDialogDescription>
-											Transaksi <b>""</b> Tindakan ini tidak dapat dibatalkan.
-											Ini akan secara permanen menghapus transaksi dari server
-											kami.
+											Pinjaman <b>{data.user.fullname}</b> untuk{" "}
+											<b>{data.repository.judul}</b> akan dihapus. Tindakan ini
+											tidak dapat dibatalkan. Ini akan secara permanen menghapus
+											transaksi dari server kami.
 										</AlertDialogDescription>
 									</AlertDialogHeader>
 									<AlertDialogFooter>
