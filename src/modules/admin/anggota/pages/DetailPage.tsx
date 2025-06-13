@@ -89,13 +89,22 @@ const DetailAnggotaPage = () => {
 					}
 				},
 				onError: (error) => {
-					toast.error(error.error, {
-						theme: "colored",
-						autoClose: 700,
-						onClose: () => {
-							setIsLoadingDownload(false);
-						},
-					});
+					if (error.status === 406) {
+						toast.info(error.error, {
+							theme: "colored",
+							onClose: () => {
+								setIsLoadingDownload(false);
+							},
+						});
+					} else {
+						toast.error(error.error, {
+							theme: "colored",
+							autoClose: 700,
+							onClose: () => {
+								setIsLoadingDownload(false);
+							},
+						});
+					}
 				},
 			});
 		}
