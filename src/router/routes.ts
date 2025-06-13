@@ -95,7 +95,10 @@ const AppRoutes = {
 		label: "Admin Tambah Anggota E-Library | ITB Al-Gazali Barru",
 	},
 
-	AdminPassword: { path: "/admin/password", label: "Password" },
+	AdminPassword: {
+		path: "/admin/password",
+		label: "Admin Reset Password E-Library | ITB Al-Gazali Barru",
+	},
 
 	// NOTE: Initial Route
 	Home: { path: "/", label: "Home E-Library | ITB Al-Gazali Barru" },

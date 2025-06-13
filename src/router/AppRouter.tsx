@@ -126,7 +126,7 @@ function AppRouter() {
 						element={
 							<AuthorizedRoute
 								allowedRoles={["Admin"]}
-								page={<Admin.PasswordPage />}
+								page={<Admin.UserPage.ResetPasswordPage />}
 							/>
 						}
 					/>
