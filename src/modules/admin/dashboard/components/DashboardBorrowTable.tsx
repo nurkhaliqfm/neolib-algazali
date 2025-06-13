@@ -60,7 +60,7 @@ export function DashboardBorrowTable({
 					);
 				case "peminjaman":
 					return (
-						<div className="flex items-center justify-center gap-x-1 bg-warning-100 rounded-full py-1 px-2">
+						<div className="flex items-center justify-center gap-x-1 bg-warning-100 rounded-full py-1 px-2 w-fit">
 							<HiOutlineCalendarDateRange />
 							<span className="whitespace-nowrap">
 								{data.overdue_days} Hari

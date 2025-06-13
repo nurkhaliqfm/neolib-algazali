@@ -30,11 +30,13 @@ const chartConfig = {
 
 export function DashboardChart({
 	data,
+	className,
 }: {
 	data: StatistikTransaksiResponse[];
+	className?: string;
 }) {
 	return (
-		<Card className="md:col-span-2 col-span-1 h-fit">
+		<Card className={className}>
 			<CardHeader>
 				<CardTitle>Data Peminjaman</CardTitle>
 				<CardDescription>
@@ -42,7 +44,7 @@ export function DashboardChart({
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<ChartContainer config={chartConfig}>
+				<ChartContainer config={chartConfig} className="xl:h-96 mx-auto">
 					<BarChart accessibilityLayer data={data}>
 						<CartesianGrid vertical={false} />
 						<XAxis

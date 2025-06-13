@@ -81,9 +81,12 @@ function DashboardPage() {
 				</section>
 			)}
 
-			<section className="my-4 grid grid-cols-1 xl:grid-cols-3 gap-y-4 xl:gap-x-4 auto-rows-max">
-				<DashboardChart data={statistikTransaksiData} />
-				<Card className="py-4 flex-1 border rounded-2xl h-fit" shadow="sm">
+			<section className="my-4 flex flex-col xl:flex-row gap-y-4 xl:gap-x-4 auto-rows-max">
+				<DashboardChart
+					className="flex-1 col-span-1"
+					data={statistikTransaksiData}
+				/>
+				<Card className="py-4 border rounded-2xl xl:h-1/2" shadow="sm">
 					<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
 						<p className="text-tiny uppercase font-bold">
 							Daftar Pinjaman Anggota
