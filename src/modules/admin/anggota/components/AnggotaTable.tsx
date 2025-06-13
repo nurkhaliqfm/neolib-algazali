@@ -196,7 +196,7 @@ export function AnggotaTable({
 								</button>
 							</Tooltip>
 							<AlertDialog>
-								<Tooltip color="danger" content="Delete Repository">
+								<Tooltip color="danger" content="Delete Anggota">
 									<AlertDialogTrigger asChild>
 										<button className="text-lg text-danger cursor-pointer active:opacity-50">
 											<HiOutlineTrash />
