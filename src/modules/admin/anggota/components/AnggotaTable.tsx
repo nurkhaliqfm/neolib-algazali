@@ -39,7 +39,7 @@ import { typeAnggotaColorMap } from "@/constants/user";
 import { AnggotaItemKey } from "@/types/anggota";
 import { deleteAnggota } from "../services/anggotaService";
 
-const RepositoryHeaderTable: TableHeaderComponent[] = [
+const AnggotaHeaderTable: TableHeaderComponent[] = [
 	{ name: "NAMA", slug: "nama" },
 	{ name: "ALAMAT", slug: "alamat" },
 	{ name: "KONTAK", slug: "kontak" },
@@ -321,7 +321,7 @@ export function AnggotaTable({
 					/>
 				</div>
 			}>
-			<TableHeader columns={RepositoryHeaderTable}>
+			<TableHeader columns={AnggotaHeaderTable}>
 				{(column) => (
 					<TableColumn key={column.slug} align="start">
 						{column.name}

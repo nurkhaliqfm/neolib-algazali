@@ -173,7 +173,7 @@ const updateRepository = async ({
 				} else {
 					repositoryBodyRequest.append(
 						`data[${key}]`,
-						data[key as keyof typeof data] as string
+						data[key as keyof typeof data] as unknown as string
 					);
 				}
 			}
@@ -267,7 +267,7 @@ const createRepository = async ({
 				} else {
 					repositoryBodyRequest.append(
 						`data[${key}]`,
-						data[key as keyof typeof data] as string
+						data[key as keyof typeof data] as unknown as string
 					);
 				}
 			}

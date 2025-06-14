@@ -5,6 +5,12 @@ export const userRoleMap = {
 	4: "DOSEN",
 } as const;
 
+export const anggotaTypeMap = {
+	MAHASISWA: "mahasiswa",
+	UMUM: "umum",
+	DOSEN: "dosen",
+} as const;
+
 export const typeAnggotaColorMap: Record<
 	string,
 	"success" | "danger" | "default" | "warning" | "primary" | undefined

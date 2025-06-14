@@ -1,6 +1,7 @@
 import {
 	Button,
 	Chip,
+	Image,
 	Input,
 	Pagination,
 	Spinner,
@@ -23,7 +24,10 @@ import {
 import { TableHeaderComponent } from "@/types/global";
 import { SetURLSearchParams, useNavigate } from "react-router-dom";
 import AppRoutes from "@/router/routes";
-import { typeRepositoryColorMap } from "@/constants/repository";
+import {
+	repositoryTypeMap,
+	typeRepositoryColorMap,
+} from "@/constants/repository";
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -38,10 +42,12 @@ import { deleteRepository } from "../services/koleksiService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { toast } from "react-toastify";
 
+const { VITE_SERVER_BASE_URL } = import.meta.env;
+
 const RepositoryHeaderTable: TableHeaderComponent[] = [
+	{ name: "SAMPUL", slug: "nama_sampul" },
 	{ name: "JUDUL", slug: "judul" },
 	{ name: "PENGARANG", slug: "pengarang" },
-	{ name: "NAMA SAMPUL", slug: "nama_sampul" },
 	{ name: "NAMA FILE", slug: "nama_file" },
 	{ name: "JENIS", slug: "type" },
 	{ name: "ACTIONS", slug: "actions" },
@@ -145,7 +151,16 @@ export function RepositoryTable({
 			case "judul":
 				return <>{data.judul}</>;
 			case "nama_sampul":
-				return <>{data.nama_sampul}</>;
+				return (
+					<Image
+						alt="Cover Repository"
+						className="object-cover rounded-xl"
+						src={`${VITE_SERVER_BASE_URL}/public/${
+							repositoryTypeMap[data.type]
+						}/sampul/${data.nama_sampul || "-"}`}
+						width={320}
+					/>
+				);
 			case "nama_file":
 				return <>{data.nama_file}</>;
 			case "type":
