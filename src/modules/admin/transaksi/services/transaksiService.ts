@@ -51,17 +51,22 @@ const getListTransaksi = async ({
 
 const createtTransaksi = async ({
 	token,
+	data,
 	onDone,
 	onError,
 }: {
 	token: string | null | undefined;
+	data: {
+		user: number;
+		repos: number;
+	};
 	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
 		const response = await axios.post(
 			`${VITE_SERVER_BASE_URL}/admin/transaksi/create`,
-			{ data: "" },
+			data,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -71,7 +76,8 @@ const createtTransaksi = async ({
 		if (onDone)
 			onDone({
 				status: response.status,
-				message: response.data.message || "Anggota created successfully",
+				message:
+					response.data.message || "Transaksi peminjaman created successfully",
 			});
 	} catch (error) {
 		if (axios.isAxiosError(error)) {

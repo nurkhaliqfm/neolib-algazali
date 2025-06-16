@@ -44,7 +44,6 @@ export function SelectionAnggotaTable({
 	data,
 	search,
 	type,
-	selectedItem,
 	setType,
 	setSearchParams,
 	setSelectedItem,
@@ -52,13 +51,13 @@ export function SelectionAnggotaTable({
 	data: AnggotaResponse;
 	search: string;
 	type: Selection;
-	selectedItem: Selection;
 	setType: Dispatch<SetStateAction<Selection>>;
 	setSearchParams: Dispatch<SetStateAction<string>>;
-	setSelectedItem: Dispatch<SetStateAction<Selection>>;
+	setSelectedItem: Dispatch<SetStateAction<AnggotaDetailResponse | undefined>>;
 }) {
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(search);
+	const [selectedKey, setSelectedKey] = useState<Selection>(new Set());
 
 	const onSearchChange = (value: string) => {
 		setFilterValue(value);
@@ -154,8 +153,17 @@ export function SelectionAnggotaTable({
 			selectionBehavior="toggle"
 			selectionMode="single"
 			topContent={topContent}
-			selectedKeys={selectedItem}
-			onSelectionChange={setSelectedItem}>
+			selectedKeys={selectedKey}
+			onSelectionChange={(e) => {
+				const selectedAnggota = data.anggota.find(
+					(item) => item.id === Number(Array.from(e)[0])
+				);
+
+				if (selectedAnggota) {
+					setSelectedItem(selectedAnggota);
+					setSelectedKey(e);
+				}
+			}}>
 			<TableHeader columns={AnggotaHeaderTable}>
 				{(column) => <TableColumn key={column.slug}>{column.name}</TableColumn>}
 			</TableHeader>

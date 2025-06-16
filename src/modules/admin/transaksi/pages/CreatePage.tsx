@@ -1,20 +1,38 @@
-import { Button, Selection } from "@heroui/react";
+import {
+	Button,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	Selection,
+	useDisclosure,
+} from "@heroui/react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getListAnggotaPagination } from "../../anggota/services/anggotaService";
 import { anggotaTypeMap } from "@/constants/user";
-import { AnggotaResponse } from "../../anggota/types/anggota.type";
-import { RepositoryResponse } from "../../koleksi/types/koleksi.type";
+import {
+	AnggotaDetailResponse,
+	AnggotaResponse,
+} from "../../anggota/types/anggota.type";
+import {
+	RepositoryDetailResponse,
+	RepositoryResponse,
+} from "../../koleksi/types/koleksi.type";
 import { getListRepositoryPagination } from "../../koleksi/services/koleksiService";
 import { repositoryTypeMap } from "@/constants/repository";
 import { SelectionAnggotaTable } from "../components/SelectionAnggotaTable";
 import { SelectionKoleksiTable } from "../components/SelectionKoleksiTable";
 import { toast } from "react-toastify";
+import { createtTransaksi } from "../services/transaksiService";
+import AppRoutes from "@/router/routes";
 
 const CreateTransaksiPage = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const navigate = useNavigate();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [isLoadingCreate, setIsLoadingCreate] = useState(false);
 	const [selectedAnggotaGroup, setSelectedAnggotaGroup] = useState<Selection>(
@@ -28,43 +46,62 @@ const CreateTransaksiPage = () => {
 		useState<RepositoryResponse | null>(null);
 
 	const [selectedRepositoryBorrowed, setSelectedRepositoryBorrowed] =
-		useState<Selection>(new Set());
+		useState<RepositoryDetailResponse>();
 
 	const [selectedAnggotaBorrowed, setSelectedAnggotaBorrowed] =
-		useState<Selection>(new Set());
+		useState<AnggotaDetailResponse>();
 
 	const [searchRepos, setSearchRepos] = useState<string>("");
 	const [searchAnggota, setSearchAnggota] = useState<string>("");
 
-	const handleNextButton = () => {
-		const anggotaId = Array.from(selectedAnggotaBorrowed)[0];
-		const repositoryId = Array.from(selectedRepositoryBorrowed)[0];
-		if (!(anggotaId && repositoryId))
+	const handleConfirmationModalButton = () => {
+		if (selectedAnggotaBorrowed && selectedRepositoryBorrowed) {
+			onOpen();
+		} else {
 			toast.error("Data Anggota dan Repository harus dipilih", {
 				theme: "colored",
 				autoClose: 700,
 			});
+		}
+	};
 
-		const anggota = anggotaData?.anggota.find(
-			(item) => item.id === Number(anggotaId)
-		);
-
-		const repository = repositoryData?.repository.find(
-			(item) => item.id === Number(repositoryId)
-		);
-
-		console.log(
-			"selectedRepositoryBorrowed",
-			selectedRepositoryBorrowed,
-			repositoryId,
-			repository
-		);
-		console.log(
-			"selectedAnggotaBorrowed",
-			selectedAnggotaBorrowed,
-			anggotaId,
-			anggota
-		);
+	const handleConfirmationButton = () => {
+		if (selectedAnggotaBorrowed && selectedRepositoryBorrowed) {
+			createtTransaksi({
+				token: user?.access_token,
+				data: {
+					user: selectedAnggotaBorrowed.id,
+					repos: selectedRepositoryBorrowed.id,
+				},
+				onDone: (data) => {
+					if (data.status === 201) {
+						toast.success(data.message, {
+							autoClose: 700,
+							onClose: () => {
+								navigate(AppRoutes.AdminTransaksi.path);
+							},
+						});
+					} else {
+						toast.error(data.message, {
+							theme: "colored",
+							autoClose: 700,
+							onClose: () => {
+								setIsLoadingCreate(false);
+							},
+						});
+					}
+				},
+				onError: (error) => {
+					toast.error(error.error, {
+						theme: "colored",
+						autoClose: 700,
+						onClose: () => {
+							setIsLoadingCreate(false);
+						},
+					});
+				},
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -106,6 +143,64 @@ const CreateTransaksiPage = () => {
 
 	return (
 		<>
+			<Modal isOpen={isOpen} size="sm" onClose={onClose}>
+				<ModalContent>
+					{(onClose) => (
+						<>
+							<ModalHeader className="flex flex-col gap-1">
+								Konfirmasi Peminjaman Anggota
+							</ModalHeader>
+							<ModalBody>
+								<p>
+									Anggota atas nama <b>{selectedAnggotaBorrowed?.fullname}</b>{" "}
+									akan meminjaman repositori dari perpustakaan ITBA Al-Gazali
+									sebagai berikut:
+								</p>
+								<p>
+									<b>{selectedRepositoryBorrowed?.judul}</b> -{" "}
+									{selectedRepositoryBorrowed?.pengarang}(
+									<i>
+										<b>{selectedRepositoryBorrowed?.type}</b>
+									</i>
+									)
+								</p>
+							</ModalBody>
+							<ModalFooter>
+								<Button color="danger" variant="light" onPress={onClose}>
+									Batal
+								</Button>
+								<Button
+									isLoading={isLoadingCreate}
+									spinner={
+										<svg
+											className="animate-spin h-5 w-5 text-current"
+											fill="none"
+											viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg">
+											<circle
+												className="opacity-25"
+												cx="12"
+												cy="12"
+												r="10"
+												stroke="currentColor"
+												strokeWidth="4"
+											/>
+											<path
+												className="opacity-75"
+												d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+												fill="currentColor"
+											/>
+										</svg>
+									}
+									color="primary"
+									onPress={() => handleConfirmationButton()}>
+									Konfirmasi
+								</Button>
+							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
 			{anggotaData && repositoryData && (
 				<section className="flex flex-col gap-y-4 px-4">
 					<Fragment>
@@ -124,7 +219,6 @@ const CreateTransaksiPage = () => {
 								setType={setSelectedAnggotaGroup}
 								setSearchParams={setSearchAnggota}
 								search={searchAnggota}
-								selectedItem={selectedAnggotaBorrowed}
 								setSelectedItem={setSelectedAnggotaBorrowed}
 							/>
 						</div>
@@ -146,7 +240,6 @@ const CreateTransaksiPage = () => {
 								setType={setSelectedReposType}
 								setSearchParams={setSearchRepos}
 								search={searchRepos}
-								selectedItem={selectedRepositoryBorrowed}
 								setSelectedItem={setSelectedRepositoryBorrowed}
 							/>
 						</div>
@@ -156,7 +249,7 @@ const CreateTransaksiPage = () => {
 
 			<div className="flex justify-end items-end mt-4">
 				<Button
-					onPress={() => handleNextButton()}
+					onPress={() => handleConfirmationModalButton()}
 					size="md"
 					variant="shadow"
 					color="primary">

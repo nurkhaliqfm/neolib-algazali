@@ -24,6 +24,7 @@ import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { TableHeaderComponent } from "@/types/global";
 import {
 	BaseRepository,
+	RepositoryDetailResponse,
 	RepositoryResponse,
 } from "../../koleksi/types/koleksi.type";
 import { repositoryTypeMap } from "@/constants/repository";
@@ -46,7 +47,6 @@ export function SelectionKoleksiTable({
 	data,
 	search,
 	type,
-	selectedItem,
 	setType,
 	setSearchParams,
 	setSelectedItem,
@@ -54,13 +54,15 @@ export function SelectionKoleksiTable({
 	data: RepositoryResponse;
 	search: string;
 	type: Selection;
-	selectedItem: Selection;
 	setType: Dispatch<SetStateAction<Selection>>;
 	setSearchParams: Dispatch<SetStateAction<string>>;
-	setSelectedItem: Dispatch<SetStateAction<Selection>>;
+	setSelectedItem: Dispatch<
+		SetStateAction<RepositoryDetailResponse | undefined>
+	>;
 }) {
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(search);
+	const [selectedKey, setSelectedKey] = useState<Selection>(new Set());
 
 	const onSearchChange = (value: string) => {
 		setFilterValue(value);
@@ -141,8 +143,17 @@ export function SelectionKoleksiTable({
 			selectionBehavior="toggle"
 			selectionMode="single"
 			topContent={topContent}
-			selectedKeys={selectedItem}
-			onSelectionChange={setSelectedItem}>
+			selectedKeys={selectedKey}
+			onSelectionChange={(e) => {
+				const repository = data.repository.find(
+					(item) => item.id === Number(Array.from(e)[0])
+				);
+
+				if (repository) {
+					setSelectedItem(repository);
+					setSelectedKey(e);
+				}
+			}}>
 			<TableHeader columns={RepositoryHeaderTable}>
 				{(column) => <TableColumn key={column.slug}>{column.name}</TableColumn>}
 			</TableHeader>
