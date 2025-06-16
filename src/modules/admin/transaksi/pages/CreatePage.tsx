@@ -1,4 +1,4 @@
-import { Selection } from "@heroui/react";
+import { Button, Selection } from "@heroui/react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,8 +26,19 @@ const CreateTransaksiPage = () => {
 	const [repositoryData, setRepositoryData] =
 		useState<RepositoryResponse | null>(null);
 
+	const [selectedRepositoryBorrowed, setSelectedRepositoryBorrowed] =
+		useState<Selection>(new Set());
+
+	const [selectedAnggotaBorrowed, setSelectedAnggotaBorrowed] =
+		useState<Selection>(new Set());
+
 	const [searchRepos, setSearchRepos] = useState<string>("");
 	const [searchAnggota, setSearchAnggota] = useState<string>("");
+
+	const handleNextButton = () => {
+		console.log("selectedAnggotaGroup", selectedRepositoryBorrowed);
+		console.log("selectedAnggotaGroup", selectedAnggotaBorrowed);
+	};
 
 	useEffect(() => {
 		const reposType = Array.from(
@@ -86,6 +97,8 @@ const CreateTransaksiPage = () => {
 								setType={setSelectedAnggotaGroup}
 								setSearchParams={setSearchAnggota}
 								search={searchAnggota}
+								selectedItem={selectedAnggotaBorrowed}
+								setSelectedItem={setSelectedAnggotaBorrowed}
 							/>
 						</div>
 					</Fragment>
@@ -106,11 +119,23 @@ const CreateTransaksiPage = () => {
 								setType={setSelectedReposType}
 								setSearchParams={setSearchRepos}
 								search={searchRepos}
+								selectedItem={selectedRepositoryBorrowed}
+								setSelectedItem={setSelectedRepositoryBorrowed}
 							/>
 						</div>
 					</Fragment>
 				</section>
 			)}
+
+			<div className="flex justify-end items-end mt-4">
+				<Button
+					onPress={() => handleNextButton()}
+					size="md"
+					variant="shadow"
+					color="primary">
+					Selanjutnya
+				</Button>
+			</div>
 		</>
 	);
 };

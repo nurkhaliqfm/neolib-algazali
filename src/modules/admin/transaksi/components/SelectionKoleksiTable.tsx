@@ -46,14 +46,18 @@ export function SelectionKoleksiTable({
 	data,
 	search,
 	type,
+	selectedItem,
 	setType,
 	setSearchParams,
+	setSelectedItem,
 }: {
 	data: RepositoryResponse;
 	search: string;
 	type: Selection;
+	selectedItem: Selection;
 	setType: Dispatch<SetStateAction<Selection>>;
 	setSearchParams: Dispatch<SetStateAction<string>>;
+	setSelectedItem: Dispatch<SetStateAction<Selection>>;
 }) {
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(search);
@@ -131,12 +135,14 @@ export function SelectionKoleksiTable({
 	return (
 		<Table
 			isStriped
-			disallowEmptySelection
+			// disallowEmptySelection
 			color="primary"
 			aria-label="Daftar Repository For Selected Transaction"
 			selectionBehavior="toggle"
 			selectionMode="multiple"
-			topContent={topContent}>
+			topContent={topContent}
+			selectedKeys={selectedItem}
+			onSelectionChange={setSelectedItem}>
 			<TableHeader columns={RepositoryHeaderTable}>
 				{(column) => <TableColumn key={column.slug}>{column.name}</TableColumn>}
 			</TableHeader>

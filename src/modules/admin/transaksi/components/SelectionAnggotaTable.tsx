@@ -44,14 +44,18 @@ export function SelectionAnggotaTable({
 	data,
 	search,
 	type,
+	selectedItem,
 	setType,
 	setSearchParams,
+	setSelectedItem,
 }: {
 	data: AnggotaResponse;
 	search: string;
 	type: Selection;
+	selectedItem: Selection;
 	setType: Dispatch<SetStateAction<Selection>>;
 	setSearchParams: Dispatch<SetStateAction<string>>;
+	setSelectedItem: Dispatch<SetStateAction<Selection>>;
 }) {
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(search);
@@ -144,12 +148,14 @@ export function SelectionAnggotaTable({
 	return (
 		<Table
 			isStriped
-			disallowEmptySelection
+			// disallowEmptySelection
 			color="primary"
 			aria-label="Daftar Anggota For Selected Transaction"
 			selectionBehavior="toggle"
 			selectionMode="single"
-			topContent={topContent}>
+			topContent={topContent}
+			selectedKeys={selectedItem}
+			onSelectionChange={setSelectedItem}>
 			<TableHeader columns={AnggotaHeaderTable}>
 				{(column) => <TableColumn key={column.slug}>{column.name}</TableColumn>}
 			</TableHeader>
