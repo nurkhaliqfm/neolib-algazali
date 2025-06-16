@@ -81,7 +81,7 @@ export function SelectionAnggotaTable({
 				<Input
 					isClearable
 					className="w-full sm:max-w-[44%]"
-					placeholder="Search repository by judul or pengarang..."
+					placeholder="Search anggota by name or nomor identitas..."
 					startContent={<HiOutlineMagnifyingGlass />}
 					value={filterValue}
 					onClear={() => onClear()}
