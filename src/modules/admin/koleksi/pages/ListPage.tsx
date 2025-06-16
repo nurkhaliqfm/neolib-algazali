@@ -1,7 +1,7 @@
 import { RepositoryItemKey } from "@/types/repository";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { getListRepository } from "../services/koleksiService";
+import { getListRepositoryPagination } from "../services/koleksiService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { RepositoryResponse } from "../types/koleksi.type";
 import { RepositoryTable } from "../components/KoleksiTable";
@@ -23,7 +23,7 @@ const ListKoleksiPage = () => {
 
 	useEffect(() => {
 		if (koleksi) {
-			getListRepository({
+			getListRepositoryPagination({
 				token: user?.access_token,
 				page: page,
 				type: koleksi,

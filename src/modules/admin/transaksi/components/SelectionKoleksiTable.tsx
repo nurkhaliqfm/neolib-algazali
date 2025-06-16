@@ -139,7 +139,7 @@ export function SelectionKoleksiTable({
 			color="primary"
 			aria-label="Daftar Repository For Selected Transaction"
 			selectionBehavior="toggle"
-			selectionMode="multiple"
+			selectionMode="single"
 			topContent={topContent}
 			selectedKeys={selectedItem}
 			onSelectionChange={setSelectedItem}>

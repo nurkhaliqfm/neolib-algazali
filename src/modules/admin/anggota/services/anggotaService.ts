@@ -13,7 +13,7 @@ import { AnggotaItemKey } from "@/types/anggota";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
-const getListAnggota = async ({
+const getListAnggotaPagination = async ({
 	token,
 	type,
 	page,
@@ -431,7 +431,7 @@ const deleteAnggota = async ({
 };
 
 export {
-	getListAnggota,
+	getListAnggotaPagination,
 	getAnggotaDetail,
 	getAnggotaTransaksiDetail,
 	getAnggotaDocument,

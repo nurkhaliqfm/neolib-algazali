@@ -14,7 +14,7 @@ import { RepositoryItemKey } from "@/types/repository";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
-const getListRepository = async ({
+const getListRepositoryPagination = async ({
 	token,
 	type,
 	page,
@@ -353,7 +353,7 @@ const deleteRepository = async ({
 };
 
 export {
-	getListRepository,
+	getListRepositoryPagination,
 	getDetailRepository,
 	updateRepository,
 	createRepository,

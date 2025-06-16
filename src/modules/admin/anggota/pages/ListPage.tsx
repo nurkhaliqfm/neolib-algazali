@@ -6,7 +6,7 @@ import { Button } from "@heroui/react";
 import { HiOutlinePlus } from "react-icons/hi2";
 import AppRoutes from "@/router/routes";
 import { AnggotaResponse } from "../types/anggota.type";
-import { getListAnggota } from "../services/anggotaService";
+import { getListAnggotaPagination } from "../services/anggotaService";
 import { AnggotaItemKey } from "@/types/anggota";
 
 const ListAnggotaPage = () => {
@@ -22,7 +22,7 @@ const ListAnggotaPage = () => {
 
 	useEffect(() => {
 		if (group) {
-			getListAnggota({
+			getListAnggotaPagination({
 				token: user?.access_token,
 				page: page,
 				type: group,

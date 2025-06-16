@@ -2,14 +2,15 @@ import { Button, Selection } from "@heroui/react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getListAnggota } from "../../anggota/services/anggotaService";
+import { getListAnggotaPagination } from "../../anggota/services/anggotaService";
 import { anggotaTypeMap } from "@/constants/user";
 import { AnggotaResponse } from "../../anggota/types/anggota.type";
 import { RepositoryResponse } from "../../koleksi/types/koleksi.type";
-import { getListRepository } from "../../koleksi/services/koleksiService";
+import { getListRepositoryPagination } from "../../koleksi/services/koleksiService";
 import { repositoryTypeMap } from "@/constants/repository";
 import { SelectionAnggotaTable } from "../components/SelectionAnggotaTable";
 import { SelectionKoleksiTable } from "../components/SelectionKoleksiTable";
+import { toast } from "react-toastify";
 
 const CreateTransaksiPage = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
@@ -36,8 +37,34 @@ const CreateTransaksiPage = () => {
 	const [searchAnggota, setSearchAnggota] = useState<string>("");
 
 	const handleNextButton = () => {
-		console.log("selectedAnggotaGroup", selectedRepositoryBorrowed);
-		console.log("selectedAnggotaGroup", selectedAnggotaBorrowed);
+		const anggotaId = Array.from(selectedAnggotaBorrowed)[0];
+		const repositoryId = Array.from(selectedRepositoryBorrowed)[0];
+		if (!(anggotaId && repositoryId))
+			toast.error("Data Anggota dan Repository harus dipilih", {
+				theme: "colored",
+				autoClose: 700,
+			});
+
+		const anggota = anggotaData?.anggota.find(
+			(item) => item.id === Number(anggotaId)
+		);
+
+		const repository = repositoryData?.repository.find(
+			(item) => item.id === Number(repositoryId)
+		);
+
+		console.log(
+			"selectedRepositoryBorrowed",
+			selectedRepositoryBorrowed,
+			repositoryId,
+			repository
+		);
+		console.log(
+			"selectedAnggotaBorrowed",
+			selectedAnggotaBorrowed,
+			anggotaId,
+			anggota
+		);
 	};
 
 	useEffect(() => {
@@ -45,7 +72,7 @@ const CreateTransaksiPage = () => {
 			selectedReposType
 		)[0] as keyof typeof repositoryTypeMap;
 
-		getListRepository({
+		getListRepositoryPagination({
 			token: user?.access_token,
 			page: "1",
 			type: repositoryTypeMap[reposType],
@@ -64,7 +91,7 @@ const CreateTransaksiPage = () => {
 			selectedAnggotaGroup
 		)[0] as keyof typeof anggotaTypeMap;
 
-		getListAnggota({
+		getListAnggotaPagination({
 			token: user?.access_token,
 			page: "1",
 			limit: "5",

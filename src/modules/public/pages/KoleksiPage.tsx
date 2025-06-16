@@ -1,5 +1,5 @@
 import { useTypedSelector } from "@/hooks/useTypedSelector";
-import { getListRepository } from "@/modules/admin/koleksi/services/koleksiService";
+import { getListRepositoryPagination } from "@/modules/admin/koleksi/services/koleksiService";
 import { RepositoryResponse } from "@/modules/admin/koleksi/types/koleksi.type";
 import { RepositoryItemKey } from "@/types/repository";
 import { useEffect, useState } from "react";
@@ -25,7 +25,7 @@ const KoleksiPage = () => {
 	useEffect(() => {
 		if (koleksi) {
 			setIsloadingData(true);
-			getListRepository({
+			getListRepositoryPagination({
 				token: user?.access_token,
 				page: page,
 				type: koleksi,

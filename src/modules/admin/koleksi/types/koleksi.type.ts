@@ -69,7 +69,7 @@ export type RepositorySkripsi = {
 };
 
 export interface BaseRepository {
-	id: string;
+	id: number;
 	judul: string;
 	pengarang: string;
 	nama_sampul: string | null;
