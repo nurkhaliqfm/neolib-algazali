@@ -26,7 +26,7 @@ import { repositoryTypeMap } from "@/constants/repository";
 import { SelectionAnggotaTable } from "../components/SelectionAnggotaTable";
 import { SelectionKoleksiTable } from "../components/SelectionKoleksiTable";
 import { toast } from "react-toastify";
-import { createtTransaksi } from "../services/transaksiService";
+import { createTransaksi } from "../services/transaksiService";
 import AppRoutes from "@/router/routes";
 
 const CreateTransaksiPage = () => {
@@ -67,14 +67,15 @@ const CreateTransaksiPage = () => {
 
 	const handleConfirmationButton = () => {
 		if (selectedAnggotaBorrowed && selectedRepositoryBorrowed) {
-			createtTransaksi({
+			createTransaksi({
 				token: user?.access_token,
 				data: {
 					user: selectedAnggotaBorrowed.id,
 					repos: selectedRepositoryBorrowed.id,
+					type: selectedRepositoryBorrowed.type,
 				},
 				onDone: (data) => {
-					if (data.status === 201) {
+					if (data.status === 200) {
 						toast.success(data.message, {
 							autoClose: 700,
 							onClose: () => {

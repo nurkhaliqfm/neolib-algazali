@@ -27,11 +27,12 @@ import { SelectionAnggotaTable } from "../components/SelectionAnggotaTable";
 import { SelectionKoleksiTable } from "../components/SelectionKoleksiTable";
 import { toast } from "react-toastify";
 import {
-	createtTransaksi,
 	getDetailTransaksi,
+	updateTransaksi,
 } from "../services/transaksiService";
 import AppRoutes from "@/router/routes";
 import { roleConverter } from "@/utils/roleCoverter";
+import { TransaksiDetailResponse } from "../types/transaksi.type";
 
 const EditTransaksiPage = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
@@ -60,6 +61,9 @@ const EditTransaksiPage = () => {
 	const [selectedAnggotaBorrowed, setSelectedAnggotaBorrowed] =
 		useState<AnggotaDetailResponse>();
 
+	const [detailTransaksi, setDetailTransaksi] =
+		useState<TransaksiDetailResponse | null>();
+
 	const [searchRepos, setSearchRepos] = useState<string>("");
 	const [searchAnggota, setSearchAnggota] = useState<string>("");
 
@@ -75,43 +79,48 @@ const EditTransaksiPage = () => {
 	};
 
 	const handleConfirmationButton = () => {
-		if (selectedAnggotaBorrowed && selectedRepositoryBorrowed) {
+		if (
+			detailTransaksi &&
+			selectedAnggotaBorrowed &&
+			selectedRepositoryBorrowed
+		) {
 			console.log(selectedAnggotaBorrowed, selectedRepositoryBorrowed);
-			// createtTransaksi({
-			// 	token: user?.access_token,
-			// 	data: {
-			// 		user: selectedAnggotaBorrowed.id,
-			// 		repos: selectedRepositoryBorrowed.id,
-			// 		type: selectedRepositoryBorrowed.type,
-			// 	},
-			// 	onDone: (data) => {
-			// 		if (data.status === 201) {
-			// 			toast.success(data.message, {
-			// 				autoClose: 700,
-			// 				onClose: () => {
-			// 					navigate(AppRoutes.AdminTransaksi.path);
-			// 				},
-			// 			});
-			// 		} else {
-			// 			toast.error(data.message, {
-			// 				theme: "colored",
-			// 				autoClose: 700,
-			// 				onClose: () => {
-			// 					setIsLoadingCreate(false);
-			// 				},
-			// 			});
-			// 		}
-			// 	},
-			// 	onError: (error) => {
-			// 		toast.error(error.error, {
-			// 			theme: "colored",
-			// 			autoClose: 700,
-			// 			onClose: () => {
-			// 				setIsLoadingCreate(false);
-			// 			},
-			// 		});
-			// 	},
-			// });
+			updateTransaksi({
+				token: user?.access_token,
+				transaksi: detailTransaksi.id,
+				data: {
+					user: selectedAnggotaBorrowed.id,
+					repos: selectedRepositoryBorrowed.id,
+					type: selectedRepositoryBorrowed.type,
+				},
+				onDone: (data) => {
+					if (data.status === 200) {
+						toast.success(data.message, {
+							autoClose: 700,
+							onClose: () => {
+								navigate(AppRoutes.AdminTransaksi.path);
+							},
+						});
+					} else {
+						toast.error(data.message, {
+							theme: "colored",
+							autoClose: 700,
+							onClose: () => {
+								setIsLoadingCreate(false);
+							},
+						});
+					}
+				},
+				onError: (error) => {
+					toast.error(error.error, {
+						theme: "colored",
+						autoClose: 700,
+						onClose: () => {
+							setIsLoadingCreate(false);
+						},
+					});
+				},
+			});
 		}
 	};
 
@@ -125,9 +134,13 @@ const EditTransaksiPage = () => {
 					const anggota = roleConverter(data.user.id_role);
 					setSelectedAnggotaGroup(new Set([anggota]));
 					setSelectedReposType(new Set([type]));
+
 					setSelectedAnggotaBorrowed(data.user);
 					setSelectedRepositoryBorrowed(data.repository);
+
 					setSearchRepos(data.repository.judul);
+
+					setDetailTransaksi(data);
 				},
 			});
 		}

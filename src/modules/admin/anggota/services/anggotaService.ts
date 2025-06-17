@@ -60,7 +60,7 @@ const getListAnggotaPagination = async ({
 	}
 };
 
-const createtAnggota = async ({
+const createAnggota = async ({
 	token,
 	atr,
 	anggota,
@@ -435,7 +435,7 @@ export {
 	getAnggotaDetail,
 	getAnggotaTransaksiDetail,
 	getAnggotaDocument,
-	createtAnggota,
+	createAnggota,
 	updateAnggota,
 	deleteAnggota,
 };

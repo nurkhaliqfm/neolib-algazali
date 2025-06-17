@@ -31,7 +31,7 @@ import {
 	anggotaFieldConfig,
 	anggotaFormSelectOptios,
 } from "@/constants/user";
-import { createtAnggota } from "../services/anggotaService";
+import { createAnggota } from "../services/anggotaService";
 import { AnggotaRequest } from "../types/anggota.type";
 import { toast } from "react-toastify";
 
@@ -79,7 +79,7 @@ const CreateAnggotaPage = () => {
 
 		const { fullname, ...anggotaData } = values as AnggotaRequest;
 
-		createtAnggota({
+		createAnggota({
 			token: user?.access_token,
 			atr: { slug: group },
 			anggota: {
