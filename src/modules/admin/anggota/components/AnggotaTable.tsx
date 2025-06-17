@@ -295,6 +295,7 @@ export function AnggotaTable({
 
 	return (
 		<Table
+			className="gap-0 my-4"
 			isHeaderSticky
 			isStriped={true}
 			shadow="none"

@@ -213,6 +213,7 @@ const AnggotaTransaksiTable = ({
 
 	return (
 		<Table
+			className="gap-0 my-4"
 			isHeaderSticky
 			aria-label="Table list transaksi anggota"
 			shadow="none"
