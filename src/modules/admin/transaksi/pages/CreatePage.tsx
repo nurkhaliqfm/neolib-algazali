@@ -247,7 +247,7 @@ const CreateTransaksiPage = () => {
 				</section>
 			)}
 
-			<div className="flex justify-end items-end mt-4">
+			<div className="flex justify-end items-end m-4">
 				<Button
 					onPress={() => handleConfirmationModalButton()}
 					size="md"

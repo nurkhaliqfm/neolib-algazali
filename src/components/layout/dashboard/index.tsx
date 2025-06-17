@@ -1,7 +1,7 @@
-import { Outlet } from 'react-router-dom';
-import HeaderLayout from './Header';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { SidebarLayout } from './Sidebar';
+import { Outlet } from "react-router-dom";
+import HeaderLayout from "./Header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarLayout } from "./Sidebar";
 
 const DashboardLayout = () => {
 	return (
@@ -11,7 +11,7 @@ const DashboardLayout = () => {
 					<SidebarLayout />
 					<SidebarInset>
 						<HeaderLayout />
-						<section className="w-full p-4">
+						<section className="w-full">
 							<Outlet />
 						</section>
 					</SidebarInset>
