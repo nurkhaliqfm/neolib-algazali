@@ -1,6 +1,9 @@
 import { ApiError, ApiResponse } from "@/types/global";
 import axios, { AxiosError } from "axios";
-import { TransaksiResponse } from "../types/transaksi.type";
+import {
+	TransaksiDetailResponse,
+	TransaksiResponse,
+} from "../types/transaksi.type";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -49,6 +52,45 @@ const getListTransaksi = async ({
 	}
 };
 
+const getDetailTransaksi = async ({
+	token,
+	transaksi,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	transaksi: string;
+	onDone?: (data: TransaksiDetailResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	try {
+		const response = await axios.get(
+			`${VITE_SERVER_BASE_URL}/admin/transaksi/detail?transaksi=${transaksi}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		if (onDone) onDone(response.data);
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.response?.data.error || axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
+
 const createtTransaksi = async ({
 	token,
 	data,
@@ -59,6 +101,7 @@ const createtTransaksi = async ({
 	data: {
 		user: number;
 		repos: number;
+		type: "JURNAL" | "EJURNAL" | "BUKU" | "EBOOK" | "SKRIPSI";
 	};
 	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
@@ -96,4 +139,4 @@ const createtTransaksi = async ({
 	}
 };
 
-export { getListTransaksi, createtTransaksi };
+export { getListTransaksi, createtTransaksi, getDetailTransaksi };

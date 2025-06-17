@@ -185,7 +185,7 @@ export function TransaksiTable({
 								<button
 									onClick={() =>
 										navigate(
-											`${AppRoutes.AdminDetailTransaksi}?transaksi=${data.id}`
+											`${AppRoutes.AdminDetailTransaksi.path}?transaksi=${data.id}`
 										)
 									}
 									className="text-lg text-warning cursor-pointer active:opacity-50">
@@ -196,7 +196,7 @@ export function TransaksiTable({
 								<button
 									onClick={() =>
 										navigate(
-											`${AppRoutes.AdminEditTransaksi}?transaksi=${data.id}`
+											`${AppRoutes.AdminEditTransaksi.path}?transaksi=${data.id}`
 										)
 									}
 									className="text-lg text-success cursor-pointer active:opacity-50">

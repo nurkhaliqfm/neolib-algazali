@@ -43,6 +43,8 @@ const anggotaOptions = [
 export function SelectionAnggotaTable({
 	data,
 	search,
+	initial,
+	isEditMode = false,
 	type,
 	setType,
 	setSearchParams,
@@ -50,6 +52,8 @@ export function SelectionAnggotaTable({
 }: {
 	data: AnggotaResponse;
 	search: string;
+	initial?: number | undefined;
+	isEditMode?: boolean;
 	type: Selection;
 	setType: Dispatch<SetStateAction<Selection>>;
 	setSearchParams: Dispatch<SetStateAction<string>>;
@@ -57,7 +61,9 @@ export function SelectionAnggotaTable({
 }) {
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(search);
-	const [selectedKey, setSelectedKey] = useState<Selection>(new Set());
+	const [selectedKey, setSelectedKey] = useState<Selection>(
+		new Set([String(initial)])
+	);
 
 	const onSearchChange = (value: string) => {
 		setFilterValue(value);
@@ -82,6 +88,7 @@ export function SelectionAnggotaTable({
 		return (
 			<div className="flex justify-between gap-3 items-end">
 				<Input
+					isDisabled={isEditMode}
 					isClearable
 					className="w-full sm:max-w-[44%]"
 					placeholder="Search anggota by name or nomor identitas..."
@@ -91,6 +98,7 @@ export function SelectionAnggotaTable({
 					onValueChange={onSearchChange}
 				/>
 				<Select
+					isDisabled={isEditMode}
 					isRequired
 					className="md:max-w-xs"
 					placeholder="Pilih Anggota Perpustakaan"

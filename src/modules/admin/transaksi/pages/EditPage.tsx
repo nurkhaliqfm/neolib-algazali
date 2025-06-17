@@ -10,7 +10,7 @@ import {
 } from "@heroui/react";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getListAnggotaPagination } from "../../anggota/services/anggotaService";
 import { anggotaTypeMap } from "@/constants/user";
 import {
@@ -26,12 +26,21 @@ import { repositoryTypeMap } from "@/constants/repository";
 import { SelectionAnggotaTable } from "../components/SelectionAnggotaTable";
 import { SelectionKoleksiTable } from "../components/SelectionKoleksiTable";
 import { toast } from "react-toastify";
-import { createtTransaksi } from "../services/transaksiService";
+import {
+	createtTransaksi,
+	getDetailTransaksi,
+} from "../services/transaksiService";
 import AppRoutes from "@/router/routes";
+import { roleConverter } from "@/utils/roleCoverter";
 
 const EditTransaksiPage = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
+	const { search } = useLocation();
 	const navigate = useNavigate();
+
+	const params = new URLSearchParams(search);
+	const transaksi = params.get("transaksi");
+
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [isLoadingCreate, setIsLoadingCreate] = useState(false);
@@ -67,42 +76,63 @@ const EditTransaksiPage = () => {
 
 	const handleConfirmationButton = () => {
 		if (selectedAnggotaBorrowed && selectedRepositoryBorrowed) {
-			createtTransaksi({
+			console.log(selectedAnggotaBorrowed, selectedRepositoryBorrowed);
+			// createtTransaksi({
+			// 	token: user?.access_token,
+			// 	data: {
+			// 		user: selectedAnggotaBorrowed.id,
+			// 		repos: selectedRepositoryBorrowed.id,
+			// 		type: selectedRepositoryBorrowed.type,
+			// 	},
+			// 	onDone: (data) => {
+			// 		if (data.status === 201) {
+			// 			toast.success(data.message, {
+			// 				autoClose: 700,
+			// 				onClose: () => {
+			// 					navigate(AppRoutes.AdminTransaksi.path);
+			// 				},
+			// 			});
+			// 		} else {
+			// 			toast.error(data.message, {
+			// 				theme: "colored",
+			// 				autoClose: 700,
+			// 				onClose: () => {
+			// 					setIsLoadingCreate(false);
+			// 				},
+			// 			});
+			// 		}
+			// 	},
+			// 	onError: (error) => {
+			// 		toast.error(error.error, {
+			// 			theme: "colored",
+			// 			autoClose: 700,
+			// 			onClose: () => {
+			// 				setIsLoadingCreate(false);
+			// 			},
+			// 		});
+			// 	},
+			// });
+		}
+	};
+
+	useEffect(() => {
+		if (transaksi) {
+			getDetailTransaksi({
 				token: user?.access_token,
-				data: {
-					user: selectedAnggotaBorrowed.id,
-					repos: selectedRepositoryBorrowed.id,
-				},
+				transaksi: transaksi,
 				onDone: (data) => {
-					if (data.status === 201) {
-						toast.success(data.message, {
-							autoClose: 700,
-							onClose: () => {
-								navigate(AppRoutes.AdminTransaksi.path);
-							},
-						});
-					} else {
-						toast.error(data.message, {
-							theme: "colored",
-							autoClose: 700,
-							onClose: () => {
-								setIsLoadingCreate(false);
-							},
-						});
-					}
-				},
-				onError: (error) => {
-					toast.error(error.error, {
-						theme: "colored",
-						autoClose: 700,
-						onClose: () => {
-							setIsLoadingCreate(false);
-						},
-					});
+					const type = data.repository.type;
+					const anggota = roleConverter(data.user.id_role);
+					setSelectedAnggotaGroup(new Set([anggota]));
+					setSelectedReposType(new Set([type]));
+					setSelectedAnggotaBorrowed(data.user);
+					setSelectedRepositoryBorrowed(data.repository);
+					setSearchRepos(data.repository.judul);
 				},
 			});
 		}
-	};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [transaksi]);
 
 	useEffect(() => {
 		const reposType = Array.from(
@@ -132,7 +162,7 @@ const EditTransaksiPage = () => {
 			token: user?.access_token,
 			page: "1",
 			limit: "5",
-			keyword: searchAnggota,
+			keyword: selectedAnggotaBorrowed?.fullname || searchAnggota,
 			type: anggotaTypeMap[anggotaGroup],
 			onDone: (data) => {
 				setAnggotaData(data);
@@ -152,9 +182,9 @@ const EditTransaksiPage = () => {
 							</ModalHeader>
 							<ModalBody>
 								<p>
-									Anggota atas nama <b>{selectedAnggotaBorrowed?.fullname}</b>{" "}
-									akan meminjaman repositori dari perpustakaan ITBA Al-Gazali
-									sebagai berikut:
+									Data pinjaman anggota atas nama{" "}
+									<b>{selectedAnggotaBorrowed?.fullname}</b> dari perpustakaan
+									ITBA Al-Gazali akan diubah menjadi sebagai berikut:
 								</p>
 								<p>
 									<b>{selectedRepositoryBorrowed?.judul}</b> -{" "}
@@ -214,8 +244,10 @@ const EditTransaksiPage = () => {
 						</p>
 						<div className="overflow-visible">
 							<SelectionAnggotaTable
+								isEditMode={true}
 								data={anggotaData}
 								type={selectedAnggotaGroup}
+								initial={selectedAnggotaBorrowed?.id}
 								setType={setSelectedAnggotaGroup}
 								setSearchParams={setSearchAnggota}
 								search={searchAnggota}
@@ -237,6 +269,7 @@ const EditTransaksiPage = () => {
 							<SelectionKoleksiTable
 								data={repositoryData}
 								type={selectedReposType}
+								initial={selectedRepositoryBorrowed?.id}
 								setType={setSelectedReposType}
 								setSearchParams={setSearchRepos}
 								search={searchRepos}
@@ -246,8 +279,7 @@ const EditTransaksiPage = () => {
 					</Fragment>
 				</section>
 			)}
-
-			<div className="flex justify-end items-end mt-4">
+			<div className="flex justify-end items-end m-4">
 				<Button
 					onPress={() => handleConfirmationModalButton()}
 					size="md"

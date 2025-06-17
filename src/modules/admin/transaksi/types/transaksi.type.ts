@@ -1,3 +1,5 @@
+import { BaseRepository } from "../../koleksi/types/koleksi.type";
+
 export interface TransaksiResponse {
 	transaksi: TransaksiDetailResponse[];
 	total: number;
@@ -12,13 +14,9 @@ export interface TransaksiDetailResponse {
 		id: number;
 		fullname: string;
 		id_role: number;
+		email: string;
 	};
-	repository: {
-		id: number;
-		judul: string;
-		pengarang: string;
-		type: "EJURNAL" | "JURNAL" | "EBOOK" | "BUKU" | "SKRIPSI";
-	};
+	repository: BaseRepository;
 	status: "BORROWED" | "RETURNED" | "LOST" | "DAMAGED" | "AVAILABLE";
 	borrowedAt: Date | null;
 	returnedAt: Date | null;

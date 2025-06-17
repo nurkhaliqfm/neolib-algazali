@@ -46,6 +46,7 @@ const RepositoryHeaderTable: TableHeaderComponent[] = [
 export function SelectionKoleksiTable({
 	data,
 	search,
+	initial,
 	type,
 	setType,
 	setSearchParams,
@@ -53,6 +54,7 @@ export function SelectionKoleksiTable({
 }: {
 	data: RepositoryResponse;
 	search: string;
+	initial?: number | undefined;
 	type: Selection;
 	setType: Dispatch<SetStateAction<Selection>>;
 	setSearchParams: Dispatch<SetStateAction<string>>;
@@ -62,7 +64,9 @@ export function SelectionKoleksiTable({
 }) {
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(search);
-	const [selectedKey, setSelectedKey] = useState<Selection>(new Set());
+	const [selectedKey, setSelectedKey] = useState<Selection>(
+		new Set([String(initial)])
+	);
 
 	const onSearchChange = (value: string) => {
 		setFilterValue(value);
