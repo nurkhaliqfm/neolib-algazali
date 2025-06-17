@@ -57,7 +57,7 @@ function DashboardPage() {
 	return (
 		<>
 			{statistikData && (
-				<section className="grid grid-cols-2 md:grid-cols-3 gap-4">
+				<section className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 pb-0">
 					{Object.keys(statistikData.repository).map((keys) => {
 						return (
 							<DashboardCard
@@ -81,7 +81,7 @@ function DashboardPage() {
 				</section>
 			)}
 
-			<section className="my-4 flex flex-col xl:flex-row gap-y-4 xl:gap-x-4 auto-rows-max">
+			<section className="my-4 flex flex-col xl:flex-row gap-y-4 xl:gap-x-4 auto-rows-max px-4">
 				<DashboardChart
 					className="flex-1 col-span-1"
 					data={statistikTransaksiData}
