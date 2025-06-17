@@ -40,7 +40,7 @@ const ListAnggotaPage = () => {
 		<>
 			{anggotaData && group ? (
 				<>
-					<section className="flex justify-between my-2 px-4 capitalize">
+					<section className="flex justify-between my-2 p-4 pb-0 capitalize">
 						<h3 className="capitalize text-xl font-light">
 							Data Anggota {group}
 						</h3>

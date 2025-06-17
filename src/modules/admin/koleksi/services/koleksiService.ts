@@ -316,7 +316,7 @@ const deleteRepository = async ({
 }: {
 	token: string | null | undefined;
 	type: string;
-	repos: string;
+	repos: number;
 	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {

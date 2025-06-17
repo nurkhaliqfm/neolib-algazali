@@ -152,7 +152,7 @@ const CreateAnggotaPage = () => {
 	if (!group) return <Navigate to={AppRoutes.Error.path} />;
 
 	return (
-		<>
+		<div className="p-4">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 					{formFields.map((ff) => {
@@ -276,7 +276,7 @@ const CreateAnggotaPage = () => {
 					</div>
 				</form>
 			</Form>
-		</>
+		</div>
 	);
 };
 

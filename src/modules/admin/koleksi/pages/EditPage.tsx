@@ -192,7 +192,7 @@ const EditKoleksiPage = () => {
 	if (!repositoryDetailData) return <p>No data found.</p>;
 
 	return (
-		<>
+		<div className="p-4">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 					{formFields.map((ff) => {
@@ -334,7 +334,7 @@ const EditKoleksiPage = () => {
 					</div>
 				</form>
 			</Form>
-		</>
+		</div>
 	);
 };
 
