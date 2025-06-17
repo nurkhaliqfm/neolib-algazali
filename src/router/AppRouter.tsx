@@ -92,6 +92,15 @@ function AppRouter() {
 							/>
 						}
 					/>
+					<Route
+						path={AppRoutes.AdminEditTransaksi.path}
+						element={
+							<AuthorizedRoute
+								allowedRoles={["Admin"]}
+								page={<Admin.TransaksiPage.EditTransaksiPage />}
+							/>
+						}
+					/>
 
 					<Route
 						path={AppRoutes.AdminAnggota.path}

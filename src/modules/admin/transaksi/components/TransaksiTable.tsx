@@ -36,7 +36,7 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 // import { deleteRepository } from "../services/transaksiService";
-// import { useTypedSelector } from "@/hooks/useTypedSelector";
+import { useTypedSelector } from "@/hooks/useTypedSelector";
 // import { toast } from "react-toastify";
 import {
 	TransaksiHeaderTable,
@@ -60,7 +60,7 @@ export function TransaksiTable({
 	setSearchParams: SetURLSearchParams;
 }) {
 	const navigate = useNavigate();
-	// const user = useTypedSelector((state) => state.oauth.oauthData);
+	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(keyword);
@@ -253,6 +253,7 @@ export function TransaksiTable({
 											variant="solid"
 											onPress={() => {
 												setIsLoadingDelete(true);
+												console.log(user?.access_token);
 											}}>
 											Hapus
 										</Button>
