@@ -1,8 +1,8 @@
-import { typeColorMapCustom } from '@/constants/repository';
-import { cn } from '@/lib/utils';
-import AppRoutes from '@/router/routes';
-import { Button, Chip, Image } from '@heroui/react';
-import { useNavigate } from 'react-router-dom';
+import { typeColorMapCustom } from "@/constants/repository";
+import { cn } from "@/lib/utils";
+import AppRoutes from "@/router/routes";
+import { Button, Chip, Image } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
 
 const CardCustomeStyleBasic = ({
 	repos,
@@ -11,7 +11,7 @@ const CardCustomeStyleBasic = ({
 	title,
 	type,
 }: {
-	repos: string;
+	repos: number;
 	url: string;
 	pengarang: string;
 	title: string;
@@ -27,7 +27,7 @@ const CardCustomeStyleBasic = ({
 				onClick={() =>
 					navigate(
 						`${AppRoutes.KoleksiDetail.path.replace(
-							':koleksi',
+							":koleksi",
 							type.toLowerCase()
 						)}?repos=${repos}`
 					)
@@ -69,7 +69,7 @@ const CardCustomeStyleDetail = ({
 	abstrak,
 	sinopsis,
 }: {
-	repos: string;
+	repos: number;
 	url: string;
 	pengarang: string;
 	title: string;
@@ -110,7 +110,7 @@ const CardCustomeStyleDetail = ({
 					<p className="text-sm font-medium line-clamp-2">{title}</p>
 					<p className="font-light text-sm italic line-clamp-1">{pengarang}</p>
 					<p className="mt-2 text-[0.7rem] leading-4 font-light line-clamp-3">
-						{abstrak || sinopsis || '-'}
+						{abstrak || sinopsis || "-"}
 					</p>
 				</div>
 				<div className="flex items-center mt-4 justify-between">
@@ -127,7 +127,7 @@ const CardCustomeStyleDetail = ({
 						onPress={() => {
 							navigate(
 								`${AppRoutes.KoleksiDetail.path.replace(
-									':koleksi',
+									":koleksi",
 									type.toLowerCase()
 								)}?repos=${repos}`
 							);
