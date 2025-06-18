@@ -128,7 +128,7 @@ const createTransaksi = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -142,6 +142,7 @@ const createTransaksi = async ({
 const updateTransaksi = async ({
 	token,
 	data,
+	slug,
 	transaksi,
 	onDone,
 	onError,
@@ -152,13 +153,14 @@ const updateTransaksi = async ({
 		repos: number;
 		type: "JURNAL" | "EJURNAL" | "BUKU" | "EBOOK" | "SKRIPSI";
 	};
+	slug: "update" | "returned" | "extended";
 	transaksi: number;
 	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
 		const response = await axios.patch(
-			`${VITE_SERVER_BASE_URL}/admin/transaksi/update?transaksi=${transaksi}`,
+			`${VITE_SERVER_BASE_URL}/admin/transaksi/${slug}?transaksi=${transaksi}`,
 			data,
 			{
 				headers: {
@@ -178,7 +180,50 @@ const updateTransaksi = async ({
 			if (onError)
 				onError({
 					status: axiosError.response?.status || 500,
-					error: axiosError.message,
+					error: axiosError.response?.data.error || axiosError.message,
+				});
+			if (axiosError.response?.status === 401) {
+				localStorage.removeItem("authData");
+				window.location.reload();
+			}
+		}
+		throw error;
+	}
+};
+
+const deleteTransaksi = async ({
+	token,
+	transaksi,
+	onDone,
+	onError,
+}: {
+	token: string | null | undefined;
+	transaksi: number;
+	onDone?: (data: ApiResponse) => void | undefined;
+	onError?: (data: ApiError) => void | undefined;
+}) => {
+	try {
+		const response = await axios.get(
+			`${VITE_SERVER_BASE_URL}/admin/transaksi/delete?transaksi=${transaksi}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+		if (onDone)
+			onDone({
+				status: response.status,
+				message:
+					response.data.message || "Transaksi peminjaman successfully deleted",
+			});
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError<ApiError>;
+			if (onError)
+				onError({
+					status: axiosError.response?.status || 500,
+					error: axiosError.response?.data.error || axiosError.message,
 				});
 			if (axiosError.response?.status === 401) {
 				localStorage.removeItem("authData");
@@ -194,4 +239,5 @@ export {
 	createTransaksi,
 	getDetailTransaksi,
 	updateTransaksi,
+	deleteTransaksi,
 };

@@ -66,7 +66,7 @@ const DetailAnggotaPage = () => {
 				onDone: (response) => {
 					if (response.status === 200) {
 						toast.success(response.message, {
-							autoClose: 700,
+							autoClose: 1000,
 							onClose: () => {
 								downloadBebasPustaka({
 									file: response.data as string,
@@ -81,7 +81,7 @@ const DetailAnggotaPage = () => {
 					} else {
 						toast.error(response.message, {
 							theme: "colored",
-							autoClose: 700,
+							autoClose: 1000,
 							onClose: () => {
 								setIsLoadingDownload(false);
 							},
@@ -99,7 +99,7 @@ const DetailAnggotaPage = () => {
 					} else {
 						toast.error(error.error, {
 							theme: "colored",
-							autoClose: 700,
+							autoClose: 1000,
 							onClose: () => {
 								setIsLoadingDownload(false);
 							},

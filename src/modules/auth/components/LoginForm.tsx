@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -8,35 +8,35 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useDispatch } from 'react-redux';
-import { setOAuthData } from '../oauthSlice';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { oauth } from '../services/oauthService';
-import { OAuthData } from '@/redux/types';
-import { toast } from 'react-toastify';
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useDispatch } from "react-redux";
+import { setOAuthData } from "../oauthSlice";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { oauth } from "../services/oauthService";
+import { OAuthData } from "@/redux/types";
+import { toast } from "react-toastify";
 import {
 	PiEye,
 	PiEyeSlash,
 	PiLockKeyFill,
 	PiUserCircleFill,
-} from 'react-icons/pi';
-import { Loader2 } from 'lucide-react';
-import LogoITBA from '@/assets/logo.svg';
+} from "react-icons/pi";
+import { Loader2 } from "lucide-react";
+import LogoITBA from "@/assets/logo.svg";
 
 const formOAuthScheme = z.object({
-	username: z.string().min(1, { message: 'Username is required' }),
-	password: z.string().min(1, { message: 'Password is required' }),
+	username: z.string().min(1, { message: "Username is required" }),
+	password: z.string().min(1, { message: "Password is required" }),
 });
 
 export function LoginForm({
 	className,
 	...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<"div">) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -46,8 +46,8 @@ export function LoginForm({
 	const formOAuth = useForm<z.infer<typeof formOAuthScheme>>({
 		resolver: zodResolver(formOAuthScheme),
 		defaultValues: {
-			username: '',
-			password: '',
+			username: "",
+			password: "",
 		},
 	});
 
@@ -56,22 +56,22 @@ export function LoginForm({
 		oauth({ password: values.password, username: values.username })
 			.then((oauthData: OAuthData) => {
 				dispatch(setOAuthData(oauthData));
-				toast.success('Berhasil Login', {
-					autoClose: 700,
-					onClose: () => navigate('/admin/dashboard'),
+				toast.success("Berhasil Login", {
+					autoClose: 1000,
+					onClose: () => navigate("/admin/dashboard"),
 				});
 			})
 			.catch(() => {
 				setIsLoading(false);
-				toast.error('Username atau Password salah', {
-					theme: 'colored',
-					autoClose: 700,
+				toast.error("Username atau Password salah", {
+					theme: "colored",
+					autoClose: 1000,
 				});
 			});
 	}
 
 	return (
-		<div className={cn('flex flex-col gap-6', className)} {...props}>
+		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Card className="overflow-hidden">
 				<CardContent className="grid p-0 md:grid-cols-2">
 					<Form {...formOAuth}>
@@ -127,7 +127,7 @@ export function LoginForm({
 														</div>
 														<input
 															className="pl-16 w-full py-3 px-4 rounded-lg my-1 font-semibold outline-none bg-accent focus:outline-primary focus:bg-primary-foreground"
-															type={`${isPasswordShow ? 'text' : 'password'}`}
+															type={`${isPasswordShow ? "text" : "password"}`}
 															autoComplete="true"
 															placeholder="Masukkan password"
 															{...field}

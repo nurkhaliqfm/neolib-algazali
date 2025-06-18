@@ -251,7 +251,7 @@ export function AnggotaTable({
 													onDone: (data) => {
 														if (data.status === 200) {
 															toast.success(data.message, {
-																autoClose: 700,
+																autoClose: 1000,
 																onClose: () => {
 																	window.location.reload();
 																	setIsLoadingDelete(false);
@@ -260,7 +260,7 @@ export function AnggotaTable({
 														} else {
 															toast.error(data.message, {
 																theme: "colored",
-																autoClose: 700,
+																autoClose: 1000,
 																onClose: () => {
 																	setIsLoadingDelete(false);
 																},
@@ -270,7 +270,7 @@ export function AnggotaTable({
 													onError: (error) => {
 														toast.error(error.error, {
 															theme: "colored",
-															autoClose: 700,
+															autoClose: 1000,
 															onClose: () => {
 																setIsLoadingDelete(false);
 															},

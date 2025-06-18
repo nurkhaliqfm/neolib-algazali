@@ -60,7 +60,7 @@ const CreateTransaksiPage = () => {
 		} else {
 			toast.error("Data Anggota dan Repository harus dipilih", {
 				theme: "colored",
-				autoClose: 700,
+				autoClose: 1000,
 			});
 		}
 	};
@@ -75,9 +75,9 @@ const CreateTransaksiPage = () => {
 					type: selectedRepositoryBorrowed.type,
 				},
 				onDone: (data) => {
-					if (data.status === 200) {
+					if (data.status === 200 || data.status === 201) {
 						toast.success(data.message, {
-							autoClose: 700,
+							autoClose: 1000,
 							onClose: () => {
 								navigate(AppRoutes.AdminTransaksi.path);
 							},
@@ -85,7 +85,7 @@ const CreateTransaksiPage = () => {
 					} else {
 						toast.error(data.message, {
 							theme: "colored",
-							autoClose: 700,
+							autoClose: 1000,
 							onClose: () => {
 								setIsLoadingCreate(false);
 							},
@@ -95,7 +95,7 @@ const CreateTransaksiPage = () => {
 				onError: (error) => {
 					toast.error(error.error, {
 						theme: "colored",
-						autoClose: 700,
+						autoClose: 1000,
 						onClose: () => {
 							setIsLoadingCreate(false);
 						},

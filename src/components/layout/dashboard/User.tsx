@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -6,26 +6,26 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 
-import ProfilePic from '@/assets/avatar.png';
+import ProfilePic from "@/assets/avatar.png";
 import {
 	HiOutlineHome,
 	HiOutlineArrowRightOnRectangle,
 	HiOutlineChevronUpDown,
-} from 'react-icons/hi2';
-import { logout } from '@/modules/auth/services/oauthService';
-import { useDispatch } from 'react-redux';
-import { clearOAuthData } from '@/modules/auth/oauthSlice';
-import { useNavigate } from 'react-router-dom';
-import AppRoutes from '@/router/routes';
-import { toast } from 'react-toastify';
+} from "react-icons/hi2";
+import { logout } from "@/modules/auth/services/oauthService";
+import { useDispatch } from "react-redux";
+import { clearOAuthData } from "@/modules/auth/oauthSlice";
+import { useNavigate } from "react-router-dom";
+import AppRoutes from "@/router/routes";
+import { toast } from "react-toastify";
 
 export function SidebarLayoutUser({
 	user,
@@ -47,19 +47,19 @@ export function SidebarLayoutUser({
 				.then((status) => {
 					if (status) {
 						dispatch(clearOAuthData());
-						localStorage.removeItem('oauthData');
+						localStorage.removeItem("oauthData");
 					}
 				})
 				.then(() => {
 					navigate(AppRoutes.Login.path);
-					toast.success('Berhasil Logout', {
-						autoClose: 700,
+					toast.success("Berhasil Logout", {
+						autoClose: 1000,
 					});
 				})
 				.catch(() => {
-					toast.error('Gagal Logout', {
-						theme: 'colored',
-						autoClose: 700,
+					toast.error("Gagal Logout", {
+						theme: "colored",
+						autoClose: 1000,
 					});
 				});
 		}
@@ -76,7 +76,7 @@ export function SidebarLayoutUser({
 							<Avatar className="h-8 w-8 rounded-lg">
 								<AvatarImage
 									src={user.avatar ?? ProfilePic}
-									alt={user.name || ''}
+									alt={user.name || ""}
 								/>
 								<AvatarFallback className="rounded-lg">AD</AvatarFallback>
 							</Avatar>
@@ -91,7 +91,7 @@ export function SidebarLayoutUser({
 					</DropdownMenuTrigger>
 					<DropdownMenuContent
 						className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-						side={isMobile ? 'bottom' : 'right'}
+						side={isMobile ? "bottom" : "right"}
 						align="end"
 						sideOffset={4}>
 						<DropdownMenuLabel className="p-0 font-normal">
@@ -99,7 +99,7 @@ export function SidebarLayoutUser({
 								<Avatar className="h-8 w-8 rounded-lg">
 									<AvatarImage
 										src={user.avatar ?? ProfilePic}
-										alt={user.name ?? ''}
+										alt={user.name ?? ""}
 									/>
 									<AvatarFallback className="rounded-lg">AD</AvatarFallback>
 								</Avatar>

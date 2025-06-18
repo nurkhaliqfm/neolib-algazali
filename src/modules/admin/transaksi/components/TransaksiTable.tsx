@@ -18,7 +18,8 @@ import {
 	TransaksiResponse,
 } from "../types/transaksi.type";
 import {
-	HiOutlineEye,
+	HiOutlineArchiveBoxArrowDown,
+	HiOutlineArrowPath,
 	HiOutlineMagnifyingGlass,
 	HiOutlinePencil,
 	HiOutlineTrash,
@@ -35,9 +36,8 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-// import { deleteRepository } from "../services/transaksiService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import {
 	TransaksiHeaderTable,
 	typeTransaksiColorMap,
@@ -45,6 +45,7 @@ import {
 import dayjs from "dayjs";
 import { typeAnggotaColorMap, userRoleMap } from "@/constants/user";
 import { moneyConverter } from "@/utils/moneyFormatter";
+import { deleteTransaksi, updateTransaksi } from "../services/transaksiService";
 
 export function TransaksiTable({
 	data,
@@ -62,6 +63,8 @@ export function TransaksiTable({
 	const navigate = useNavigate();
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
+	const [isLoadingExtended, setIsLoadingExtended] = useState<boolean>(false);
+	const [isLoadingReturned, setIsLoadingReturned] = useState<boolean>(false);
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(keyword);
 
@@ -181,7 +184,193 @@ export function TransaksiTable({
 				case "actions":
 					return (
 						<div className="relative flex items-center gap-2">
-							<Tooltip color="warning" content="Detail Pinjaman">
+							<AlertDialog>
+								<Tooltip color="primary" content="Kembalikan Pinjaman">
+									<AlertDialogTrigger asChild>
+										<button className="text-lg text-primary cursor-pointer active:opacity-50">
+											<HiOutlineArrowPath />
+										</button>
+									</AlertDialogTrigger>
+								</Tooltip>
+								<AlertDialogContent>
+									<AlertDialogHeader>
+										<AlertDialogTitle>
+											Apakah anda yakin ingin mengebalikan pinjaman ini?
+										</AlertDialogTitle>
+										<AlertDialogDescription>
+											Pinjaman <b>{data.user.fullname}</b> untuk{" "}
+											<b>{data.repository.judul}</b> akan dikembalikan. Tindakan
+											ini tidak dapat dibatalkan.
+										</AlertDialogDescription>
+									</AlertDialogHeader>
+									<AlertDialogFooter>
+										<AlertDialogCancel>Batal</AlertDialogCancel>
+										<Button
+											size="md"
+											isLoading={isLoadingReturned}
+											spinner={
+												<svg
+													className="animate-spin h-5 w-5 text-current"
+													fill="none"
+													viewBox="0 0 24 24"
+													xmlns="http://www.w3.org/2000/svg">
+													<circle
+														className="opacity-25"
+														cx="12"
+														cy="12"
+														r="10"
+														stroke="currentColor"
+														strokeWidth="4"
+													/>
+													<path
+														className="opacity-75"
+														d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+														fill="currentColor"
+													/>
+												</svg>
+											}
+											color="primary"
+											variant="solid"
+											onPress={() => {
+												setIsLoadingReturned(true);
+												updateTransaksi({
+													token: user?.access_token,
+													transaksi: data.id,
+													slug: "returned",
+													data: {
+														repos: data.repository.id,
+														user: data.user.id,
+														type: data.repository.type,
+													},
+													onDone: (data) => {
+														if (data.status === 200) {
+															toast.success(data.message, {
+																autoClose: 1000,
+																onClose: () => {
+																	window.location.reload();
+																	setIsLoadingReturned(false);
+																},
+															});
+														} else {
+															toast.error(data.message, {
+																theme: "colored",
+																autoClose: 1000,
+																onClose: () => {
+																	setIsLoadingReturned(false);
+																},
+															});
+														}
+													},
+													onError: (error) => {
+														toast.error(error.error, {
+															theme: "colored",
+															autoClose: 1000,
+															onClose: () => {
+																setIsLoadingReturned(false);
+															},
+														});
+													},
+												});
+											}}>
+											Kembalikan
+										</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
+							<AlertDialog>
+								<Tooltip color="default" content="Perpanjang Pinjaman">
+									<AlertDialogTrigger asChild>
+										<button className="text-lg text-default cursor-pointer active:opacity-50">
+											<HiOutlineArchiveBoxArrowDown />
+										</button>
+									</AlertDialogTrigger>
+								</Tooltip>
+								<AlertDialogContent>
+									<AlertDialogHeader>
+										<AlertDialogTitle>
+											Apakah anda yakin ingin meperpanjang pinjaman ini?
+										</AlertDialogTitle>
+										<AlertDialogDescription>
+											Pinjaman <b>{data.user.fullname}</b> untuk{" "}
+											<b>{data.repository.judul}</b> akan diperpanjang. Tindakan
+											ini tidak dapat dibatalkan.
+										</AlertDialogDescription>
+									</AlertDialogHeader>
+									<AlertDialogFooter>
+										<AlertDialogCancel>Batal</AlertDialogCancel>
+										<Button
+											size="md"
+											isLoading={isLoadingExtended}
+											spinner={
+												<svg
+													className="animate-spin h-5 w-5 text-current"
+													fill="none"
+													viewBox="0 0 24 24"
+													xmlns="http://www.w3.org/2000/svg">
+													<circle
+														className="opacity-25"
+														cx="12"
+														cy="12"
+														r="10"
+														stroke="currentColor"
+														strokeWidth="4"
+													/>
+													<path
+														className="opacity-75"
+														d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+														fill="currentColor"
+													/>
+												</svg>
+											}
+											color="default"
+											variant="solid"
+											onPress={() => {
+												setIsLoadingExtended(true);
+												updateTransaksi({
+													token: user?.access_token,
+													transaksi: data.id,
+													slug: "extended",
+													data: {
+														repos: data.repository.id,
+														user: data.user.id,
+														type: data.repository.type,
+													},
+													onDone: (data) => {
+														if (data.status === 200) {
+															toast.success(data.message, {
+																autoClose: 1000,
+																onClose: () => {
+																	window.location.reload();
+																	setIsLoadingExtended(false);
+																},
+															});
+														} else {
+															toast.error(data.message, {
+																theme: "colored",
+																autoClose: 1000,
+																onClose: () => {
+																	setIsLoadingExtended(false);
+																},
+															});
+														}
+													},
+													onError: (error) => {
+														toast.error(error.error, {
+															theme: "colored",
+															autoClose: 1000,
+															onClose: () => {
+																setIsLoadingExtended(false);
+															},
+														});
+													},
+												});
+											}}>
+											Perpanjang
+										</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
+							{/* <Tooltip color="warning" content="Detail Pinjaman">
 								<button
 									onClick={() =>
 										navigate(
@@ -191,7 +380,7 @@ export function TransaksiTable({
 									className="text-lg text-warning cursor-pointer active:opacity-50">
 									<HiOutlineEye />
 								</button>
-							</Tooltip>
+							</Tooltip> */}
 							<Tooltip color="success" content="Edit Pinjaman">
 								<button
 									onClick={() =>
@@ -253,7 +442,38 @@ export function TransaksiTable({
 											variant="solid"
 											onPress={() => {
 												setIsLoadingDelete(true);
-												console.log(user?.access_token);
+												deleteTransaksi({
+													token: user?.access_token,
+													transaksi: data.id,
+													onDone: (data) => {
+														if (data.status === 200) {
+															toast.success(data.message, {
+																autoClose: 1000,
+																onClose: () => {
+																	window.location.reload();
+																	setIsLoadingDelete(false);
+																},
+															});
+														} else {
+															toast.error(data.message, {
+																theme: "colored",
+																autoClose: 1000,
+																onClose: () => {
+																	setIsLoadingDelete(false);
+																},
+															});
+														}
+													},
+													onError: (error) => {
+														toast.error(error.error, {
+															theme: "colored",
+															autoClose: 1000,
+															onClose: () => {
+																setIsLoadingDelete(false);
+															},
+														});
+													},
+												});
 											}}>
 											Hapus
 										</Button>

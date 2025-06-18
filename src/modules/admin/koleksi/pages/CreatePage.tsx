@@ -105,7 +105,7 @@ const CreateKoleksiPage = () => {
 			onDone: (data) => {
 				if (data.status === 201) {
 					toast.success(data.message, {
-						autoClose: 700,
+						autoClose: 1000,
 						onClose: () => {
 							navigate(
 								AppRoutes.AdminKoleksi.path.replace(":koleksi", koleksi || "")
@@ -115,7 +115,7 @@ const CreateKoleksiPage = () => {
 				} else {
 					toast.error(data.message, {
 						theme: "colored",
-						autoClose: 700,
+						autoClose: 1000,
 						onClose: () => {
 							setIsLoadingCreate(false);
 						},
@@ -125,7 +125,7 @@ const CreateKoleksiPage = () => {
 			onError: (error) => {
 				toast.error(error.error, {
 					theme: "colored",
-					autoClose: 700,
+					autoClose: 1000,
 					onClose: () => {
 						setIsLoadingCreate(false);
 					},

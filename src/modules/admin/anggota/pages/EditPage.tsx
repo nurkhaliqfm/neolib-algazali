@@ -99,7 +99,7 @@ const EditAnggotaPage = () => {
 			onDone: (data) => {
 				if (data.status === 200) {
 					toast.success(data.message, {
-						autoClose: 700,
+						autoClose: 1000,
 						onClose: () => {
 							navigate(
 								AppRoutes.AdminAnggota.path.replace(":group", group || "")
@@ -109,7 +109,7 @@ const EditAnggotaPage = () => {
 				} else {
 					toast.error(data.message, {
 						theme: "colored",
-						autoClose: 700,
+						autoClose: 1000,
 						onClose: () => {
 							setIsLoadingUpdate(false);
 						},
@@ -119,7 +119,7 @@ const EditAnggotaPage = () => {
 			onError: (error) => {
 				toast.error(error.error, {
 					theme: "colored",
-					autoClose: 700,
+					autoClose: 1000,
 					onClose: () => {
 						setIsLoadingUpdate(false);
 					},
@@ -150,7 +150,7 @@ const EditAnggotaPage = () => {
 				onError: (error) => {
 					toast.error(error.error, {
 						theme: "colored",
-						autoClose: 700,
+						autoClose: 1000,
 					});
 					setIsLoadingUpdate(false);
 				},

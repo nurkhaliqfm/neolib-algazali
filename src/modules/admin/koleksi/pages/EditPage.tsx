@@ -127,7 +127,7 @@ const EditKoleksiPage = () => {
 			onDone: (data) => {
 				if (data.status === 200) {
 					toast.success(data.message, {
-						autoClose: 700,
+						autoClose: 1000,
 						onClose: () => {
 							navigate(
 								AppRoutes.AdminKoleksi.path.replace(":koleksi", koleksi || "")
@@ -137,7 +137,7 @@ const EditKoleksiPage = () => {
 				} else {
 					toast.error(data.message, {
 						theme: "colored",
-						autoClose: 700,
+						autoClose: 1000,
 						onClose: () => {
 							setIsLoadingUpdate(false);
 						},
@@ -147,7 +147,7 @@ const EditKoleksiPage = () => {
 			onError: (error) => {
 				toast.error(error.error, {
 					theme: "colored",
-					autoClose: 700,
+					autoClose: 1000,
 					onClose: () => {
 						setIsLoadingUpdate(false);
 					},
@@ -180,7 +180,7 @@ const EditKoleksiPage = () => {
 				onError: (error) => {
 					toast.error(error.error, {
 						theme: "colored",
-						autoClose: 700,
+						autoClose: 1000,
 					});
 					setIsLoadingUpdate(false);
 				},

@@ -154,7 +154,7 @@ export function RepositoryTable({
 				return (
 					<Image
 						alt="Cover Repository"
-						className="object-cover rounded-xl"
+						className="object-cover rounded-xl max-w-36"
 						src={`${VITE_SERVER_BASE_URL}/public/${
 							repositoryTypeMap[data.type]
 						}/sampul/${data.nama_sampul || "-"}`}
@@ -260,7 +260,7 @@ export function RepositoryTable({
 												onDone: (data) => {
 													if (data.status === 200) {
 														toast.success(data.message, {
-															autoClose: 700,
+															autoClose: 1000,
 															onClose: () => {
 																window.location.reload();
 																setIsLoadingDelete(false);
@@ -269,7 +269,7 @@ export function RepositoryTable({
 													} else {
 														toast.error(data.message, {
 															theme: "colored",
-															autoClose: 700,
+															autoClose: 1000,
 															onClose: () => {
 																setIsLoadingDelete(false);
 															},
@@ -279,7 +279,7 @@ export function RepositoryTable({
 												onError: (error) => {
 													toast.error(error.error, {
 														theme: "colored",
-														autoClose: 700,
+														autoClose: 1000,
 														onClose: () => {
 															setIsLoadingDelete(false);
 														},
