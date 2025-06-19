@@ -201,7 +201,7 @@ export const repositoryFieldConfig = {
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
 			type: "number",
-			required: false,
+			required: true,
 		},
 		{ name: "asal_buku", label: "Asal Buku", type: "text", required: false },
 		{ name: "isbn", label: "ISBN", type: "text", required: false },
