@@ -17,6 +17,18 @@ export const generateZodSchema = (
 				case "textarea":
 					fieldSchema = z.string();
 					break;
+				case "year":
+					fieldSchema = z
+						.number()
+						.int()
+						.min(1900, "Year must be at least 1900")
+						.max(
+							new Date().getFullYear(),
+							`Year cannot be greater than ${new Date().getFullYear()}`
+						)
+						.optional();
+
+					break;
 				case "number":
 					fieldSchema = z
 						.number()

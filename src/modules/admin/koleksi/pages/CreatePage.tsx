@@ -142,7 +142,7 @@ const CreateKoleksiPage = () => {
 					(acc, field) => ({
 						...acc,
 						[field.name]:
-							field.type === "number"
+							field.type === "number" || field.type === "year"
 								? undefined
 								: field.type === "textarea"
 								? ""
@@ -230,7 +230,23 @@ const CreateKoleksiPage = () => {
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
-															field.onChange(0);
+															field.onChange(undefined);
+														} else {
+															field.onChange(Number(value));
+														}
+													}}
+												/>
+											) : ff.type === "year" ? (
+												<Input
+													placeholder={`Masukkan ${ff.label}`}
+													{...field}
+													type="number"
+													min={0}
+													value={undefined}
+													onChange={(e) => {
+														const value = e.target.value;
+														if (value === "") {
+															field.onChange(undefined);
 														} else {
 															field.onChange(Number(value));
 														}

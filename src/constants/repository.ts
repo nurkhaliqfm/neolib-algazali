@@ -135,7 +135,7 @@ export const repositoryFieldConfig = {
 		{
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
-			type: "number",
+			type: "year",
 			required: true,
 		},
 		{ name: "isbn", label: "ISBN", type: "text", required: false },
@@ -149,7 +149,7 @@ export const repositoryFieldConfig = {
 		{
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
-			type: "number",
+			type: "year",
 			required: true,
 		},
 		{ name: "isbn", label: "ISBN", type: "text", required: false },
@@ -168,7 +168,7 @@ export const repositoryFieldConfig = {
 		{
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
-			type: "number",
+			type: "year",
 			required: true,
 		},
 		{ name: "isbn", label: "ISBN", type: "text", required: false },
@@ -200,7 +200,7 @@ export const repositoryFieldConfig = {
 		{
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
-			type: "number",
+			type: "year",
 			required: true,
 		},
 		{ name: "asal_buku", label: "Asal Buku", type: "text", required: false },
@@ -223,7 +223,7 @@ export const repositoryFieldConfig = {
 		{
 			name: "tahun_terbit",
 			label: "Tahun Terbit",
-			type: "number",
+			type: "year",
 			required: true,
 		},
 		{ name: "lokasi", label: "Lokasi", type: "select", required: true },

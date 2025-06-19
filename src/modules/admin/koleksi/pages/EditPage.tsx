@@ -258,6 +258,21 @@ const EditKoleksiPage = () => {
 														}
 													}}
 												/>
+											) : ff.type === "year" ? (
+												<Input
+													placeholder={`Masukkan ${ff.label}`}
+													{...field}
+													type="number"
+													min={0}
+													onChange={(e) => {
+														const value = e.target.value;
+														if (value === "") {
+															field.onChange(1900);
+														} else {
+															field.onChange(Number(value));
+														}
+													}}
+												/>
 											) : ff.type === "file" ? (
 												<div className="flex flex-col gap-2">
 													{ff.name === "nama_sampul" &&
