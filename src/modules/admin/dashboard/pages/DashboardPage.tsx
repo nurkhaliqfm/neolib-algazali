@@ -51,8 +51,7 @@ function DashboardPage() {
 				setLatestTransaksiDataData(data);
 			},
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [user?.access_token]);
 
 	return (
 		<>

@@ -58,7 +58,7 @@ const ListTransaksiPage = () => {
 					/>
 				</>
 			) : (
-				<div className="border-1 border-slate-100 p-2 rounded-lg text-center shadow-md">
+				<div className="border-1 border-slate-100 p-2 rounded-lg text-center shadow-md m-4">
 					Data Transaksi tidak ditemukan
 				</div>
 			)}
