@@ -17,6 +17,7 @@ import {
 	Key,
 	SetStateAction,
 	useCallback,
+	useEffect,
 	useMemo,
 	useState,
 } from "react";
@@ -28,6 +29,7 @@ import {
 	RepositoryResponse,
 } from "../../koleksi/types/koleksi.type";
 import { repositoryTypeMap } from "@/constants/repository";
+import useDebounce from "@/hooks/useDebounce";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -67,25 +69,21 @@ export function SelectionKoleksiTable({
 	const [selectedKey, setSelectedKey] = useState<Selection>(
 		new Set([String(initial)])
 	);
+	const debounceValue = useDebounce(filterValue);
 
 	const onSearchChange = (value: string) => {
-		setFilterValue(value);
 		setIsLoadingData(true);
-		const debounceTimeout = setTimeout(() => {
-			if (value) {
-				setSearchParams(value.toString());
-			} else {
-				setSearchParams("");
-			}
-			setIsLoadingData(false);
-		}, 1000);
-
-		return () => clearTimeout(debounceTimeout);
+		setFilterValue(value);
 	};
 
 	const onClear = useCallback(() => {
 		setFilterValue("");
 	}, []);
+
+	useEffect(() => {
+		setSearchParams(debounceValue ? debounceValue.toString() : "");
+		setIsLoadingData(false);
+	}, [debounceValue, setSearchParams]);
 
 	const topContent = useMemo(() => {
 		return (

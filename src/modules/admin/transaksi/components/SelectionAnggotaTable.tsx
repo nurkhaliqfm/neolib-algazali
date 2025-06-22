@@ -16,6 +16,7 @@ import {
 	Key,
 	SetStateAction,
 	useCallback,
+	useEffect,
 	useMemo,
 	useState,
 } from "react";
@@ -26,6 +27,7 @@ import {
 	AnggotaDetailResponse,
 	AnggotaResponse,
 } from "../../anggota/types/anggota.type";
+import useDebounce from "@/hooks/useDebounce";
 
 const AnggotaHeaderTable: TableHeaderComponent[] = [
 	{ name: "NAMA", slug: "nama" },
@@ -64,25 +66,21 @@ export function SelectionAnggotaTable({
 	const [selectedKey, setSelectedKey] = useState<Selection>(
 		new Set([String(initial)])
 	);
+	const debounceValue = useDebounce(filterValue);
 
 	const onSearchChange = (value: string) => {
 		setFilterValue(value);
 		setIsLoadingData(true);
-		const debounceTimeout = setTimeout(() => {
-			if (value) {
-				setSearchParams(value.toString());
-			} else {
-				setSearchParams("");
-			}
-			setIsLoadingData(false);
-		}, 1000);
-
-		return () => clearTimeout(debounceTimeout);
 	};
 
 	const onClear = useCallback(() => {
 		setFilterValue("");
 	}, []);
+
+	useEffect(() => {
+		setSearchParams(debounceValue ? debounceValue.toString() : "");
+		setIsLoadingData(false);
+	}, [debounceValue, setSearchParams]);
 
 	const topContent = useMemo(() => {
 		return (

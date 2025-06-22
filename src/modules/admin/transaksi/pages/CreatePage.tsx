@@ -122,7 +122,7 @@ const CreateTransaksiPage = () => {
 			},
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedReposType]);
+	}, [selectedReposType, searchRepos]);
 
 	useEffect(() => {
 		const anggotaGroup = Array.from(
