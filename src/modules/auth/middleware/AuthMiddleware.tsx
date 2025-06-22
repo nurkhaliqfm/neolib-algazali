@@ -32,10 +32,12 @@ const AuthMiddleware = () => {
 					console.log("error Request refresh", error);
 					dispatch(clearOAuthData());
 					setRedirectToLogin(true);
+				} finally {
+					setLoading(false);
 				}
+			} else {
+				setLoading(false);
 			}
-
-			setLoading(false);
 		};
 
 		checkAuthToken();
