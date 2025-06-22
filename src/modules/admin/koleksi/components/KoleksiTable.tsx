@@ -104,26 +104,6 @@ export function RepositoryTable({
 		setIsLoadingData(false);
 	}, [debounceValue, limit, setSearchParams]);
 
-	// useEffect(() => {
-	// 	if (debounceValue) {
-	// 		console.log("Exist", debounceValue);
-	// 		setSearchParams({
-	// 			keyword: debounceValue.toString(),
-	// 			page: "1",
-	// 			limit: limit,
-	// 		});
-	// 	} else {
-	// 		console.log("Not Exist", debounceValue);
-
-	// 		setSearchParams({
-	// 			page: "1",
-	// 			limit: limit,
-	// 		});
-	// 	}
-
-	// 	setIsLoadingData(false);
-	// }, [debounceValue, limit, setSearchParams]);
-
 	const topContent = useMemo(() => {
 		return (
 			<div className="flex flex-col gap-4 px-4">

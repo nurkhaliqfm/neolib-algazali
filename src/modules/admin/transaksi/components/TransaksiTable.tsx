@@ -98,23 +98,6 @@ export function TransaksiTable({
 		setIsLoadingData(false);
 	}, [debounceValue, limit, setSearchParams]);
 
-	// useEffect(() => {
-	// 	if (debounceValue) {
-	// 		setSearchParams({
-	// 			keyword: debounceValue.toString(),
-	// 			page: "1",
-	// 			limit: limit,
-	// 		});
-	// 	} else {
-	// 		setSearchParams({
-	// 			page: "1",
-	// 			limit: limit,
-	// 		});
-	// 	}
-
-	// 	setIsLoadingData(false);
-	// }, [debounceValue, limit, setSearchParams]);
-
 	const topContent = useMemo(() => {
 		return (
 			<div className="flex flex-col gap-4 px-4">
