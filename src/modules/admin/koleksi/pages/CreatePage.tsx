@@ -35,6 +35,7 @@ import { z } from "zod";
 import { RepositoryRequest } from "../types/koleksi.type";
 import { createRepository } from "../services/koleksiService";
 import { toast } from "react-toastify";
+import BlockInvalidInputChar from "@/utils/blockInvalidInput";
 
 const CreateKoleksiPage = () => {
 	const { koleksi } = useParams<{ koleksi: RepositoryItemKey }>();
@@ -227,6 +228,7 @@ const CreateKoleksiPage = () => {
 													type="number"
 													min={0}
 													value={undefined}
+													onKeyDown={BlockInvalidInputChar}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
@@ -243,6 +245,7 @@ const CreateKoleksiPage = () => {
 													type="number"
 													min={0}
 													value={undefined}
+													onKeyDown={BlockInvalidInputChar}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {

@@ -35,6 +35,7 @@ import {
 	anggotaFormSelectOptios,
 } from "@/constants/user";
 import { getAnggotaDetail, updateAnggota } from "../services/anggotaService";
+import BlockInvalidInputChar from "@/utils/blockInvalidInput";
 
 const EditAnggotaPage = () => {
 	const { group } = useParams<{ group: AnggotaItemKey }>();
@@ -219,6 +220,7 @@ const EditAnggotaPage = () => {
 													{...field}
 													type="number"
 													min={0}
+													onKeyDown={BlockInvalidInputChar}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {

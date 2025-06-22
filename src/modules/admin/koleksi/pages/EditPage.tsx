@@ -43,6 +43,7 @@ import { Button, Image } from "@heroui/react";
 import { HiChevronRight } from "react-icons/hi2";
 import { toast } from "react-toastify";
 import AppRoutes from "@/router/routes";
+import BlockInvalidInputChar from "@/utils/blockInvalidInput";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -249,6 +250,7 @@ const EditKoleksiPage = () => {
 													{...field}
 													type="number"
 													min={0}
+													onKeyDown={BlockInvalidInputChar}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
@@ -264,6 +266,7 @@ const EditKoleksiPage = () => {
 													{...field}
 													type="number"
 													min={0}
+													onKeyDown={BlockInvalidInputChar}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {

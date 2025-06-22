@@ -34,6 +34,7 @@ import {
 import { createAnggota } from "../services/anggotaService";
 import { AnggotaRequest } from "../types/anggota.type";
 import { toast } from "react-toastify";
+import BlockInvalidInputChar from "@/utils/blockInvalidInput";
 
 const CreateAnggotaPage = () => {
 	const { group } = useParams<{ group: AnggotaItemKey }>();
@@ -213,6 +214,7 @@ const CreateAnggotaPage = () => {
 													{...field}
 													type="number"
 													min={0}
+													onKeyDown={BlockInvalidInputChar}
 													onChange={(e) => {
 														const value = e.target.value;
 														if (value === "") {
