@@ -115,7 +115,6 @@ export function RepositoryTable({
 						startContent={<HiOutlineMagnifyingGlass />}
 						value={filterValue}
 						onClear={() => onClear()}
-						// onValueChange={(e) => setFilterValue(e)}
 						onValueChange={onSearchChange}
 					/>
 				</div>
