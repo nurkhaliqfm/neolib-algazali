@@ -12,29 +12,30 @@ const AuthMiddleware = () => {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
 	const isAuthenticated = !!localStorage.getItem("oauthData");
 	const [loading, setLoading] = useState(true);
+	const [redirectToLogin, setRedirectToLogin] = useState(false);
 
 	useEffect(() => {
 		const checkAuthToken = async () => {
 			if (!user || !isAuthenticated) {
+				setRedirectToLogin(true);
 				setLoading(false);
 				return;
 			}
 
-			const isTokenExpired = Date.now() >= user.expires_in;
+			const isTokenExpired = Date.now() >= user.expires_in - 20000;
 
 			if (isTokenExpired) {
 				try {
-					refresh(user.access_token).then((oauthData: OAuthData) => {
-						dispatch(setOAuthData(oauthData));
-					});
+					const oauthData: OAuthData = await refresh(user.access_token);
+					dispatch(setOAuthData(oauthData));
 				} catch (error) {
 					console.log("error Request refresh", error);
 					dispatch(clearOAuthData());
-					return <Navigate to={"/login"} />;
+					setRedirectToLogin(true);
 				}
-			} else {
-				setLoading(false);
 			}
+
+			setLoading(false);
 		};
 
 		checkAuthToken();
@@ -48,8 +49,10 @@ const AuthMiddleware = () => {
 				</div>
 			</section>
 		);
-	if (!user || !localStorage.getItem("oauthData"))
-		return <Navigate to="/login" />;
+
+	if (redirectToLogin || !user || !isAuthenticated) {
+		return <Navigate to="/login" replace />;
+	}
 
 	return <Outlet />;
 };
