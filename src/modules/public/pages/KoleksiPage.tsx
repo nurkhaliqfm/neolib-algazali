@@ -51,7 +51,7 @@ const KoleksiPage = () => {
 				</div>
 			) : (
 				<>
-					{repositoryData && koleksi ? (
+					{repositoryData && repositoryData.repository.length > 0 && koleksi ? (
 						<section className="leading-3 mb-2 mt-4 px-6">
 							<SectionTitleContent
 								icon={HiOutlineInboxStack}
@@ -71,7 +71,7 @@ const KoleksiPage = () => {
 							/>
 						</section>
 					) : (
-						<div className="border-1 border-slate-100 p-2 rounded-lg text-center shadow-md">
+						<div className="border-1 my-4 border-slate-100 p-2 rounded-lg text-center shadow-md">
 							Data koleksi tidak ditemukan
 						</div>
 					)}

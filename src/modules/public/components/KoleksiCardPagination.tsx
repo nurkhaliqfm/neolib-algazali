@@ -1,10 +1,11 @@
 import { Input, Pagination, Spinner } from "@heroui/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { SetURLSearchParams } from "react-router-dom";
 import { CardCustomeStyleDetail } from "./CardRepository";
 import { RepositoryResponse } from "@/modules/admin/koleksi/types/koleksi.type";
 import { repositoryTypeMap } from "@/constants/repository";
+import useDebounce from "@/hooks/useDebounce";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -25,27 +26,11 @@ export function KoleksiCardPagination({
 }) {
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(keyword);
+	const debounceValue = useDebounce(filterValue);
 
 	const onSearchChange = (value: string) => {
-		setFilterValue(value);
 		setIsLoadingData(true);
-		const debounceTimeout = setTimeout(() => {
-			if (value) {
-				setSearchParams({
-					keyword: value.toString(),
-					page: "1",
-					limit: limit,
-				});
-			} else {
-				setSearchParams({
-					page: "1",
-					limit: limit,
-				});
-			}
-			setIsLoadingData(false);
-		}, 1000);
-
-		return () => clearTimeout(debounceTimeout);
+		setFilterValue(value);
 	};
 
 	const onClear = useCallback(() => {
@@ -59,6 +44,19 @@ export function KoleksiCardPagination({
 			limit: e.target.value,
 		});
 	};
+
+	useEffect(() => {
+		if (debounceValue != undefined) {
+			setSearchParams({
+				...(debounceValue &&
+					debounceValue !== "" && { keyword: debounceValue.toString() }),
+				page: "1",
+				limit: limit,
+			});
+		}
+
+		setIsLoadingData(false);
+	}, [debounceValue, limit, setSearchParams]);
 
 	return (
 		<section className="my-4">
