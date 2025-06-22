@@ -10,8 +10,7 @@ import {
 	AnggotaUmumRequest,
 } from "../types/anggota.type";
 import { AnggotaItemKey } from "@/types/anggota";
-
-const { VITE_SERVER_BASE_URL } = import.meta.env;
+import axiosPrivate from "@/utils/axiosPrivate";
 
 const getListAnggotaPagination = async ({
 	token,
@@ -31,10 +30,10 @@ const getListAnggotaPagination = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}s?page=${page}${
-				keyword ? `&keyword=${keyword}` : ""
-			}${limit ? `&limit=${limit}` : ""}`,
+		const response = await axiosPrivate.get(
+			`/anggota/${type}s?page=${page}${keyword ? `&keyword=${keyword}` : ""}${
+				limit ? `&limit=${limit}` : ""
+			}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -124,8 +123,8 @@ const createAnggota = async ({
 	}
 
 	try {
-		const response = await axios.post(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${atr.slug}/create`,
+		const response = await axiosPrivate.post(
+			`/anggota/${atr.slug}/create`,
 			anggotaBodyRequest,
 			{
 				headers: {
@@ -220,8 +219,8 @@ const updateAnggota = async ({
 	}
 
 	try {
-		const response = await axios.patch(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${atr.slug}?anggota=${atr.id}`,
+		const response = await axiosPrivate.patch(
+			`/anggota/${atr.slug}?anggota=${atr.id}`,
 			anggotaBodyRequest,
 			{
 				headers: {
@@ -265,8 +264,8 @@ const getAnggotaDetail = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/detail?anggota=${anggota}`,
+		const response = await axiosPrivate.get(
+			`/anggota/${type}/detail?anggota=${anggota}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -306,8 +305,8 @@ const getAnggotaTransaksiDetail = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/transaksi?anggota=${anggota}`,
+		const response = await axiosPrivate.get(
+			`/anggota/${type}/transaksi?anggota=${anggota}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -347,8 +346,8 @@ const getAnggotaDocument = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/bebas-pustaka?anggota=${anggota}`,
+		const response = await axiosPrivate.get(
+			`/anggota/${type}/bebas-pustaka?anggota=${anggota}`,
 			{
 				responseType: "blob",
 				headers: {
@@ -399,8 +398,8 @@ const deleteAnggota = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/anggota/${type}/delete?anggota=${anggota}`,
+		const response = await axiosPrivate.get(
+			`/anggota/${type}/delete?anggota=${anggota}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,

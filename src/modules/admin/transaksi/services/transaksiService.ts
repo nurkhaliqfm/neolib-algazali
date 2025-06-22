@@ -4,8 +4,7 @@ import {
 	TransaksiDetailResponse,
 	TransaksiResponse,
 } from "../types/transaksi.type";
-
-const { VITE_SERVER_BASE_URL } = import.meta.env;
+import axiosPrivate from "@/utils/axiosPrivate";
 
 const getListTransaksi = async ({
 	token,
@@ -23,10 +22,10 @@ const getListTransaksi = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/transaksi/list?page=${page}${
-				keyword ? `&keyword=${keyword}` : ""
-			}${limit ? `&limit=${limit}` : ""}`,
+		const response = await axiosPrivate.get(
+			`/transaksi/list?page=${page}${keyword ? `&keyword=${keyword}` : ""}${
+				limit ? `&limit=${limit}` : ""
+			}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -64,8 +63,8 @@ const getDetailTransaksi = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/transaksi/detail?transaksi=${transaksi}`,
+		const response = await axiosPrivate.get(
+			`/transaksi/detail?transaksi=${transaksi}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -107,15 +106,11 @@ const createTransaksi = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.post(
-			`${VITE_SERVER_BASE_URL}/admin/transaksi/create`,
-			data,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		);
+		const response = await axiosPrivate.post(`/transaksi/create`, data, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 		if (onDone)
 			onDone({
 				status: response.status,
@@ -159,8 +154,8 @@ const updateTransaksi = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.patch(
-			`${VITE_SERVER_BASE_URL}/admin/transaksi/${slug}?transaksi=${transaksi}`,
+		const response = await axiosPrivate.patch(
+			`/transaksi/${slug}?transaksi=${transaksi}`,
 			data,
 			{
 				headers: {
@@ -203,8 +198,8 @@ const deleteTransaksi = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/transaksi/delete?transaksi=${transaksi}`,
+		const response = await axiosPrivate.get(
+			`/transaksi/delete?transaksi=${transaksi}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,

@@ -5,8 +5,7 @@ import {
 } from "@/types/statistik";
 import axios, { AxiosError } from "axios";
 import { TransaksiDetailResponse } from "../../transaksi/types/transaksi.type";
-
-const { VITE_SERVER_BASE_URL } = import.meta.env;
+import axiosPrivate from "@/utils/axiosPrivate";
 
 const getDataStatistik = async ({
 	token,
@@ -16,14 +15,11 @@ const getDataStatistik = async ({
 	onDone?: (data: StatistikResponse) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/statistik/repository`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		);
+		const response = await axiosPrivate.get(`/statistik/repository`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 
 		if (onDone) onDone(response.data);
 	} catch (error) {
@@ -46,14 +42,11 @@ const getDataStatistikTransaksi = async ({
 	onDone?: (data: StatistikTransaksiResponse[]) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/statistik/transaksi`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		);
+		const response = await axiosPrivate.get(`/statistik/transaksi`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 
 		if (onDone) onDone(response.data);
 	} catch (error) {
@@ -76,14 +69,11 @@ const getDataLatestTransaksi = async ({
 	onDone?: (data: TransaksiDetailResponse[]) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/statistik/transaksi/latest`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		);
+		const response = await axiosPrivate.get(`/statistik/transaksi/latest`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 
 		if (onDone) onDone(response.data);
 	} catch (error) {

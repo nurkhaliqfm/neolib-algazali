@@ -11,6 +11,7 @@ import {
 	RepositorySkripsi,
 } from "../types/koleksi.type";
 import { RepositoryItemKey } from "@/types/repository";
+import axiosPrivate from "@/utils/axiosPrivate";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -33,11 +34,11 @@ const getListRepositoryPagination = async ({
 	onDone?: (data: RepositoryResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
-	const baseUrl = isPublic
-		? `${VITE_SERVER_BASE_URL}/public`
-		: `${VITE_SERVER_BASE_URL}/admin/repository`;
+	const baseUrl = isPublic ? `${VITE_SERVER_BASE_URL}/public` : `/repository`;
+	const axiosClient = isPublic ? axios : axiosPrivate;
+
 	try {
-		const response = await axios.get(
+		const response = await axiosClient.get(
 			`${baseUrl}/${type}s?page=${page}${keyword ? `&keyword=${keyword}` : ""}${
 				limit ? `&limit=${limit}` : ""
 			}`,
@@ -81,11 +82,11 @@ const getDetailRepository = async ({
 	onDone?: (data: RepositoryDetailResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
-	const baseUrl = isPublic
-		? `${VITE_SERVER_BASE_URL}/public`
-		: `${VITE_SERVER_BASE_URL}/admin/repository`;
+	const baseUrl = isPublic ? `${VITE_SERVER_BASE_URL}/public` : `/repository`;
+	const axiosClient = isPublic ? axios : axiosPrivate;
+
 	try {
-		const response = await axios.get(
+		const response = await axiosClient.get(
 			`${baseUrl}/${type}/detail?repos=${repos}`,
 			{
 				headers: {
@@ -181,8 +182,8 @@ const updateRepository = async ({
 	}
 
 	try {
-		const response = await axios.patch(
-			`${VITE_SERVER_BASE_URL}/admin/repository/${atr.slug}?repos=${atr.id}`,
+		const response = await axiosPrivate.patch(
+			`/repository/${atr.slug}?repos=${atr.id}`,
 			repositoryBodyRequest,
 			{
 				headers: {
@@ -275,8 +276,8 @@ const createRepository = async ({
 	}
 
 	try {
-		const response = await axios.post(
-			`${VITE_SERVER_BASE_URL}/admin/repository/${atr.slug}/create`,
+		const response = await axiosPrivate.post(
+			`/repository/${atr.slug}/create`,
 			repositoryBodyRequest,
 			{
 				headers: {
@@ -321,8 +322,8 @@ const deleteRepository = async ({
 	onError?: (data: ApiError) => void | undefined;
 }) => {
 	try {
-		const response = await axios.get(
-			`${VITE_SERVER_BASE_URL}/admin/repository/${type}/delete?repos=${repos}`,
+		const response = await axiosPrivate.get(
+			`/repository/${type}/delete?repos=${repos}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
