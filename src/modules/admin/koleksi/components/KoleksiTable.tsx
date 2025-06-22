@@ -13,7 +13,7 @@ import {
 	TableRow,
 	Tooltip,
 } from "@heroui/react";
-import { Key, useCallback, useMemo, useState } from "react";
+import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { BaseRepository, RepositoryResponse } from "../types/koleksi.type";
 import {
 	HiOutlineEye,
@@ -41,6 +41,7 @@ import {
 import { deleteRepository } from "../services/koleksiService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { toast } from "react-toastify";
+import useDebounce from "@/hooks/useDebounce";
 
 const { VITE_SERVER_BASE_URL } = import.meta.env;
 
@@ -73,27 +74,11 @@ export function RepositoryTable({
 	const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(keyword);
+	const debounceValue = useDebounce(filterValue);
 
 	const onSearchChange = (value: string) => {
-		setFilterValue(value);
 		setIsLoadingData(true);
-		const debounceTimeout = setTimeout(() => {
-			if (value) {
-				setSearchParams({
-					keyword: value.toString(),
-					page: "1",
-					limit: limit,
-				});
-			} else {
-				setSearchParams({
-					page: "1",
-					limit: limit,
-				});
-			}
-			setIsLoadingData(false);
-		}, 1000);
-
-		return () => clearTimeout(debounceTimeout);
+		setFilterValue(value);
 	};
 
 	const onClear = useCallback(() => {
@@ -108,6 +93,23 @@ export function RepositoryTable({
 		});
 	};
 
+	useEffect(() => {
+		if (debounceValue) {
+			setSearchParams({
+				keyword: debounceValue.toString(),
+				page: "1",
+				limit: limit,
+			});
+		} else {
+			setSearchParams({
+				page: "1",
+				limit: limit,
+			});
+		}
+
+		setIsLoadingData(false);
+	}, [debounceValue, limit, setSearchParams]);
+
 	const topContent = useMemo(() => {
 		return (
 			<div className="flex flex-col gap-4 px-4">
@@ -119,6 +121,7 @@ export function RepositoryTable({
 						startContent={<HiOutlineMagnifyingGlass />}
 						value={filterValue}
 						onClear={() => onClear()}
+						// onValueChange={(e) => setFilterValue(e)}
 						onValueChange={onSearchChange}
 					/>
 				</div>

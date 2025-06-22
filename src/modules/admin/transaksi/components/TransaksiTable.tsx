@@ -12,7 +12,7 @@ import {
 	TableRow,
 	Tooltip,
 } from "@heroui/react";
-import { Key, useCallback, useMemo, useState } from "react";
+import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import {
 	TransaksiDetailResponse,
 	TransaksiResponse,
@@ -46,6 +46,7 @@ import dayjs from "dayjs";
 import { typeAnggotaColorMap, userRoleMap } from "@/constants/user";
 import { moneyConverter } from "@/utils/moneyFormatter";
 import { deleteTransaksi, updateTransaksi } from "../services/transaksiService";
+import useDebounce from "@/hooks/useDebounce";
 
 export function TransaksiTable({
 	data,
@@ -67,27 +68,11 @@ export function TransaksiTable({
 	const [isLoadingReturned, setIsLoadingReturned] = useState<boolean>(false);
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(keyword);
+	const debounceValue = useDebounce(filterValue);
 
 	const onSearchChange = (value: string) => {
-		setFilterValue(value);
 		setIsLoadingData(true);
-		const debounceTimeout = setTimeout(() => {
-			if (value) {
-				setSearchParams({
-					keyword: value.toString(),
-					page: "1",
-					limit: limit,
-				});
-			} else {
-				setSearchParams({
-					page: "1",
-					limit: limit,
-				});
-			}
-			setIsLoadingData(false);
-		}, 1000);
-
-		return () => clearTimeout(debounceTimeout);
+		setFilterValue(value);
 	};
 
 	const onClear = useCallback(() => {
@@ -101,6 +86,23 @@ export function TransaksiTable({
 			limit: e.target.value,
 		});
 	};
+
+	useEffect(() => {
+		if (debounceValue) {
+			setSearchParams({
+				keyword: debounceValue.toString(),
+				page: "1",
+				limit: limit,
+			});
+		} else {
+			setSearchParams({
+				page: "1",
+				limit: limit,
+			});
+		}
+
+		setIsLoadingData(false);
+	}, [debounceValue, limit, setSearchParams]);
 
 	const topContent = useMemo(() => {
 		return (

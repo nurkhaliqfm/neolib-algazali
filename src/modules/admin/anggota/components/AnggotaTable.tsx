@@ -12,7 +12,7 @@ import {
 	TableRow,
 	Tooltip,
 } from "@heroui/react";
-import { Key, useCallback, useMemo, useState } from "react";
+import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import {
 	HiOutlineEye,
 	HiOutlineMagnifyingGlass,
@@ -38,6 +38,7 @@ import { AnggotaDetailResponse, AnggotaResponse } from "../types/anggota.type";
 import { typeAnggotaColorMap } from "@/constants/user";
 import { AnggotaItemKey } from "@/types/anggota";
 import { deleteAnggota } from "../services/anggotaService";
+import useDebounce from "@/hooks/useDebounce";
 
 const AnggotaHeaderTable: TableHeaderComponent[] = [
 	{ name: "NAMA", slug: "nama" },
@@ -68,27 +69,11 @@ export function AnggotaTable({
 	const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
 	const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
 	const [filterValue, setFilterValue] = useState<string>(keyword);
+	const debounceValue = useDebounce(filterValue);
 
 	const onSearchChange = (value: string) => {
-		setFilterValue(value);
 		setIsLoadingData(true);
-		const debounceTimeout = setTimeout(() => {
-			if (value) {
-				setSearchParams({
-					keyword: value.toString(),
-					page: "1",
-					limit: limit,
-				});
-			} else {
-				setSearchParams({
-					page: "1",
-					limit: limit,
-				});
-			}
-			setIsLoadingData(false);
-		}, 1000);
-
-		return () => clearTimeout(debounceTimeout);
+		setFilterValue(value);
 	};
 
 	const onClear = useCallback(() => {
@@ -102,6 +87,23 @@ export function AnggotaTable({
 			limit: e.target.value,
 		});
 	};
+
+	useEffect(() => {
+		if (debounceValue) {
+			setSearchParams({
+				keyword: debounceValue.toString(),
+				page: "1",
+				limit: limit,
+			});
+		} else {
+			setSearchParams({
+				page: "1",
+				limit: limit,
+			});
+		}
+
+		setIsLoadingData(false);
+	}, [debounceValue, limit, setSearchParams]);
 
 	const topContent = useMemo(() => {
 		return (
