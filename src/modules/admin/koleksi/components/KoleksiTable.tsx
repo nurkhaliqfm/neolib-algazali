@@ -94,21 +94,35 @@ export function RepositoryTable({
 	};
 
 	useEffect(() => {
-		if (debounceValue) {
-			setSearchParams({
-				keyword: debounceValue.toString(),
-				page: "1",
-				limit: limit,
-			});
-		} else {
-			setSearchParams({
-				page: "1",
-				limit: limit,
-			});
-		}
+		setSearchParams({
+			...(debounceValue &&
+				debounceValue !== "" && { keyword: debounceValue.toString() }),
+			page: "1",
+			limit: limit,
+		});
 
 		setIsLoadingData(false);
 	}, [debounceValue, limit, setSearchParams]);
+
+	// useEffect(() => {
+	// 	if (debounceValue) {
+	// 		console.log("Exist", debounceValue);
+	// 		setSearchParams({
+	// 			keyword: debounceValue.toString(),
+	// 			page: "1",
+	// 			limit: limit,
+	// 		});
+	// 	} else {
+	// 		console.log("Not Exist", debounceValue);
+
+	// 		setSearchParams({
+	// 			page: "1",
+	// 			limit: limit,
+	// 		});
+	// 	}
+
+	// 	setIsLoadingData(false);
+	// }, [debounceValue, limit, setSearchParams]);
 
 	const topContent = useMemo(() => {
 		return (
