@@ -13,3 +13,8 @@ export type StatistikTransaksiResponse = {
 	month: string;
 	peminjaman: number;
 };
+
+export type StatistikVisitorResponse = {
+	month: string;
+	visitor: number;
+};

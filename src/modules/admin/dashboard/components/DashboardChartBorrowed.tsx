@@ -28,7 +28,7 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export function DashboardChart({
+export function DashboardChartBorrowed({
 	data,
 	className,
 }: {

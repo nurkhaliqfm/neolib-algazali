@@ -1,21 +1,24 @@
 import { DashboardCard } from "../components/DashboardCard";
 import { DashboardBorrowTable } from "../components/DashboardBorrowTable";
-import { DashboardChart } from "../components/DashboardChart";
+import { DashboardChartBorrowed } from "../components/DashboardChartBorrowed";
 import { CardDashboardItemKey } from "../types/dashboard.type";
 import { RepositoryItemKey } from "@/types/repository";
 import {
 	StatistikResponse,
 	StatistikTransaksiResponse,
+	StatistikVisitorResponse,
 } from "@/types/statistik";
 import { useEffect, useState } from "react";
 import {
 	getDataLatestTransaksi,
 	getDataStatistik,
 	getDataStatistikTransaksi,
+	getDataVisitor,
 } from "../services/statistikService";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { TransaksiDetailResponse } from "../../transaksi/types/transaksi.type";
 import { Card, CardBody, CardHeader } from "@heroui/react";
+import { DashboardChartVisitor } from "../components/DashboardChartVisitor";
 
 function DashboardPage() {
 	const user = useTypedSelector((state) => state.oauth.oauthData);
@@ -26,6 +29,10 @@ function DashboardPage() {
 
 	const [statistikTransaksiData, setStatistikTransaksiData] = useState<
 		StatistikTransaksiResponse[]
+	>([]);
+
+	const [statistikVisitorData, setStatistikVisitorData] = useState<
+		StatistikVisitorResponse[]
 	>([]);
 
 	const [latestTransaksiData, setLatestTransaksiDataData] = useState<
@@ -49,6 +56,12 @@ function DashboardPage() {
 			token: user?.access_token,
 			onDone: (data) => {
 				setLatestTransaksiDataData(data);
+			},
+		});
+		getDataVisitor({
+			token: user?.access_token,
+			onDone: (data) => {
+				setStatistikVisitorData(data);
 			},
 		});
 	}, [user?.access_token]);
@@ -81,7 +94,14 @@ function DashboardPage() {
 			)}
 
 			<section className="my-4 flex flex-col xl:flex-row gap-y-4 xl:gap-x-4 auto-rows-max px-4">
-				<DashboardChart
+				<DashboardChartVisitor
+					className="flex-1 col-span-1"
+					data={statistikVisitorData}
+				/>
+			</section>
+
+			<section className="my-4 flex flex-col xl:flex-row gap-y-4 xl:gap-x-4 auto-rows-max px-4">
+				<DashboardChartBorrowed
 					className="flex-1 col-span-1"
 					data={statistikTransaksiData}
 				/>
