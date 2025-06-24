@@ -9,6 +9,7 @@ import Auth from "@/modules/auth";
 import AuthMiddleware from "@/modules/auth/middleware/AuthMiddleware";
 import ProtectedRoutes from "@/modules/auth/middleware/ProtectedRoutes";
 import AuthorizedRoute from "@/modules/auth/middleware/AuthorizedRoute";
+import HitCounterMiddleware from "@/modules/public/middleware/HitCounterMiddleware";
 
 function AppRouter() {
 	return (
@@ -151,13 +152,18 @@ function AppRouter() {
 				</Route>
 			</Route>
 
-			<Route element={<BaseLayout />}>
-				<Route path={AppRoutes.Home.path} element={<Public.HomePage />} />
-				<Route path={AppRoutes.Koleksi.path} element={<Public.KoleksiPage />} />
-				<Route
-					path={AppRoutes.KoleksiDetail.path}
-					element={<Shared.DetailKoleksiPage />}
-				/>
+			<Route element={<HitCounterMiddleware />}>
+				<Route element={<BaseLayout />}>
+					<Route path={AppRoutes.Home.path} element={<Public.HomePage />} />
+					<Route
+						path={AppRoutes.Koleksi.path}
+						element={<Public.KoleksiPage />}
+					/>
+					<Route
+						path={AppRoutes.KoleksiDetail.path}
+						element={<Shared.DetailKoleksiPage />}
+					/>
+				</Route>
 			</Route>
 		</Routes>
 	);
