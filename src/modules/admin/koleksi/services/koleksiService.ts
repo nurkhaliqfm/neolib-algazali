@@ -129,7 +129,6 @@ const updateRepository = async ({
 	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
-	console.log(repos);
 	const repositoryBodyRequest = new FormData();
 
 	repositoryBodyRequest.append("judul", repos.judul);
