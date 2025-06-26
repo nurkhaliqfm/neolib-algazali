@@ -129,10 +129,12 @@ const updateRepository = async ({
 	onDone?: (data: ApiResponse) => void | undefined;
 	onError?: (data: ApiError) => void | undefined;
 }) => {
+	console.log(repos);
 	const repositoryBodyRequest = new FormData();
 
 	repositoryBodyRequest.append("judul", repos.judul);
 	repositoryBodyRequest.append("type", repos.type);
+	repositoryBodyRequest.append("pengarang", repos.pengarang);
 	if (repos.old_sampul) {
 		repositoryBodyRequest.append("nama_sampul", repos.old_sampul);
 	}
@@ -233,6 +235,7 @@ const createRepository = async ({
 
 	repositoryBodyRequest.append("judul", repos.judul);
 	repositoryBodyRequest.append("type", repos.type);
+	repositoryBodyRequest.append("pengarang", repos.pengarang);
 	if (repos.nama_sampul) {
 		const fileSampul = repos.nama_sampul as FileList;
 		repositoryBodyRequest.append("sampul", fileSampul[0], fileSampul[0]?.name);
