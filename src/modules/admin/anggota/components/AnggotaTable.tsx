@@ -97,7 +97,8 @@ export function AnggotaTable({
 		});
 
 		setIsLoadingData(false);
-	}, [debounceValue, limit, setSearchParams]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [debounceValue, limit]);
 
 	const topContent = useMemo(() => {
 		return (
