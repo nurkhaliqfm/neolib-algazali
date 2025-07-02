@@ -46,7 +46,7 @@ export function KoleksiCardPagination({
 	};
 
 	useEffect(() => {
-		if (debounceValue != undefined) {
+		if (debounceValue !== keyword) {
 			setSearchParams({
 				...(debounceValue &&
 					debounceValue !== "" && { keyword: debounceValue.toString() }),
@@ -56,7 +56,7 @@ export function KoleksiCardPagination({
 		}
 
 		setIsLoadingData(false);
-	}, [debounceValue, limit, setSearchParams]);
+	}, [debounceValue, limit, keyword, setSearchParams]);
 
 	return (
 		<section className="my-4">
@@ -156,7 +156,7 @@ export function KoleksiCardPagination({
 								onChange={(page) =>
 									setSearchParams({
 										page: page.toString(),
-										keyword: filterValue,
+										keyword: keyword,
 										limit: limit,
 									})
 								}
